@@ -1,0 +1,29 @@
+schema_version = 1
+policy = "exact-revision-or-recorded-compatibility-mode"
+
+[[dependency]]
+id = "sourceright"
+kind = "quality-toolchain"
+required = true
+purpose = ["source-rights", "source-quality", "claim-evidence-integrity"]
+integration = "thin-adapter"
+submodule = false
+fallback = "compatibility-mode-with-recorded-limitations"
+
+[[dependency]]
+id = "citeweft"
+kind = "quality-toolchain"
+required = true
+purpose = ["citation-extraction", "citation-linkage", "reference-integrity"]
+integration = "thin-adapter"
+submodule = false
+fallback = "compatibility-mode-with-recorded-limitations"
+
+[[dependency]]
+id = "authentext"
+kind = "quality-toolchain"
+required = true
+purpose = ["humanization", "readability", "style-quality"]
+integration = "thin-adapter"
+submodule = false
+fallback = "compatibility-mode-with-recorded-limitations"

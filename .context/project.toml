@@ -1,0 +1,47 @@
+schema_version = 1
+repository = "local/australian-health-policy-atlas"
+maintainer_model = "single-accountable-maintainer"
+python = "3.14"
+context_policy = "deterministic-load-order"
+
+required_context = [
+  "AGENTS.md",
+  "conductor/index.md",
+  "conductor/product.md",
+  "conductor/product-guidelines.md",
+  "conductor/requirements.md",
+  "conductor/design.md",
+  "conductor/glossary.md",
+  "conductor/roadmap.md",
+  "conductor/tech-stack.md",
+  "conductor/workflow.md",
+  "conductor/autonomy.md",
+  "conductor/tracks.md",
+  "docs/ECOSYSTEM_REUSE.md",
+]
+
+required_manifests = [
+  ".context/ecosystem.toml",
+  ".context/dependencies.toml",
+  "conductor/registry.toml",
+]
+
+required_harness_profiles = [
+  "context",
+  "conductor-reconciliation",
+  "dependencies",
+  "source-integrity",
+  "citation-integrity",
+  "authentext",
+  "routine",
+  "strict",
+]
+
+human_gates = [
+  "credentials",
+  "licensing",
+  "public-release",
+  "external-publication",
+  "consequential-interpretation",
+  "policy-recommendation",
+]

@@ -1,0 +1,8 @@
+schema_version = 1
+
+[[track]]
+id = "T00"
+slug = "foundation"
+status = "active"
+path = "conductor/tracks/T00-foundation"
+depends_on = []

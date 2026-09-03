@@ -1,0 +1,19 @@
+id = "T00"
+title = "Foundation and context management"
+status = "active"
+created = "2026-09-03"
+updated = "2026-09-03"
+
+outputs = [
+  ".context/project.toml",
+  ".context/ecosystem.toml",
+  ".context/dependencies.toml",
+  "AGENTS.md",
+  "conductor/registry.toml",
+  "scripts/validate_context.py",
+]
+
+unresolved = [
+  "exact revisions and native interfaces for sourceright/citeweft/authentext",
+  "GitHub issue/project reciprocal link",
+]

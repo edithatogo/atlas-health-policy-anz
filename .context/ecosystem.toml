@@ -1,0 +1,44 @@
+schema_version = 1
+owner = "edithatogo"
+policy = "reuse-before-build"
+
+[reuse_discovery]
+schema_version = 1
+freshness_seconds = 86400
+required_surfaces = ["local_clones", "github", "hugging_face", "source_registry"]
+snapshot_path = "quality/reuse-discovery/"
+
+[[github]]
+id = "archive-govt-nz"
+repository = "edithatogo/archive-govt-nz"
+authority = "evidence-first-preservation-provenance-and-medallion-patterns"
+disposition = "adopt-pattern"
+local_boundary = "ingestion/provenance/medallion"
+
+[[github]]
+id = "global-medicines-atlas"
+repository = "edithatogo/global-medicines-atlas"
+authority = "comparative-evidence-bitemporal-validity-and-atlas-patterns"
+disposition = "adopt-pattern"
+local_boundary = "comparison/validity/uncertainty"
+
+[[github]]
+id = "sourceright"
+repository = "edithatogo/sourceright"
+authority = "source-rights-source-quality-and-evidence-integrity"
+disposition = "dependency"
+local_boundary = "quality/source-integrity"
+
+[[github]]
+id = "citeweft"
+repository = "edithatogo/citeweft"
+authority = "citation-extraction-linkage-and-integrity"
+disposition = "dependency"
+local_boundary = "quality/citation-integrity"
+
+[[github]]
+id = "authentext"
+repository = "edithatogo/authentext"
+authority = "humanization-readability-and-style-quality"
+disposition = "dependency"
+local_boundary = "quality/authentext"
