@@ -28,3 +28,9 @@ T07 will turn these into reusable, versioned skills with fixtures and contracts.
 
 - `confidence_assign`: compose provenance, comparability, coverage, benchmark and triangulation evidence into reason-coded A0–A4 states.
 - `release_close`: evaluate finite release acceptance criteria, emit immutable completion receipt and permit downstream progression.
+- `microtask_compile`: compile deterministic single-question task packets from Conductor/skill/evidence state.
+- `structured_decode`: execute JSON Schema/grammar-constrained generation and validate raw/parsed outputs.
+- `tiny_model_route`: select the smallest benchmark-qualified task-specific method/model and bounded escalation path.
+- `local_sensitive_compare`: execute a network-denied private policy comparison against a pre-pinned public baseline.
+- `trace_emit_replay`: emit/replay content-addressed public benchmark traces while keeping private traces local by default.
+- `browser_private_compare`: experimental DuckDB-Wasm + Transformers.js client-side comparison contract.

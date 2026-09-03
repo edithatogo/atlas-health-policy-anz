@@ -1,0 +1,61 @@
+{
+  "packet_version": "1.0",
+  "task_id": "example.modality.001",
+  "skill_id": "atomic_assertion_extract",
+  "objective": "Classify the normative modality of the supplied policy clause.",
+  "open_question": "Is the actor required, recommended, permitted, or prohibited from performing the action?",
+  "allowed_inputs": [
+    "evidence_refs"
+  ],
+  "evidence_refs": [
+    {
+      "source_id": "fixture-policy",
+      "span_id": "p17.s4.2",
+      "sha256": "cad57e977b12deae6b5bce86a688cd7acd34e4ffea4ded81d570d979e88b5376",
+      "text": "A registered nurse must notify the treating medical officer within 30 minutes when escalation criterion X is met.",
+      "context_role": "primary"
+    }
+  ],
+  "invariants": [
+    "Use only supplied evidence.",
+    "Do not infer an unstated exception.",
+    "Return an abstention code if modality is ambiguous."
+  ],
+  "output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "modality",
+      "source_span_id"
+    ],
+    "properties": {
+      "modality": {
+        "enum": [
+          "must",
+          "should",
+          "may",
+          "must_not"
+        ]
+      },
+      "source_span_id": {
+        "type": "string"
+      }
+    }
+  },
+  "stop_conditions": [
+    "A valid modality is supported by the supplied clause.",
+    "An abstention condition is met."
+  ],
+  "abstention_codes": [
+    "evidence_missing",
+    "ambiguous_modality",
+    "unsupported_task"
+  ],
+  "context_budget": {
+    "instruction_tokens": 250,
+    "evidence_tokens": 120,
+    "output_tokens": 80
+  },
+  "prompt_version": "modality-v1",
+  "model_route": "tiny_local_model"
+}

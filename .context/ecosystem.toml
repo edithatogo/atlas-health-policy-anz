@@ -43,6 +43,14 @@ authority = "humanization-readability-and-style-quality"
 disposition = "dependency"
 local_boundary = "quality/authentext"
 
+[[github]]
+id = "rcagent"
+repository = "edithatogo/rcagent"
+snapshot = "af5777bdefa2cb0052ee80c1c5fac9ed972568a4"
+authority = "portable-skill-method-selection-stop-rules-and-local-client-boundary"
+disposition = "adopt-pattern"
+local_boundary = "skills/local-sensitive-execution"
+
 [[hugging_face]]
 id = "corpus-social-media-government-nz"
 repository = "edithatogo/corpus-social-media-government-nz"

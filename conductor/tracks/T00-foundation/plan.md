@@ -15,6 +15,10 @@
 - [x] Replace routine approvals with A0–A4 confidence-gated autonomy and narrow exception gates.
 - [x] Add finite completion contracts for Source Census/Bronze/Silver/Gold/Platinum/Gap Analysis releases.
 - [x] Add later experiments/features roadmap without creating additional tracks.
+- [x] Add tiny-model compiled-microtask/state contract and strict JSON schemas.
+- [x] Add rcagent-inspired local/sensitive execution architecture.
+- [x] Add current CI/CD/supply-chain baseline and shared Renovate policy.
+- [x] Add bleeding-edge/free-resource experiments to the roadmap without creating tracks.
 - [ ] Resolve exact canonical repositories/revisions for SourceRight, CiteWeft and Authentext.
 - [ ] Add native thin adapters once dependency interfaces are inspected.
 - [ ] Map tracks to GitHub issue/project hierarchy when the remote repository is created/connected.

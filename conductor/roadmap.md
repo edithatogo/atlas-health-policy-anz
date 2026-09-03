@@ -86,6 +86,25 @@ The items below are **not Conductor tracks** and should not be instantiated as t
 - **Policy complexity versus performance:** test whether more prescriptive/burdensome PPG architectures are associated with better, unchanged or worse outcomes.
 - **Diffusion studies:** estimate adoption networks and lag structures after national standards, coronial recommendations or major incidents.
 
+### Tiny/local-model and automation experiments
+- **Tiny-model specialization ladder:** benchmark sub-1B, 1–4B and compact discriminative models separately for modality, actor/action extraction, scope classification, pairwise equivalence and framework projection; store the smallest passing route per task.
+- **Distillation/PEFT candidates:** derive compact task-specific classifiers or LoRA/adapter models only from adjudicated Gold/Platinum benchmarks, with untouched temporal/jurisdiction test sets.
+- **DSPy/GEPA prompt compilation:** automatically optimize bounded microtask instructions/schema examples against training/validation metrics, then promote only after hidden hold-out and adversarial gates.
+- **Local GGUF qualification matrix:** benchmark quantization levels, llama.cpp engines/backends and context budgets for quality/latency/RAM/energy trade-offs.
+- **Schema-decoder bake-off:** compare engine-native JSON Schema, llama.cpp grammar conversion and XGrammar for structural failure rate, latency and supported-schema coverage.
+- **Semantic cache experiment:** content-address model results by source+packet+prompt+schema+model+engine hashes to eliminate unnecessary repeat inference.
+- **Browser-only sensitive comparator:** DuckDB-Wasm + Transformers.js/WebGPU/WASM, with public Atlas Parquet as baseline and no sensitive upload.
+- **Portable Agent Skill distribution:** publish a policy-gap-analysis `SKILL.md` package with references/assets/checksums in the `rcagent` style for Codex/Claude/Gemini/Cursor-compatible clients, while retaining a purpose-built local runner as the authoritative state machine.
+- **Public session-trace corpus:** emit sanitised public benchmark runs in Hugging Face Session Trace Simple Format for replay/audit; sensitive traces remain local.
+
+### Free/public infrastructure experiments
+- **HF Dataset Viewer as serverless query plane:** design public Silver/Gold/Platinum Parquet so the Hub's rows/search/filter/parquet/statistics/Croissant endpoints can answer common read-only queries without an Atlas backend.
+- **HF Xet incremental publication:** exploit content-defined chunk deduplication for frequent versioned dataset commits while retaining release manifests/revisions as the authoritative identity.
+- **HF webhooks:** evaluate Hub repo-change webhooks as a low-friction trigger into GitHub/local update orchestration; do not make webhook delivery authoritative or order-dependent.
+- **ZeroGPU benchmark/demo:** use free personal ZeroGPU only for bounded interactive demos or occasional open-model qualification where the daily quota is sufficient; never make it required for routine production.
+- **GitHub Artifact Attestations:** attest release packages, SBOMs and benchmark bundles; later evaluate reusable workflows + attestations toward SLSA v1 Build Level 3.
+- **GitHub Agentic Workflows:** evaluate `gh-aw` for non-authoritative repository maintenance such as issue triage, stale-context detection, documentation/test suggestions and CI diagnosis. Deterministic Actions remain authoritative for builds, medallion promotion and evidence qualification.
+
 ### Product/interface experiments
 - **Public benchmark/challenge set:** publish adjudicated difficult policy-pair examples on Hugging Face for reproducible method comparison.
 - **Evidence badges:** machine-verifiable provenance/replay/coverage badges on Atlas outputs.

@@ -14,3 +14,7 @@ Develop the reusable agents, skills and workflows needed to execute the medallio
 - SourceRight, CiteWeft and Authentext adapters are shared skills rather than duplicated implementations.
 - Workflows implement A0–A4 confidence-gated autonomy and do not request approval for routine reversible operations.
 - Finite release closure is implemented as a first-class workflow with machine-verifiable completion receipts.
+- Implement a deterministic microtask-packet compiler conforming to `schemas/microtask-packet-v1.json`; language models never own workflow state or unbounded method selection.
+- Qualify tiny/local model routes per task class with schema-constrained decoding, context budgets, explicit stop rules and programmatic span/hash verification.
+- Provide a portable policy-gap-analysis skill package patterned on `rcagent`: short selector skill, bounded references/assets, host-owned permissions/state, and offline/private execution compatibility.
+- Record reproducible model-call/session traces for public benchmark runs while defaulting sensitive traces to local-only storage.

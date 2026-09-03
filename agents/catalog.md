@@ -26,3 +26,7 @@ These are target agents to be developed and benchmarked under T07. They are role
 | Release Closer Agent | Test finite release acceptance contract and issue completion receipt when satisfied | May close routine releases when all machine gates pass |
 
 Every agent must expose typed inputs/outputs, abstention/failure states, model/tool manifests where applicable and tests against adversarial fixtures. Candidate-generating and validating roles remain separate.
+| Packet Compiler Agent | Deterministically compile one open question, evidence subset, invariants, schema and stop rules | Mechanical only; cannot invoke a model or alter evidence |
+| Task Router Agent | Select the smallest benchmark-qualified deterministic/model route from machine evidence | Mechanical routing; cannot upgrade evidence confidence |
+| Local Runtime Adapter Agent | Execute a typed packet against a pinned local endpoint and return raw + parsed receipts | No network/file authority beyond runner contract |
+| Trace/Replay Agent | Emit public reproducibility traces or local sensitive traces and verify replay identities | Evidence only; never publishes private traces implicitly |

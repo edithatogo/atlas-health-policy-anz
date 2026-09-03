@@ -24,6 +24,14 @@ Read `.context/project.toml`, then every `required_context` entry in order befor
 - Every model-backed result records immutable model revision, prompt/schema, parameters, source hashes and abstention/disagreement state.
 - Do not collapse distinct analytical frameworks into a single score unless commensurability is explicitly demonstrated.
 
+## Tiny-model execution discipline
+- The orchestrator, not the language model, owns workflow state, method selection, routing, retries, medallion transitions and stopping.
+- Compile Conductor/skill context into one self-contained microtask packet per open question; never dump the full project context into a small model.
+- Use the lowest-capability qualified method first: deterministic → lexical/structural → tiny local → small local → independent triangulation → larger fallback.
+- Canonical model-backed outputs require schema/grammar-constrained decoding plus exact span/hash/type verification.
+- One model call answers one bounded question. Context expansion is reason-coded and bounded; model self-confidence is non-authoritative.
+- Sensitive/local mode defaults to network-denied execution and must not upload source text, embeddings, prompts, traces or derived findings.
+
 ## Git discipline
 - Keep commits scoped and descriptive.
 - Do not rewrite history after an evidence receipt references a commit.

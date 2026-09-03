@@ -111,3 +111,26 @@ Selection gates use task-specific metrics, including:
 
 ## Mandatory quality dependencies
 SourceRight, CiteWeft and Authentext remain governed dependencies. Their outputs supplement but do not replace medallion/source validity gates.
+
+
+## Tiny/local inference substrate
+Tiny-model support is a first-class constraint, not a later optimization. The production control plane is a Python-owned finite-state machine that compiles deterministic microtask packets from Conductor and the active skill. Models do not choose workflow transitions or retrieve arbitrary context.
+
+Preferred local runtime compatibility target:
+- `llama.cpp` server for CPU/Metal/CUDA-friendly GGUF inference and schema/grammar-constrained output;
+- XGrammar where token-level JSON Schema/EBNF constraints improve reliability or engine portability;
+- Hugging Face model revisions/GGUF artefacts pinned by immutable revision/digest;
+- task-specific tiny classifiers/encoders before generative models where benchmark performance is sufficient.
+
+Model routing is per task class. Examples: regex/rules for obvious modality and dates; BM25 for retrieval; compact encoder/cross-encoder/NLI for ranking/classification; a 0.5–4B-class generative model for a single schema-bound unresolved question; larger inference only after bounded local repair/escalation fails. Parameter count is never itself an acceptance criterion.
+
+Every model invocation records model/revision/quantization, engine version, chat template/tokenizer, prompt/packet/schema hashes, source hashes, constrained-decoding mode and parsed/verification outcome. A semantic cache keys reusable results by these identities.
+
+## Browser-local candidate
+A later private-mode experiment should combine DuckDB-Wasm for local Parquet/query execution with Transformers.js/WebGPU/WASM for embeddings or compact classifiers. Public Atlas baseline Parquet may be fetched, while the institution's comparison document remains inside the browser. This is a candidate deployment, not an authoritative processing path until benchmarked.
+
+## Prompt and model optimization
+Prompt/schema variants are versioned artefacts. DSPy/GEPA or similar metric-driven optimizers may be evaluated against training/validation examples to improve tiny-model reliability, but promotion requires untouched temporal and jurisdictional hold-outs and adversarial error-class gates. Prompt optimization cannot weaken source-span, scope, authority, temporal or abstention requirements.
+
+## CI/CD baseline
+Current repository infrastructure follows the maintainer's active archetypes: exact Python 3.14.6 and `uv` 0.11.29, SHA-pinned GitHub Actions, public `ubuntu-24.04` runners, dependency review, CodeQL, actionlint/zizmor, Gitleaks, Renovate shared config, and locked pip-audit/CycloneDX once a qualified production lockfile exists. Property/metamorphic/contract/edge tests are mandatory; critical promotion/comparison/lineage logic targets 100% line/branch coverage and mutation testing, while overall production coverage targets at least 95%.

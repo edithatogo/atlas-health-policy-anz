@@ -16,3 +16,6 @@ Implementation is strictly layer-gated:
 Human-facing recommendations, candidate policy wording and implementation options are application products derived from Platinum; they are not authoritative medallion data.
 
 The first substantive delivery is Bronze. Silver implementation must not begin until an explicitly scoped Bronze release passes its maturity gate. The same rule applies to every subsequent layer.
+
+## Execution portability
+The same canonical contracts must run from deterministic code through tiny/local models to larger model fallbacks. A language model is never the workflow controller: Conductor and program state are compiled into bounded typed microtasks. Institutional/sensitive documents can be projected locally into the same schemas and compared against pre-pinned public Atlas baselines without public upload.

@@ -14,3 +14,7 @@
 12. Descriptive findings and normative recommendations remain separate layers.
 13. Finite releases close when their declared acceptance contracts pass; optional refinement moves to the next release.
 14. Generated policy recommendations remain traceable to evidence and explicit normative assumptions.
+15. Small/tiny models receive one compiled open question, explicit evidence, schema and stop rules; they never own workflow state.
+16. Use the smallest benchmark-qualified method/model; escalate only after reason-coded local failure.
+17. Sensitive institutional inputs are local by default and never need to enter the public GitHub/Hugging Face planes.
+18. Deterministic CI and evidence qualification remain authoritative; agentic repository automation is advisory.

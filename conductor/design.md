@@ -43,7 +43,7 @@ The medallion is implemented as finite releases, not endless work streams. Sourc
 - Claim-level confidence is evidence-derived and can vary within one report.
 
 ## Context architecture
-`.context/project.toml` defines deterministic context and required manifests. `.context/ecosystem.toml` governs reuse. `.context/dependencies.toml` governs quality-toolchain dependencies. `.context/comparison.toml` governs comparison assurance. `.context/autonomy.toml` governs claim-level confidence/autonomy. `.context/frameworks.toml` defines analytical framework classes. Conductor tracks define executable project memory.
+`.context/project.toml` defines deterministic context and required manifests. `.context/ecosystem.toml` governs reuse. `.context/dependencies.toml` governs quality-toolchain dependencies. `.context/comparison.toml` governs comparison assurance. `.context/autonomy.toml` governs claim-level confidence/autonomy. `.context/frameworks.toml` defines analytical framework classes. `.context/tiny-models.toml` defines compiled microtask execution and local inference boundaries. `.context/ci.toml` defines CI/CD and supply-chain alignment. Conductor tracks define executable project memory.
 
 ## Quality toolchain
 - **SourceRight**: source identity, source quality/provenance and reproducible acquisition metadata. Redistribution is authorised for this project and is not a repetitive approval gate.
@@ -51,3 +51,9 @@ The medallion is implemented as finite releases, not endless work streams. Sourc
 - **Authentext**: humanization/readability/style quality of publication-facing narrative only; it does not modify canonical evidence records.
 
 All integrations use thin adapters and exact-revision records when native dependencies are available; compatibility mode must be explicit when not.
+
+
+## Tiny-model and sensitive execution architecture
+The model is a bounded transformation function, never the process controller. A deterministic orchestrator compiles one open question, selected method, exact evidence spans, invariants, JSON Schema and stop/abstention rules into a microtask packet. This allows the same policy logic to run against tiny local models, larger remote models or no generative model at all without changing the canonical state machine.
+
+The local/sensitive deployment pattern adopts the portable-skill lessons from `rcagent`: a short `SKILL.md` selects only the necessary workflow/reference material; the host owns permissions, state and logging; method budgets and stop rules prevent unnecessary stacking. The Atlas strengthens this with program-owned state, content-addressed evidence, schema-constrained output and offline-by-default private-input handling.

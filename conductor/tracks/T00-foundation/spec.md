@@ -14,6 +14,7 @@ Establish deterministic Conductor context management, Git traceability, archetyp
 - Conductor records the already-agreed computational-policy thesis, analysis ladder, GitHub/HF split, medallion sequence, Platinum layer, model/method triangulation policy and future reproducible gap-analysis objective.
 - Track registry includes the agents/skills/workflow development path and medallion maturity gates.
 - Claim-level A0–A4 autonomy, minimal exception gates and finite release-completion semantics are part of required context.
+- Tiny/local execution, rcagent reuse, CI/CD/supply-chain alignment and microtask/state schemas are part of the foundation context.
 
 ## Non-compensatory gates
 - Required context file missing -> fail.
@@ -21,3 +22,4 @@ Establish deterministic Conductor context management, Git traceability, archetyp
 - Required dependency omitted from manifests -> fail.
 - Routine reversible work converted into a manual approval requirement contrary to `.context/autonomy.toml` -> fail.
 - Downstream medallion production before predecessor maturity -> fail.
+- Tiny-model workflow state delegated to an unconstrained language model or action dependencies left unpinned -> fail.

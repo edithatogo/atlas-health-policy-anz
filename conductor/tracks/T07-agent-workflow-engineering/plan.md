@@ -8,3 +8,7 @@
 - [ ] Run red-team/differential/reconstruction tests as applicable.
 - [ ] Record evidence and unresolved limitations.
 - [ ] Promote maturity/status only after non-compensatory gates pass.
+
+- [ ] Implement and benchmark the microtask compiler/state machine before adding open-ended agent loops.
+- [ ] Build the rcagent-style portable local/sensitive skill package and offline integration fixtures.
+- [ ] Qualify tiny/small model routes using temporal/jurisdiction hold-outs and adversarial mutations.

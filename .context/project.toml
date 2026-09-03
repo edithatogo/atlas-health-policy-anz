@@ -20,6 +20,9 @@ required_context = [
   "conductor/tracks.md",
   "docs/ECOSYSTEM_REUSE.md",
   "docs/COMPARISON_ASSURANCE.md",
+  "docs/TINY_MODEL_EXECUTION.md",
+  "docs/LOCAL_SENSITIVE_EXECUTION.md",
+  "docs/CI_CD.md",
   "agents/catalog.md",
   "skills/catalog.md",
   "workflows/catalog.md",
@@ -31,7 +34,16 @@ required_manifests = [
   ".context/comparison.toml",
   ".context/frameworks.toml",
   ".context/autonomy.toml",
+  ".context/tiny-models.toml",
+  ".context/ci.toml",
   "conductor/registry.toml",
+  "pyproject.toml",
+  ".python-version",
+  "quality/tool-versions.json",
+  "renovate.json",
+  "schemas/microtask-packet-v1.json",
+  "schemas/work-item-state-v1.json",
+  "examples/microtask-packet.example.json",
 ]
 
 required_harness_profiles = [
@@ -50,6 +62,11 @@ required_harness_profiles = [
   "publication-verification",
   "routine",
   "strict",
+  "tiny-model-contract",
+  "microtask-packet",
+  "offline-local",
+  "supply-chain",
+  "security",
 ]
 
 human_gates = [

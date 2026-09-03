@@ -31,3 +31,12 @@ Clean environment → fetch pinned public Bronze/manifests/code/model revisions 
 
 ## WF-09 Confidence adjudication
 For each candidate finding: deterministic validity gates → independent method evidence → optional model triangulation → calibration/benchmark lookup → assign A0–A4 → record reason codes. A2/A3 remain reportable; A4 abstains. No model majority vote can upgrade a failed hard gate.
+
+## WF-10 Tiny-model microtask execution
+Resolve work-item state → deterministically select one open question/method → compile microtask packet → run deterministic method or smallest qualified local model with constrained decoding → verify schema/span/hash/scope → reason-coded context expansion or bounded escalation if needed → assign A0–A4 → checkpoint terminal state. The model never chooses the next workflow state.
+
+## WF-11 Local sensitive comparison
+Pre-pin public baseline, code, model and schemas → disable network by default → ingest private document locally → create Silver/Gold-compatible local derivatives → run WF-10 and selected gap-analysis workflow → retain private evidence/embeddings/prompts/traces/results locally → export only when the operator explicitly requests it.
+
+## WF-12 Browser-private comparison experiment
+Load public baseline Parquet into DuckDB-Wasm → keep user document in browser memory/local file APIs → perform deterministic retrieval plus qualified Transformers.js/WebGPU/WASM inference → generate local gap-analysis package. No server receives the sensitive document. This remains experimental until browser security, memory and benchmark gates pass.

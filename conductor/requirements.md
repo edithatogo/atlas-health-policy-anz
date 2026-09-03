@@ -44,3 +44,18 @@
 - Fail-closed handling of missing, conflicting or unqualified evidence at the *claim promotion* boundary; uncertainty is reported rather than silently discarded.
 - Benchmark-driven adoption of parsers, retrieval models, embeddings, NLI/cross-encoders and generative models.
 - Discrete completion receipts prevent endless refinement from blocking agreed release scope.
+
+## Tiny/local-model execution
+- Program code owns state, method selection, routing, retry/escalation, medallion transitions and stop conditions.
+- Model execution consumes a versioned single-question microtask packet with exact evidence spans, invariants, output schema and enumerated abstention codes.
+- Canonical model outputs require constrained decoding and deterministic schema/span/hash verification.
+- Context budgets and retry/escalation counts are finite and machine-enforced.
+- Model/task qualification is per task class; no parameter-count or brand is globally authoritative.
+- The system supports network-denied local execution and must not require private institutional text, embeddings, prompts, traces or results to leave the deployment.
+
+## CI/CD and supply chain
+- Current baseline aligns to the maintainer ecosystem: exact Python 3.14.6, uv 0.11.29, SHA-pinned GitHub Actions, least privileges and disabled persisted checkout credentials.
+- Public GitHub standard runners are preferred for routine deterministic CI; heavy model inference is not a routine CI requirement.
+- Dependency review, CodeQL, Gitleaks, actionlint/zizmor, pip-audit, CycloneDX and Renovate are required when applicable.
+- Once a qualified installable production dependency set exists, `uv.lock` is mandatory and CI uses `uv sync --locked`.
+- Critical promotion/lineage/comparison logic targets 100% line/branch coverage plus mutation/property/metamorphic tests; overall production coverage is at least 95%.
