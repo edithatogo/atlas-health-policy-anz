@@ -32,11 +32,27 @@ def main() -> int:
             errors.append(f"missing required dependency: {required}")
 
     registry = load_toml(ROOT / "conductor/registry.toml")
-    for track in registry.get("track", []):
+    tracks = registry.get("track", [])
+    track_ids = {track.get("id") for track in tracks}
+    track_status = {track.get("id"): track.get("status") for track in tracks}
+    for track in tracks:
         base = ROOT / track["path"]
         for name in ("spec.md", "plan.md", "metadata.toml"):
             if not (base / name).exists():
                 errors.append(f"track {track['id']} missing {name}")
+        for dep in track.get("depends_on", []):
+            if dep not in track_ids:
+                errors.append(f"track {track['id']} has unknown dependency: {dep}")
+
+    # Production maturity is sequential. A downstream medallion track may be planned,
+    # but it must not be marked active/completed before its predecessor is completed.
+    sequence = [("T02", "T03"), ("T03", "T04"), ("T04", "T05")]
+    started = {"active", "completed"}
+    for upstream, downstream in sequence:
+        if track_status.get(downstream) in started and track_status.get(upstream) != "completed":
+            errors.append(
+                f"medallion gate violation: {downstream} started before {upstream} completed"
+            )
 
     if errors:
         for error in errors:

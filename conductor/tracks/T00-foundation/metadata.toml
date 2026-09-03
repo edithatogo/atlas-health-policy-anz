@@ -8,12 +8,19 @@ outputs = [
   ".context/project.toml",
   ".context/ecosystem.toml",
   ".context/dependencies.toml",
+  ".context/comparison.toml",
+  ".context/frameworks.toml",
   "AGENTS.md",
+  "agents/catalog.md",
+  "skills/catalog.md",
+  "workflows/catalog.md",
+  "docs/COMPARISON_ASSURANCE.md",
   "conductor/registry.toml",
   "scripts/validate_context.py",
 ]
 
 unresolved = [
   "exact revisions and native interfaces for sourceright/citeweft/authentext",
-  "GitHub issue/project reciprocal link",
+  "GitHub remote repository plus issue/project reciprocal links",
+  "target Hugging Face medallion dataset repositories are roadmap targets and not yet created",
 ]

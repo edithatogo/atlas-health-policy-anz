@@ -6,3 +6,87 @@ slug = "foundation"
 status = "active"
 path = "conductor/tracks/T00-foundation"
 depends_on = []
+
+[[track]]
+id = "T01"
+slug = "source-census-rights"
+status = "planned"
+path = "conductor/tracks/T01-source-census-rights"
+depends_on = ["T00"]
+
+[[track]]
+id = "T02"
+slug = "bronze-maturity"
+status = "planned"
+path = "conductor/tracks/T02-bronze-maturity"
+depends_on = ["T01"]
+
+[[track]]
+id = "T03"
+slug = "silver-maturity"
+status = "planned"
+path = "conductor/tracks/T03-silver-maturity"
+depends_on = ["T02"]
+
+[[track]]
+id = "T04"
+slug = "gold-maturity"
+status = "planned"
+path = "conductor/tracks/T04-gold-maturity"
+depends_on = ["T03"]
+
+[[track]]
+id = "T05"
+slug = "platinum-comparison"
+status = "planned"
+path = "conductor/tracks/T05-platinum-comparison"
+depends_on = ["T04"]
+
+[[track]]
+id = "T06"
+slug = "comparison-triangulation"
+status = "planned"
+path = "conductor/tracks/T06-comparison-triangulation"
+depends_on = ["T04"]
+
+[[track]]
+id = "T07"
+slug = "agent-workflow-engineering"
+status = "planned"
+path = "conductor/tracks/T07-agent-workflow-engineering"
+depends_on = ["T00"]
+
+[[track]]
+id = "T08"
+slug = "framework-registry"
+status = "planned"
+path = "conductor/tracks/T08-framework-registry"
+depends_on = ["T04"]
+
+[[track]]
+id = "T09"
+slug = "gap-analysis-engine"
+status = "planned"
+path = "conductor/tracks/T09-gap-analysis-engine"
+depends_on = ["T05", "T06", "T08"]
+
+[[track]]
+id = "T10"
+slug = "interfaces"
+status = "planned"
+path = "conductor/tracks/T10-interfaces"
+depends_on = ["T09"]
+
+[[track]]
+id = "T11"
+slug = "living-updates"
+status = "planned"
+path = "conductor/tracks/T11-living-updates"
+depends_on = ["T09"]
+
+[[track]]
+id = "T12"
+slug = "research-validation"
+status = "planned"
+path = "conductor/tracks/T12-research-validation"
+depends_on = ["T05", "T11"]

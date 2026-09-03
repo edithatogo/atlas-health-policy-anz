@@ -1,0 +1,36 @@
+schema_version = 1
+policy = "evidence-before-equivalence"
+
+[principles]
+non_retrieval_is_not_absence = true
+text_similarity_is_not_equivalence = true
+model_agreement_is_not_ground_truth = true
+consensus_is_not_correctness = true
+semantic_indexes_are_non_authoritative = true
+source_spans_required_for_high_consequence_claims = true
+
+[stages]
+ordered = ["scope", "authority", "temporal", "candidate_retrieval", "equivalence", "framework_projection", "platinum_qualification"]
+fail_closed = true
+
+[triangulation]
+method_triangulation = "required-for-difficult-cases"
+model_triangulation = "benchmark-driven-and-selective"
+majority_vote_as_ground_truth = false
+independent_prompts = true
+retain_disagreement = true
+
+[retrieval]
+required_signals = ["lexical", "semantic"]
+optional_signals = ["ontology"]
+fusion_default = "reciprocal-rank-fusion"
+
+[models]
+require_immutable_revision = true
+require_model_manifest = true
+require_source_hashes = true
+require_prompt_or_schema_receipt = true
+require_benchmark_before_production = true
+
+[platinum]
+requires = ["gold_provenance", "scope_qualification", "authority_qualification", "temporal_qualification", "comparison_validity", "coverage_state", "method_manifest"]

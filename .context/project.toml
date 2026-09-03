@@ -18,11 +18,17 @@ required_context = [
   "conductor/autonomy.md",
   "conductor/tracks.md",
   "docs/ECOSYSTEM_REUSE.md",
+  "docs/COMPARISON_ASSURANCE.md",
+  "agents/catalog.md",
+  "skills/catalog.md",
+  "workflows/catalog.md",
 ]
 
 required_manifests = [
   ".context/ecosystem.toml",
   ".context/dependencies.toml",
+  ".context/comparison.toml",
+  ".context/frameworks.toml",
   "conductor/registry.toml",
 ]
 
@@ -31,8 +37,16 @@ required_harness_profiles = [
   "conductor-reconciliation",
   "dependencies",
   "source-integrity",
+  "rights",
+  "bronze-fixity",
+  "parsing-parity",
+  "lineage",
+  "comparison-benchmark",
+  "model-manifests",
   "citation-integrity",
   "authentext",
+  "reconstruction",
+  "publication-verification",
   "routine",
   "strict",
 ]
