@@ -35,3 +35,12 @@
 - Added rcagent-inspired portable-skill/local-sensitive execution architecture and offline/private comparison modes.
 - Added current-repo CI/CD baseline aligned with archive-govt-nz/global-medicines-atlas: Python 3.14.6, uv 0.11.29, pinned Actions, dependency review, CodeQL, Gitleaks, actionlint/zizmor, Renovate and conditional locked supply-chain audit.
 - Added roadmap experiments for tiny-model specialization, DSPy/GEPA optimization, llama.cpp/XGrammar, browser-local DuckDB-Wasm/Transformers.js, HF Dataset Viewer/Xet/webhooks/ZeroGPU, session traces, artifact attestations and non-authoritative GitHub Agentic Workflows.
+
+## 2026-09-03 — Executable core bootstrap
+
+- Added the first production-shaped Python package and 40-test deterministic suite.
+- Implemented content-addressed Bronze ingest/capture, seed source census, Silver text/HTML normalization, conservative Gold extraction, baseline Platinum/gap primitives, finite release gates and A0–A4 confidence composition.
+- Added bounded tiny-model packets, exact-span/hash verification, a loopback-only llama.cpp adapter, model manifests and task benchmark harness.
+- Added an rcagent-style portable policy-gap-analysis skill, local/sensitive institutional runner, offline bundle verification and a dependency-free zipapp build.
+- Added Test-Goblin, source-health and Bronze Hugging Face publication workflows.
+- Activated T07 while retaining corpus medallion tracks behind their existing maturity gates.

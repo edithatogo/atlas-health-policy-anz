@@ -41,5 +41,21 @@ See `conductor/roadmap.md`, `conductor/design.md` and `docs/COMPARISON_ASSURANCE
 - Model-backed canonical outputs use constrained schemas plus exact source-span/hash verification.
 - Sensitive institutional PPGs can be processed locally against pre-pinned public Atlas releases without upload.
 
+
+## Executable core
+
+For offline institutional use, see [`docs/LOCAL_QUICKSTART.md`](docs/LOCAL_QUICKSTART.md).
+
+The repository now contains a dependency-light reference implementation of the governed workflow, including Bronze CAS/receipts, Silver text/HTML normalization, conservative Gold extraction, baseline Platinum comparison primitives, A0–A4 confidence logic, tiny-model packets, local/offline execution, institutional gap analysis, Hugging Face publication preparation and a portable zipapp. See `docs/IMPLEMENTATION_STATUS.md` for the exact qualified/deferred boundary.
+
+Useful bootstrap commands (from a checkout):
+
+```sh
+PYTHONPATH=src python scripts/build_source_census.py
+PYTHONPATH=src python scripts/benchmark_modality.py
+PYTHONPATH=src python scripts/build_zipapp.py
+python dist/au-health-policy-atlas.pyz classify-modality "The service must act."
+```
+
 ## Project governance
 Conductor is the authoritative context and delivery system. CI/CD and dependency policy are defined in `.context/ci.toml` and `docs/CI_CD.md`; tiny-model rules are defined in `.context/tiny-models.toml` and `docs/TINY_MODEL_EXECUTION.md`.

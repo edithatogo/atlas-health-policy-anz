@@ -52,7 +52,7 @@ depends_on = ["T04"]
 [[track]]
 id = "T07"
 slug = "agent-workflow-engineering"
-status = "planned"
+status = "active"
 path = "conductor/tracks/T07-agent-workflow-engineering"
 depends_on = ["T00"]
 

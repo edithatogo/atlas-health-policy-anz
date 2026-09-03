@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/au-health-policy-atlas/release-receipt-v1.schema.json",
+  "title": "Release Receipt v1",
+  "type": "object",
+  "required": ["release_id", "layer", "status", "input_manifest_sha256", "output_manifest_sha256", "acceptance_results", "evidence_state", "reason_codes"],
+  "properties": {
+    "layer": {"enum": ["census", "bronze", "silver", "gold", "platinum", "gap-analysis"]},
+    "status": {"enum": ["planned", "executing", "candidate", "qualified", "closed"]},
+    "evidence_state": {"enum": ["A0", "A1", "A2", "A3", "A4"]}
+  }
+}
