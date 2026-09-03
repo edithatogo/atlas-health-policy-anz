@@ -117,6 +117,47 @@ def validate_ci(errors: list[str]) -> None:
         errors.append("Renovate must inherit edithatogo/renovate-config")
 
 
+
+
+def validate_public_corpus(errors: list[str]) -> None:
+    registry_path = ROOT / "data/sources/source-surfaces-v1.json"
+    completion_path = ROOT / "evidence/public-corpus/source-census-v1/completion.json"
+    if not registry_path.exists() or not completion_path.exists():
+        errors.append("Source Census v1 registry/completion receipt missing")
+        return
+    registry = load_json(registry_path)
+    sources = registry.get("sources", [])
+    jurisdictions = {item.get("jurisdiction") for item in sources}
+    expected = {"QLD", "NSW", "VIC", "SA", "WA", "TAS", "ACT", "NT"}
+    if not expected.issubset(jurisdictions):
+        errors.append(f"Source Census v1 missing jurisdictions: {sorted(expected - jurisdictions)}")
+    if "Cth" not in jurisdictions:
+        errors.append("Source Census v1 missing Commonwealth comparator")
+    required = {"source_id", "jurisdiction", "url", "capture_adapter", "disposition"}
+    for index, item in enumerate(sources):
+        missing = required - set(item)
+        if missing:
+            errors.append(f"source surface {index} missing fields: {sorted(missing)}")
+        if not str(item.get("url", "")).startswith("https://"):
+            errors.append(f"source surface must use HTTPS: {item.get('source_id')}")
+    completion = load_json(completion_path)
+    actual_sha = hashlib.sha256(registry_path.read_bytes()).hexdigest()
+    if completion.get("registry_sha256") != actual_sha:
+        errors.append("Source Census v1 completion receipt registry hash drifted")
+    if completion.get("status") != "qualified":
+        errors.append("Source Census v1 completion receipt is not qualified")
+
+    shadow = ROOT / "quality/shadow/clinical-governance-v0/receipt.json"
+    if shadow.exists():
+        receipt = load_json(shadow)
+        if receipt.get("not_a_medallion_release") is not True:
+            errors.append("shadow clinical-governance output must remain non-release")
+    readiness = ROOT / "evidence/public-corpus/bronze-v1/readiness.json"
+    if readiness.exists():
+        bronze = load_json(readiness)
+        if bronze.get("gate_b_passed") is not False and bronze.get("original_payloads_captured", 0) == 0:
+            errors.append("Bronze Gate B cannot pass with zero original payloads")
+
 def main() -> int:
     errors: list[str] = []
     project_path = ROOT / ".context/project.toml"
@@ -199,6 +240,7 @@ def main() -> int:
 
     validate_microtask(errors)
     validate_ci(errors)
+    validate_public_corpus(errors)
 
     if errors:
         for error in errors:

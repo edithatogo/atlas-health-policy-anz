@@ -1,6 +1,6 @@
 id = "T02"
 title = "Bronze acquisition and maturity"
-status = "planned"
+status = "active"
 created = "2026-09-03"
 updated = "2026-09-03"
 depends_on = ["T01"]

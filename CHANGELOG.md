@@ -1,3 +1,4 @@
+# Changelog
 
 ## 2026-09-03 — GraphRAG and spaCy NLP substrate
 
@@ -6,7 +7,16 @@
 - Added optional spaCy NLP support for sentence segmentation and exact-offset modality, jurisdiction, framework, concept and role spans; rule-only spaCy output is explicitly non-independent triangulation evidence.
 - Integrated optional spaCy and graph generation into network-free local document preparation and added portable CLI `nlp-analyse` and `graph-query` commands.
 - Added graph node/edge schemas, tests and documentation.
-# Changelog
+
+## 2026-09-03 — Public Australian corpus execution
+
+- Closed T01 Source Census v1 over 28 official public source surfaces spanning all eight state/territory jurisdictions plus Commonwealth comparators, with a hash-bound completion receipt and frozen Bronze/Hugging Face publication contract.
+- Activated T02 Bronze v1 and generated the 28-surface capture queue, readiness receipt and document-discovery snapshot.
+- Recorded current portal discovery evidence for Queensland, NSW, Victoria, South Australia, Western Australia, ACT and the distributed NT public corpus while preserving public-v1 exclusions for staff-login-only material.
+- Built a quarantined nine-source clinical-governance vertical slice through shadow Silver, Gold, Platinum and GraphRAG outputs; every output is stamped `not_a_medallion_release`.
+- Added fail-closed context checks preventing shadow artefacts or zero-byte Bronze state from satisfying production medallion gates.
+- Added public-corpus integration tests; 106 tests pass and current branch-aware package coverage is 97%.
+- Attempted authenticated Hugging Face execution: target datasets do not yet exist, no repository-write action is exposed by the connector, and `cpu-basic` Jobs returned HTTP 402; no remote publication is claimed.
 
 ## Unreleased
 

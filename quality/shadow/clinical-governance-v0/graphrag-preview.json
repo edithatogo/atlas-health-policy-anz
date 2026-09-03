@@ -1,0 +1,372 @@
+{
+  "evidence_segments": [
+    {
+      "kind": "segment",
+      "label": "The 2024 Victorian framework provides best-practice guidance on clinical governance roles, systems, reporting, safety culture, consumer-centred decision-making ",
+      "node_id": "segment:shadow.cg.vic.seg.000001",
+      "properties": {
+        "evidence_state": "A2",
+        "jurisdiction": "VIC",
+        "limitations": [
+          "no_bronze_exact_span"
+        ],
+        "locator": "web-source-grounded-summary:1",
+        "not_a_medallion_release": true,
+        "ordinal": 1,
+        "parser_id": "shadow-web-observation-v0",
+        "segment_id": "shadow.cg.vic.seg.000001",
+        "source_id": "cg-vic-2024",
+        "text": "The 2024 Victorian framework provides best-practice guidance on clinical governance roles, systems, reporting, safety culture, consumer-centred decision-making and accountability across an expanded range of healthcare sectors.",
+        "text_sha256": "a183f9514c5ee6e16cd95e6f38f29872b7033056815e9d1c1489c666cf24d083"
+      }
+    },
+    {
+      "kind": "segment",
+      "label": "The 2026 national model defines six foundations: leading systems and organisational culture; partnering with patients, carers and consumers; building a healthy ",
+      "node_id": "segment:shadow.cg.cth.seg.000001",
+      "properties": {
+        "evidence_state": "A2",
+        "jurisdiction": "Cth",
+        "limitations": [
+          "no_bronze_exact_span"
+        ],
+        "locator": "web-source-grounded-summary:1",
+        "not_a_medallion_release": true,
+        "ordinal": 1,
+        "parser_id": "shadow-web-observation-v0",
+        "segment_id": "shadow.cg.cth.seg.000001",
+        "source_id": "cg-cth-2026",
+        "text": "The 2026 national model defines six foundations: leading systems and organisational culture; partnering with patients, carers and consumers; building a healthy workforce culture; enabling high-quality and integrated clinical practice; managing and reducing risk; and using data for better care.",
+        "text_sha256": "fb89fbda483bdf44387222ba7bd51fe550396dcd739837cf7ee6c6a25a8eb358"
+      }
+    }
+  ],
+  "hits": [
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "VIC addresses leading systems and organisational culture",
+      "node_id": "assertion:shadow.cg.vic.concept.01",
+      "path": [
+        {
+          "relation": "INVERSE_SUPPORTS",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "segment:shadow.cg.vic.seg.000001"
+        },
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.vic.seg.000001",
+          "target": "assertion:shadow.cg.vic.concept.01"
+        }
+      ],
+      "score": 0.511111,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "VIC addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.vic.concept.02",
+      "path": [
+        {
+          "relation": "INVERSE_SUPPORTS",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "segment:shadow.cg.vic.seg.000001"
+        },
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.vic.seg.000001",
+          "target": "assertion:shadow.cg.vic.concept.02"
+        }
+      ],
+      "score": 0.511111,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "VIC addresses building a healthy workforce culture",
+      "node_id": "assertion:shadow.cg.vic.concept.03",
+      "path": [
+        {
+          "relation": "INVERSE_SUPPORTS",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "segment:shadow.cg.vic.seg.000001"
+        },
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.vic.seg.000001",
+          "target": "assertion:shadow.cg.vic.concept.03"
+        }
+      ],
+      "score": 0.511111,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "VIC addresses enabling high-quality and integrated clinical practice",
+      "node_id": "assertion:shadow.cg.vic.concept.04",
+      "path": [
+        {
+          "relation": "INVERSE_SUPPORTS",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "segment:shadow.cg.vic.seg.000001"
+        },
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.vic.seg.000001",
+          "target": "assertion:shadow.cg.vic.concept.04"
+        }
+      ],
+      "score": 0.511111,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "VIC addresses managing and reducing risk",
+      "node_id": "assertion:shadow.cg.vic.concept.05",
+      "path": [
+        {
+          "relation": "INVERSE_SUPPORTS",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "segment:shadow.cg.vic.seg.000001"
+        },
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.vic.seg.000001",
+          "target": "assertion:shadow.cg.vic.concept.05"
+        }
+      ],
+      "score": 0.511111,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "VIC addresses using data for better care",
+      "node_id": "assertion:shadow.cg.vic.concept.06",
+      "path": [
+        {
+          "relation": "INVERSE_SUPPORTS",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "segment:shadow.cg.vic.seg.000001"
+        },
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.vic.seg.000001",
+          "target": "assertion:shadow.cg.vic.concept.06"
+        }
+      ],
+      "score": 0.511111,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "segment",
+      "label": "The 2026 national model defines six foundations: leading systems and organisational culture; partnering with patients, carers and consumers; building a healthy ",
+      "node_id": "segment:shadow.cg.cth.seg.000001",
+      "path": [
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.cth.seg.000001",
+          "target": "assertion:shadow.cg.cth.concept.01"
+        },
+        {
+          "relation": "INVERSE_SUPPORTS",
+          "source": "assertion:shadow.cg.cth.concept.01",
+          "target": "segment:shadow.cg.cth.seg.000001"
+        }
+      ],
+      "score": 0.483333,
+      "seed_score": 0.25
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "ACT addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.act.concept.02",
+      "path": [
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "concept:partnering with patients, carers and consumers"
+        },
+        {
+          "relation": "INVERSE_MENTIONS_CONCEPT",
+          "source": "concept:partnering with patients, carers and consumers",
+          "target": "assertion:shadow.cg.act.concept.02"
+        }
+      ],
+      "score": 0.477778,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "Cth addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.cth.concept.02",
+      "path": [
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "concept:partnering with patients, carers and consumers"
+        },
+        {
+          "relation": "INVERSE_MENTIONS_CONCEPT",
+          "source": "concept:partnering with patients, carers and consumers",
+          "target": "assertion:shadow.cg.cth.concept.02"
+        }
+      ],
+      "score": 0.477778,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "NSW addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.nsw.concept.02",
+      "path": [
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "concept:partnering with patients, carers and consumers"
+        },
+        {
+          "relation": "INVERSE_MENTIONS_CONCEPT",
+          "source": "concept:partnering with patients, carers and consumers",
+          "target": "assertion:shadow.cg.nsw.concept.02"
+        }
+      ],
+      "score": 0.477778,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "NT addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.nt.concept.02",
+      "path": [
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "concept:partnering with patients, carers and consumers"
+        },
+        {
+          "relation": "INVERSE_MENTIONS_CONCEPT",
+          "source": "concept:partnering with patients, carers and consumers",
+          "target": "assertion:shadow.cg.nt.concept.02"
+        }
+      ],
+      "score": 0.477778,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "QLD addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.qld.concept.02",
+      "path": [
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "concept:partnering with patients, carers and consumers"
+        },
+        {
+          "relation": "INVERSE_MENTIONS_CONCEPT",
+          "source": "concept:partnering with patients, carers and consumers",
+          "target": "assertion:shadow.cg.qld.concept.02"
+        }
+      ],
+      "score": 0.477778,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "SA addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.sa.concept.02",
+      "path": [
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "concept:partnering with patients, carers and consumers"
+        },
+        {
+          "relation": "INVERSE_MENTIONS_CONCEPT",
+          "source": "concept:partnering with patients, carers and consumers",
+          "target": "assertion:shadow.cg.sa.concept.02"
+        }
+      ],
+      "score": 0.477778,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "assertion",
+      "label": "WA addresses partnering with patients, carers and consumers",
+      "node_id": "assertion:shadow.cg.wa.concept.02",
+      "path": [
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.vic.concept.02",
+          "target": "concept:partnering with patients, carers and consumers"
+        },
+        {
+          "relation": "INVERSE_MENTIONS_CONCEPT",
+          "source": "concept:partnering with patients, carers and consumers",
+          "target": "assertion:shadow.cg.wa.concept.02"
+        }
+      ],
+      "score": 0.477778,
+      "seed_score": 0.277778
+    },
+    {
+      "hops": 2,
+      "kind": "concept",
+      "label": "building a healthy workforce culture",
+      "node_id": "concept:building a healthy workforce culture",
+      "path": [
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.cth.seg.000001",
+          "target": "assertion:shadow.cg.cth.concept.03"
+        },
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.cth.concept.03",
+          "target": "concept:building a healthy workforce culture"
+        }
+      ],
+      "score": 0.47,
+      "seed_score": 0.25
+    },
+    {
+      "hops": 2,
+      "kind": "concept",
+      "label": "enabling high-quality and integrated clinical practice",
+      "node_id": "concept:enabling high-quality and integrated clinical practice",
+      "path": [
+        {
+          "relation": "SUPPORTS",
+          "source": "segment:shadow.cg.cth.seg.000001",
+          "target": "assertion:shadow.cg.cth.concept.04"
+        },
+        {
+          "relation": "MENTIONS_CONCEPT",
+          "source": "assertion:shadow.cg.cth.concept.04",
+          "target": "concept:enabling high-quality and integrated clinical practice"
+        }
+      ],
+      "score": 0.47,
+      "seed_score": 0.25
+    }
+  ],
+  "query": "partnering with consumers leadership risk data clinical practice workforce culture",
+  "reason_codes": [
+    "derived_graph_non_authoritative",
+    "path_preserving_retrieval",
+    "lexical_seed_only"
+  ]
+}

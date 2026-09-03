@@ -14,8 +14,9 @@ This document distinguishes executable capability from roadmap intent. A passing
 - loopback-only OpenAI-compatible/llama.cpp adapter with structured-output verification.
 
 ### Corpus and medallion substrate
-- governed seed registry covering ACT, NSW, NT, QLD, SA, TAS, VIC and WA official policy surfaces;
-- deterministic source-census receipt generation;
+- closed Source Census v1 covering 28 official public source surfaces across ACT, NSW, NT, QLD, SA, TAS, VIC and WA plus Commonwealth comparators, with a hash-bound completion receipt and frozen Bronze publication contract;
+- deterministic source-census receipt generation and an active 28-surface Bronze capture queue;
+- partial document-level portal discovery evidence, including 213 current Safer Care Victoria publication results, 20 mandatory WA Clinical Governance/Safety/Quality policies, 20 SA Health policy domains, a 100-record ACT Health transparency-page snapshot, NSW's living Patient Matters manual, and the distributed NT Health Digital Library boundary;
 - bounded HTTPS capture into SHA-256 content-addressed storage with HTTP provenance receipts;
 - portal link discovery for likely policies/guidelines/procedures/frameworks;
 - Bronze local ingest and deterministic Bronze manifests;
@@ -39,7 +40,7 @@ This document distinguishes executable capability from roadmap intent. A passing
 - local model manifest contract and task-specific benchmark harness.
 
 ### CI/CD and automation
-- 103 deterministic tests currently pass with 96.61% branch-aware package coverage;
+- 106 deterministic tests currently pass; the package is at 97% branch-aware coverage in the current public-corpus execution state;
 - context/security/dependency-review workflows;
 - Test-Goblin-style unit/integration/smoke/property/contract matrix;
 - 95% branch-coverage target in CI;
@@ -64,18 +65,26 @@ The following code exists but its production route still requires the relevant t
 
 These remain deliberately unable to upgrade evidence merely because they execute successfully.
 
+## Current public-corpus release state
+
+- **T01 / Source Census v1:** completed. The release is intentionally a finite census of official source *surfaces*; individual-document completeness is a Bronze obligation.
+- **T02 / Bronze v1:** active. Twenty-eight source surfaces are queued, but zero original payloads have been captured in this execution environment, so Gate B correctly remains closed.
+- **T03 / Silver v1, T04 / Gold v1, T05 / Platinum v1:** production status remains planned because predecessor gates are non-compensatory.
+- **Shadow clinical-governance slice:** 9 source observations → 9 shadow Silver segments → 48 shadow Gold concept candidates → 9 Platinum preview rows → 63-node/96-edge graph. It is explicitly `not_a_medallion_release`.
+- **Hugging Face:** the four intended public dataset repositories do not yet exist. The authenticated connector exposes no dataset write action, and a `cpu-basic` Hugging Face Job attempt returned HTTP 402, so no upload is claimed. Publication candidate contracts and remote-verification machinery are ready.
+
 ## Genuinely deferred
 
-The remaining work that cannot be responsibly completed before the live corpus exists is mostly empirical rather than architectural:
+The remaining work is now predominantly data acquisition and empirical qualification rather than architecture:
 
-1. close the v1 source census and enumerate every in-scope document rather than only seed portals;
-2. run complete live acquisition and qualify Bronze v1;
+1. execute the networked 28-surface Bronze queue; recursively enumerate all in-scope public documents and assign every discovery a captured/duplicate/superseded/unavailable/out-of-scope disposition;
+2. publish and remotely verify the real public Bronze Hugging Face release;
 3. benchmark parser combinations on the captured PDF/DOCX/HTML corpus and select the qualified Silver route;
 4. construct/adjudicate Gold extraction benchmarks, including jurisdiction and temporal hold-outs;
-5. benchmark embeddings, cross-encoders, NLI and candidate generative models on real comparison pairs;
+5. benchmark lexical, embedding, GraphRAG seed, cross-encoder, NLI and candidate generative methods on real comparison pairs;
 6. choose and pin the smallest passing local models/quantizations;
-7. generate the real public Silver, Gold and Platinum Hugging Face releases;
+7. generate and remotely verify the real public Silver, Gold and Platinum Hugging Face releases;
 8. qualify the final institutional runner against those releases;
-9. perform workstation-specific throughput/memory tuning for any offline bundle that includes a local model runtime.
+9. perform workstation-specific throughput/memory tuning only for any offline bundle that includes a local model runtime.
 
 The intended local burden is therefore installation/selection/tuning of already-defined components, not architectural or workflow development.

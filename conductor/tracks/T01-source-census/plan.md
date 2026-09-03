@@ -1,11 +1,11 @@
-# T01 Plan
+# T01 Plan — Source Census v1
 
-- [ ] Freeze scope and acceptance criteria.
-- [ ] Complete ecosystem/dependency reuse discovery for this track.
-- [ ] Create typed schemas/contracts and adversarial fixtures before production implementation.
-- [ ] Implement benchmark/qualification harness.
-- [ ] Implement smallest end-to-end vertical slice.
-- [ ] Run red-team/differential/reconstruction tests as applicable.
-- [ ] Record evidence and unresolved limitations.
-- [ ] Emit immutable release manifest, replay instructions and machine-readable completion receipt.
-- [ ] Mark the finite release closed/track completed only after non-compensatory gates pass; defer optional refinements to the next release.
+- [x] Freeze v1 as official public source surfaces observed 2026-09-03; delegate individual-document completeness to T02.
+- [x] Reuse the archive-govt-nz source-registry/provenance pattern and Global Medicines Atlas publication separation.
+- [x] Enumerate source surfaces across all eight state/territory systems plus Commonwealth comparators.
+- [x] Assign source taxonomy, authority/publisher, capture adapter, update mechanism and disposition.
+- [x] Explicitly model distributed-corpus jurisdictions rather than inventing central registers.
+- [x] Freeze the public Hugging Face Bronze package and remote verification contract.
+- [x] Produce a machine-readable completion receipt and immutable file/hash manifest.
+- [x] Record replay instructions and residual limitations.
+- [x] Close Source Census v1; later discoveries enter an incremental census release.

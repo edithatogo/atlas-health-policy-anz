@@ -10,14 +10,14 @@ depends_on = []
 [[track]]
 id = "T01"
 slug = "source-census"
-status = "planned"
+status = "completed"
 path = "conductor/tracks/T01-source-census"
 depends_on = ["T00"]
 
 [[track]]
 id = "T02"
 slug = "bronze-maturity"
-status = "planned"
+status = "active"
 path = "conductor/tracks/T02-bronze-maturity"
 depends_on = ["T01"]
 

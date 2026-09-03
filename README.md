@@ -35,6 +35,12 @@ Analyses progress only as comparability is established:
 See `conductor/roadmap.md`, `conductor/design.md` and `docs/COMPARISON_ASSURANCE.md`.
 
 
+## Public-corpus execution status
+
+As at **2026-09-03**, **Source Census v1 (T01) is closed** over 28 official source surfaces covering all eight states/territories plus Commonwealth comparators. **Bronze v1 (T02) is executing** with all 28 surfaces queued, but Gate B remains closed because this execution environment cannot retrieve original government bytes or write a Hugging Face dataset repository. T03–T05 therefore remain production-gated.
+
+A quarantined clinical-governance vertical slice exercises the downstream design without bypassing those gates: 9 source-grounded observations, 48 Gold concept candidates, a 9-row Platinum preview, and a 63-node/96-edge GraphRAG projection. Every artefact is stamped `not_a_medallion_release` and cannot be promoted into production. See `docs/IMPLEMENTATION_STATUS.md`.
+
 ## Execution portability
 - The orchestrator owns state; language models answer bounded typed microtasks.
 - Deterministic and lexical methods precede tiny/local inference; larger models are fallbacks.

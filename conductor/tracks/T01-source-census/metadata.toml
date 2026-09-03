@@ -1,6 +1,6 @@
 id = "T01"
 title = "Source census and Hugging Face contracts"
-status = "planned"
+status = "completed"
 created = "2026-09-03"
 updated = "2026-09-03"
 depends_on = ["T00"]
