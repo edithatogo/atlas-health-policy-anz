@@ -12,3 +12,5 @@ Develop the reusable agents, skills and workflows needed to execute the medallio
 - Red-team fixtures target hallucination, source omission, false equivalence, temporal mismatch, authority mismatch and silent fallback.
 - Model-backed agents require benchmark qualification and immutable model/prompt manifests.
 - SourceRight, CiteWeft and Authentext adapters are shared skills rather than duplicated implementations.
+- Workflows implement A0–A4 confidence-gated autonomy and do not request approval for routine reversible operations.
+- Finite release closure is implemented as a first-class workflow with machine-verifiable completion receipts.

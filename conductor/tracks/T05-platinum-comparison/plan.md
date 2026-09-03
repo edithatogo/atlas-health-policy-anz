@@ -7,4 +7,5 @@
 - [ ] Implement smallest end-to-end vertical slice.
 - [ ] Run red-team/differential/reconstruction tests as applicable.
 - [ ] Record evidence and unresolved limitations.
-- [ ] Promote maturity/status only after non-compensatory gates pass.
+- [ ] Emit immutable release manifest, replay instructions and machine-readable completion receipt.
+- [ ] Mark the finite release closed/track completed only after non-compensatory gates pass; defer optional refinements to the next release.

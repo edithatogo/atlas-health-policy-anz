@@ -14,5 +14,5 @@ Produce a complete, reproducible Silver representation of the qualified Bronze r
 - CiteWeft integration for reference/citation structures.
 - Reconstruct Silver deterministically from pinned Bronze and code.
 
-## Gate S
-No Gold production until all v1 formats are qualified, loss is accounted, lineage is reversible and benchmark thresholds pass.
+## Gate S / completion
+No Gold production until all v1 formats are qualified, loss is accounted, lineage is reversible and benchmark thresholds pass. Silver v1 must also be published to the public Hugging Face Silver dataset, remotely verified, and closed with an immutable manifest and completion receipt.

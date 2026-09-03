@@ -3,11 +3,11 @@
 T07 will turn these into reusable, versioned skills with fixtures and contracts.
 
 - `source_census`: enumerate official repositories and close every item with a disposition.
-- `rights_qualification`: source-specific redistribution/publication assessment via SourceRight boundary.
+- `source_provenance`: SourceRight-compatible source identity, provenance/source-quality and acquisition-context assessment.
 - `web_capture`: bounded HTTP/browser acquisition with receipts and WARC/CAS persistence.
 - `document_fixity`: SHA-256/BLAKE3 identity and manifest verification.
-- `hf_publication_candidate`: build rights-qualified Hugging Face dataset package without publishing it.
-- `hf_remote_verification`: verify remote revision, bytes, metadata and dataset usability after authorized publication.
+- `hf_publication`: build and publish a technically qualified public Hugging Face dataset package when credentials are available.
+- `hf_remote_verification`: verify remote revision, bytes, metadata and dataset usability after publication.
 - `pdf_parse`, `html_parse`, `docx_parse`: format-specific extraction with loss accounting.
 - `parser_differential`: compare independent parser outputs and classify divergence.
 - `section_normalization`: structural Silver projection with stable anchors.
@@ -25,3 +25,6 @@ T07 will turn these into reusable, versioned skills with fixtures and contracts.
 - `rebuild_from_bronze`: clean-room reconstruction of all derivative layers.
 - `institution_adapter`: map an institution's PPG corpus into the common Gold/Platinum contracts.
 - `narrative_synthesize`: evidence-table-to-prose rendering with CiteWeft and Authentext gates.
+
+- `confidence_assign`: compose provenance, comparability, coverage, benchmark and triangulation evidence into reason-coded A0–A4 states.
+- `release_close`: evaluate finite release acceptance criteria, emit immutable completion receipt and permit downstream progression.

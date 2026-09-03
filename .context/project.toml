@@ -16,6 +16,7 @@ required_context = [
   "conductor/tech-stack.md",
   "conductor/workflow.md",
   "conductor/autonomy.md",
+  "conductor/completion.md",
   "conductor/tracks.md",
   "docs/ECOSYSTEM_REUSE.md",
   "docs/COMPARISON_ASSURANCE.md",
@@ -29,6 +30,7 @@ required_manifests = [
   ".context/dependencies.toml",
   ".context/comparison.toml",
   ".context/frameworks.toml",
+  ".context/autonomy.toml",
   "conductor/registry.toml",
 ]
 
@@ -37,7 +39,6 @@ required_harness_profiles = [
   "conductor-reconciliation",
   "dependencies",
   "source-integrity",
-  "rights",
   "bronze-fixity",
   "parsing-parity",
   "lineage",
@@ -52,10 +53,7 @@ required_harness_profiles = [
 ]
 
 human_gates = [
-  "credentials",
-  "licensing",
-  "public-release",
-  "external-publication",
-  "consequential-interpretation",
-  "policy-recommendation",
+  "missing-unrefreshable-credentials",
+  "destructive-irreversible-external-mutation",
+  "explicit-manual-adjudication-request",
 ]

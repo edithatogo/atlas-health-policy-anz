@@ -12,6 +12,9 @@
 - [x] Record comparison assurance and framework/model triangulation policy.
 - [x] Create catalogues and tracks for agents, skills and workflows.
 - [x] Add roadmap for reproducible, configurable, updateable and institutional gap analysis.
+- [x] Replace routine approvals with A0–A4 confidence-gated autonomy and narrow exception gates.
+- [x] Add finite completion contracts for Source Census/Bronze/Silver/Gold/Platinum/Gap Analysis releases.
+- [x] Add later experiments/features roadmap without creating additional tracks.
 - [ ] Resolve exact canonical repositories/revisions for SourceRight, CiteWeft and Authentext.
 - [ ] Add native thin adapters once dependency interfaces are inspected.
 - [ ] Map tracks to GitHub issue/project hierarchy when the remote repository is created/connected.

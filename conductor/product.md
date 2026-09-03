@@ -8,7 +8,7 @@ Australian jurisdictions face many of the same clinical and governance problems 
 ## Canonical progression
 Implementation is strictly layer-gated:
 
-1. **Bronze** — immutable, rights-qualified source evidence and capture context.
+1. **Bronze** — immutable source evidence, provenance and capture context.
 2. **Silver** — reproducibly parsed and structurally normalised documents.
 3. **Gold** — provenance-bearing, bitemporal atomic policy assertions and concepts.
 4. **Platinum** — qualified cross-jurisdiction comparisons, gap analyses, consensus/outlier measures and framework projections.

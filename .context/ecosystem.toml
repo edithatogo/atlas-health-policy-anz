@@ -25,7 +25,7 @@ local_boundary = "comparison/validity/uncertainty"
 [[github]]
 id = "sourceright"
 repository = "edithatogo/sourceright"
-authority = "source-rights-source-quality-and-evidence-integrity"
+authority = "source-provenance-source-quality-and-evidence-integrity"
 disposition = "dependency"
 local_boundary = "quality/source-integrity"
 
@@ -48,7 +48,7 @@ id = "corpus-social-media-government-nz"
 repository = "edithatogo/corpus-social-media-government-nz"
 authority = "public-government-corpus-publication-and-provenance-pattern"
 disposition = "adopt-pattern"
-publication_gate = "source-specific-rights-and-remote-verification"
+publication_gate = "technical-integrity-and-remote-verification"
 
 [[hugging_face]]
 id = "global-medicines-atlas-catalogue"
@@ -62,25 +62,25 @@ id = "au-health-policy-atlas-bronze"
 repository = "edithatogo/au-health-policy-atlas-bronze"
 authority = "planned-public-bronze-source-evidence-dataset"
 disposition = "planned-create"
-publication_gate = "bronze-maturity-plus-rights-plus-human-public-release-plus-remote-verification"
+publication_gate = "bronze-maturity-plus-remote-verification"
 
 [[hugging_face]]
 id = "au-health-policy-atlas-silver"
 repository = "edithatogo/au-health-policy-atlas-silver"
 authority = "planned-public-silver-structured-document-dataset"
 disposition = "planned-create"
-publication_gate = "silver-maturity-plus-lineage-plus-human-public-release-plus-remote-verification"
+publication_gate = "silver-maturity-plus-lineage-plus-remote-verification"
 
 [[hugging_face]]
 id = "au-health-policy-atlas-gold"
 repository = "edithatogo/au-health-policy-atlas-gold"
 authority = "planned-public-gold-policy-assertion-dataset"
 disposition = "planned-create"
-publication_gate = "gold-maturity-plus-benchmark-plus-human-public-release-plus-remote-verification"
+publication_gate = "gold-maturity-plus-benchmark-plus-remote-verification"
 
 [[hugging_face]]
 id = "au-health-policy-atlas-platinum"
 repository = "edithatogo/au-health-policy-atlas-platinum"
 authority = "planned-public-platinum-comparative-dataset"
 disposition = "planned-create"
-publication_gate = "platinum-maturity-plus-replay-plus-human-public-release-plus-remote-verification"
+publication_gate = "platinum-maturity-plus-replay-plus-remote-verification"

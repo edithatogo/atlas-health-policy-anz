@@ -31,6 +31,18 @@ def main() -> int:
         if required not in ids:
             errors.append(f"missing required dependency: {required}")
 
+    autonomy = load_toml(ROOT / ".context/autonomy.toml")
+    levels = {level.get("id") for level in autonomy.get("level", [])}
+    if levels != {"A0", "A1", "A2", "A3", "A4"}:
+        errors.append("autonomy manifest must define exactly A0-A4")
+    if not autonomy.get("principles", {}).get("minimal_approval_spam", False):
+        errors.append("autonomy manifest must enforce minimal approval spam")
+    forbidden_routine_gates = {"licensing", "public-release", "consequential-interpretation", "policy-recommendation"}
+    configured_gates = set(project.get("human_gates", []))
+    bad = forbidden_routine_gates & configured_gates
+    if bad:
+        errors.append(f"routine approval gates reintroduced: {sorted(bad)}")
+
     registry = load_toml(ROOT / "conductor/registry.toml")
     tracks = registry.get("track", [])
     track_ids = {track.get("id") for track in tracks}
@@ -54,11 +66,14 @@ def main() -> int:
                 f"medallion gate violation: {downstream} started before {upstream} completed"
             )
 
+    if not (ROOT / "conductor/completion.md").exists():
+        errors.append("missing discrete completion contract")
+
     if errors:
         for error in errors:
             print(f"ERROR {error}")
         return 1
-    print("OK context and Conductor reconciliation passed")
+    print("OK context, autonomy and Conductor reconciliation passed")
     return 0
 
 

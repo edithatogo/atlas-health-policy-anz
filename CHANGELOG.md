@@ -21,3 +21,11 @@
 - Added comparison-assurance and analytical-framework manifests.
 - Added twelve-track roadmap, including agent/skill/workflow engineering and a reproducible institutional gap-analysis engine.
 - Added benchmark-driven method/model triangulation policy and hallucination controls.
+
+## 2026-09-03 — Confidence-gated autonomy and discrete completion
+- Replaced routine approval gates with claim-level A0–A4 confidence-gated autonomy; human intervention is now exception-only.
+- Recorded maintainer authority to redistribute and removed redistribution/public-HF release approval friction from routine workflows.
+- Added finite Source Census/Bronze/Silver/Gold/Platinum/Gap-Analysis release contracts and completion receipts.
+- Added autonomous public Hugging Face publication plus remote verification to medallion completion semantics.
+- Added pairwise non-transitive equivalence discipline, denominator-aware coverage, descriptive/normative separation and hold-out benchmark requirements.
+- Added a later experiments/features roadmap without creating additional Conductor tracks.

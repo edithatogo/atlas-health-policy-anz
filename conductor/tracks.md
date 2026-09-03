@@ -3,7 +3,7 @@
 | Track | Name | Status | Primary dependency |
 |---|---|---|---|
 | T00 | Foundation and context management | active | — |
-| T01 | Source census, rights and HF contracts | planned | T00 |
+| T01 | Source census and HF contracts | planned | T00 |
 | T02 | Bronze acquisition and maturity | planned | T01 |
 | T03 | Silver parsing and lineage maturity | planned | T02 / Gate B |
 | T04 | Gold assertions and concept maturity | planned | T03 / Gate S |

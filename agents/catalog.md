@@ -2,25 +2,27 @@
 
 These are target agents to be developed and benchmarked under T07. They are roles with contracts, not fictional reviewers and not claims of current implementation.
 
-| Agent | Primary responsibility | Authoritative? |
+| Agent | Primary responsibility | Autonomous authority |
 |---|---|---|
-| Census Agent | Enumerate official policy repositories/source sets and disposition every discovered item | No |
-| Rights Agent | Apply SourceRight-compatible rights/redistribution checks and publication gates | No; human licensing gate remains |
-| Capture Agent | Bounded acquisition, receipts, WARC/CAS/fixity and Bronze manifests | Mechanical evidence only |
-| Bronze Auditor | Verify census completeness, fixity, provenance, recoverability and HF publication candidate | Gate evidence |
-| Parser Ensemble Agent | Run qualified parsers, compare outputs and retain extraction-loss/disagreement records | No |
+| Census Agent | Enumerate official policy repositories/source sets and disposition every discovered item | May close mechanically supported census items; uncertainty is explicit |
+| Source Provenance Agent | Apply SourceRight-compatible source identity, provenance and source-quality metadata | Mechanical evidence; no routine redistribution approval gate |
+| Capture Agent | Bounded acquisition, receipts, WARC/CAS/fixity and Bronze manifests | Full for reversible acquisition/publication workflow |
+| Bronze Auditor | Verify census completeness, fixity, provenance, recoverability and HF publication | May qualify Bronze when hard gates pass |
+| Parser Ensemble Agent | Run qualified parsers, compare outputs and retain extraction-loss/disagreement records | May promote A0/A1 structural outputs; retain weaker outputs explicitly |
 | Lineage Agent | Maintain page/DOM/cell/span lineage Bronze→Silver→Gold | Mechanical evidence |
 | Assertion Extractor | Propose atomic actor/modality/action/object/condition/timeframe assertions | Candidate only |
-| Assertion Verifier | Validate extracted fields against exact source spans and deterministic constraints | Qualification evidence |
+| Assertion Verifier | Validate extracted fields against exact source spans and deterministic constraints | May promote qualified assertions according to A0–A4 contract |
 | Equivalence Candidate Agent | Retrieve likely cross-jurisdiction equivalents using lexical/semantic/ontology signals | Candidate only |
-| Equivalence Judge | Apply scope/authority/time/NLI/cross-encoder/LLM comparison contract | No; emits validity state |
-| Framework Agent | Apply one versioned framework projection without contaminating other lenses | Derived analysis |
-| Triangulation Agent | Compare independent method/model outputs and preserve agreement/disagreement | No majority-vote authority |
-| Gap Analysis Agent | Construct reproducible gap matrices from qualified Gold/Platinum inputs | Derived analysis |
+| Equivalence Judge | Apply scope/authority/time/NLI/cross-encoder/LLM comparison contract | Emits evidence state; can autonomously promote A0/A1 only |
+| Framework Agent | Apply one versioned framework projection without contaminating other lenses | Derived analysis with A0–A4 state |
+| Triangulation Agent | Compare independent method/model outputs and preserve agreement/disagreement | May assign evidence state; no majority-vote authority |
+| Confidence Agent | Compose provenance, coverage, comparability, benchmark and triangulation evidence into A0–A4 reason-coded state | Classification authority only; cannot override failed hard gates |
+| Gap Analysis Agent | Construct reproducible gap matrices from qualified Gold/Platinum inputs | Full reporting, including clearly labelled A2/A3 findings |
 | Citation Agent | CiteWeft-compatible citation/source integrity | Quality evidence |
-| Narrative Agent | Explain qualified tables without adding unsupported facts | Publication narrative only |
+| Narrative Agent | Explain qualified tables without adding unsupported facts | Publication narrative only; inherits finding evidence labels |
 | Authentext Agent | Authentext/readability/humanization checks on narrative | Style only |
-| Red-Team Agent | Search for source gaps, false equivalence, temporal/scope errors and unsupported claims | Adversarial quality |
+| Red-Team Agent | Search for source gaps, false equivalence, temporal/scope errors and unsupported claims | Adversarial quality; may downgrade but not invent evidence |
 | Reproduction Agent | Clean-room rebuild and comparison replay from pinned manifests | Verification evidence |
+| Release Closer Agent | Test finite release acceptance contract and issue completion receipt when satisfied | May close routine releases when all machine gates pass |
 
-Every agent must expose typed inputs/outputs, abstention/failure states, model/tool manifests where applicable and tests against adversarial fixtures.
+Every agent must expose typed inputs/outputs, abstention/failure states, model/tool manifests where applicable and tests against adversarial fixtures. Candidate-generating and validating roles remain separate.

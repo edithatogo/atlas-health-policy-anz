@@ -10,12 +10,14 @@ outputs = [
   ".context/dependencies.toml",
   ".context/comparison.toml",
   ".context/frameworks.toml",
+  ".context/autonomy.toml",
   "AGENTS.md",
   "agents/catalog.md",
   "skills/catalog.md",
   "workflows/catalog.md",
   "docs/COMPARISON_ASSURANCE.md",
   "conductor/registry.toml",
+  "conductor/completion.md",
   "scripts/validate_context.py",
 ]
 

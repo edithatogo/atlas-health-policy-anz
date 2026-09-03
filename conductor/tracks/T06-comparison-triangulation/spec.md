@@ -13,3 +13,6 @@ Develop and validate the comparison methods/models so hallucination and false-eq
 - Test adversarial pairs: copied wording with changed scope; same requirement with changed terminology; superseded/current; guideline/mandatory; negation; exceptions; timeframes; role substitutions.
 - Record immutable model revisions and inference manifests.
 - No majority-vote ground truth.
+- Shared-base-model variants are not counted as materially independent model families.
+- Benchmark design includes jurisdiction and temporal hold-outs where feasible.
+- Evaluate claim-level calibration/abstention and A0–A4 assignment, not only class accuracy.

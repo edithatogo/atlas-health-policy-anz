@@ -12,3 +12,7 @@ Build qualified cross-jurisdiction equivalence classes and Platinum comparative 
 - Platinum records identify exact Gold inputs, methods/models/frameworks, versions, thresholds, coverage and uncertainty.
 - Produce consensus, outlier, modal/common-denominator and policy-frontier primitives without treating consensus as correctness.
 - Clean-room replay reproduces the comparison from pinned public inputs.
+- Every finding carries an A0–A4 autonomy/evidence state and reason codes; A2/A3 findings remain reportable and A4 abstains.
+- Pairwise equivalence is not assumed transitive; inconsistent triangles/cycles are surfaced.
+- Coverage metrics state an explicit denominator and observation cutoff.
+- Platinum v1 is published to the public Hugging Face Platinum dataset, remotely verified, and closed with an immutable manifest and completion receipt.
