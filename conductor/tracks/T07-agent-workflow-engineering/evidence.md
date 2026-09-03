@@ -2,7 +2,7 @@
 
 Initial executable bootstrap recorded 2026-09-03.
 
-- 90 deterministic unit/integration/assurance tests pass in the available Python 3.13 host, with 95.96% branch-aware package coverage using `PYTHONPATH=src pytest -q -c /dev/null tests --cov=australian_health_policy_atlas --cov-branch`.
+- 103 deterministic unit/integration/assurance tests pass in the available Python 3.13 host, with 96.61% branch-aware package coverage using `PYTHONPATH=src pytest -q -c /dev/null tests --cov=australian_health_policy_atlas --cov-branch`.
 - `scripts/validate_context.py` passes after adding the executable contracts.
 - `scripts/benchmark_modality.py` passes the initial five-case adversarial modality fixture at 100%, including `must not` precedence and explicit ambiguity.
 - The portable zipapp executes deterministic modality classification and local document preparation without package installation.

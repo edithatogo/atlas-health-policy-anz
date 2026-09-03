@@ -27,3 +27,13 @@ purpose = ["humanization", "readability", "style-quality"]
 integration = "thin-adapter"
 submodule = false
 fallback = "compatibility-mode-with-recorded-limitations"
+
+[[dependency]]
+id = "spacy"
+kind = "optional-nlp-runtime"
+required = false
+purpose = ["sentence-segmentation", "exact-offset-entities", "role-concept-framework-extraction", "triangulation-support"]
+integration = "optional-adapter"
+submodule = false
+fallback = "deterministic-regex-and-tokenization"
+qualification = "rule-only-output-is-not-independent-triangulation; statistical-models-require-benchmark-and-model-manifest"

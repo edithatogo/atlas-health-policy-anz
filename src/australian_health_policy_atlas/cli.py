@@ -9,7 +9,10 @@ from typing import Sequence
 
 from .bronze import ingest_local_file, write_manifest
 from .gold import classify_modality
+from .graph import load_graph
+from .graphrag import retrieve_graph_context
 from .institutional import run_institutional_gap_analysis
+from .nlp import analyse_with_spacy
 from .local_runner import prepare_local_document
 from .offline_bundle import build_bundle, verify_bundle
 from .source_registry import load_registry
@@ -49,6 +52,17 @@ def build_parser() -> argparse.ArgumentParser:
     local.add_argument("document")
     local.add_argument("--source-id", required=True)
     local.add_argument("--output-dir", required=True)
+    local.add_argument("--spacy", action="store_true", help="emit optional spaCy NLP features")
+    local.add_argument(
+        "--spacy-model",
+        default=None,
+        help="qualified spaCy statistical model name; blank English when omitted",
+    )
+    local.add_argument(
+        "--graph",
+        action="store_true",
+        help="emit rebuildable local medallion graph projection",
+    )
 
     gap = sub.add_parser(
         "institutional-gap",
@@ -58,6 +72,22 @@ def build_parser() -> argparse.ArgumentParser:
     gap.add_argument("public_gold_jsonl")
     gap.add_argument("--source-id", required=True)
     gap.add_argument("--output-dir", required=True)
+
+    nlp = sub.add_parser(
+        "nlp-analyse",
+        help="run optional spaCy exact-offset NLP projection",
+    )
+    nlp.add_argument("text")
+    nlp.add_argument("--spacy-model", default=None)
+
+    graph_query = sub.add_parser(
+        "graph-query",
+        help="run transparent path-preserving GraphRAG retrieval over a derived graph",
+    )
+    graph_query.add_argument("graph_dir")
+    graph_query.add_argument("query")
+    graph_query.add_argument("--top-k", type=int, default=12)
+    graph_query.add_argument("--max-hops", type=int, default=2)
 
     bundle = sub.add_parser(
         "bundle-build",
@@ -114,6 +144,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.document,
             source_id=args.source_id,
             output_dir=args.output_dir,
+            use_spacy=args.spacy,
+            spacy_model=args.spacy_model,
+            build_graph_projection=args.graph,
         )
         _print_json(receipt)
         return 0
@@ -125,6 +158,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             output_dir=args.output_dir,
         )
         _print_json(receipt)
+        return 0
+    if args.command == "nlp-analyse":
+        _print_json(analyse_with_spacy(args.text, model_name=args.spacy_model).as_dict())
+        return 0
+    if args.command == "graph-query":
+        graph = load_graph(args.graph_dir)
+        context = retrieve_graph_context(
+            graph,
+            args.query,
+            top_k=args.top_k,
+            max_hops=args.max_hops,
+        )
+        _print_json(context.as_dict())
         return 0
     if args.command == "bundle-build":
         manifest = build_bundle(

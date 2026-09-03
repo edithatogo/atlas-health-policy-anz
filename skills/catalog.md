@@ -15,6 +15,9 @@ T07 will turn these into reusable, versioned skills with fixtures and contracts.
 - `atomic_assertion_extract`: source-span grounded Gold candidate extraction.
 - `assertion_verify`: deterministic and model-assisted validation of Gold candidates.
 - `concept_map`: controlled concept/ontology mapping with explicit synonym provenance.
+- `spacy_nlp_projection`: exact-offset sentence/entity/concept/role/framework projection; statistical models require separate qualification.
+- `graph_project`: rebuild canonical medallion identifiers into a non-authoritative graph projection.
+- `graphrag_retrieve`: lexical/semantic seed fusion plus bounded path-preserving graph expansion and exact evidence recovery.
 - `candidate_retrieve`: BM25 + embeddings + optional ontology, transparently fused.
 - `equivalence_classify`: scope/authority/time compatible pairwise equivalence/contradiction classification.
 - `model_triangulate`: independent model-family judgments with disagreement retention.

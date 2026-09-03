@@ -35,7 +35,20 @@ Differential parsing is required on benchmark/sample material: disagreement betw
 - Exact hashes and normalized hashes for duplicate/version detection.
 - `rapidfuzz` for token/string similarity and near-duplicate discovery.
 - BM25/FTS (DuckDB FTS or a qualified BM25 implementation) for lexical candidate retrieval.
-- Rule-based modality/authority/timeframe extraction using validated patterns and optionally spaCy components where they improve benchmark performance.
+- Rule-based modality/authority/timeframe extraction using validated patterns.
+- **spaCy integration is implemented as an optional exact-offset NLP projection** for sentence segmentation, roles, concepts, framework references and later statistical parsing/NER. Blank/rule-only spaCy output is explicitly non-independent from deterministic rules; a pinned statistical pipeline may count as a distinct triangulation signal only after task-specific benchmark qualification.
+
+
+## Derived knowledge graph and GraphRAG
+A rebuildable policy graph is implemented as a **derived index**, never as the canonical evidence store. It can project Bronze source/object provenance, Silver source→segment structure, Gold assertion/jurisdiction/concept/framework relationships and Platinum comparison findings. Nodes and edges retain canonical identifiers and can be regenerated from medallion releases.
+
+GraphRAG retrieval is also implemented with transparent lexical seeds, optional externally supplied semantic seed scores, bounded multi-hop expansion and explicit path receipts. The current implementation deliberately avoids a mandatory graph database or heavyweight GraphRAG framework so it remains portable on small/offline systems. Later qualified embeddings, sparse retrieval or rerankers may seed the same graph traversal. Graph proximity is candidate evidence only and cannot promote a claim, create an equivalence edge or override source/scope/authority/temporal gates.
+
+The graph should progressively exploit the medallion:
+- Bronze: source, capture/object and version provenance;
+- Silver: document/section/segment containment and citation anchors;
+- Gold: assertions, actors, concepts, obligations, jurisdictions and framework mappings;
+- Platinum: comparison findings, agreement/disagreement, evidence/citation and policy-genealogy relationships.
 
 ## Semantic candidate retrieval
 Semantic methods only produce candidates unless independently qualified.

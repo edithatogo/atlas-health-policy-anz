@@ -131,6 +131,20 @@ def main() -> int:
         if not (ROOT / rel).exists():
             errors.append(f"missing required manifest: {rel}")
 
+    nlp_graph = load_toml(ROOT / ".context/nlp-graph.toml")
+    if nlp_graph.get("graph", {}).get("authoritative") is not False:
+        errors.append("policy graph must remain non-authoritative")
+    if nlp_graph.get("graph", {}).get("graph_proximity_can_promote_claim") is not False:
+        errors.append("graph proximity must not promote claims")
+    if nlp_graph.get("spacy", {}).get("rule_only_is_independent_method") is not False:
+        errors.append("rule-only spaCy must not count as independent triangulation")
+    if nlp_graph.get("graphrag", {}).get("candidate_only") is not True:
+        errors.append("GraphRAG must remain candidate-only")
+    pyproject = load_toml(ROOT / "pyproject.toml")
+    nlp_dependencies = pyproject.get("project", {}).get("optional-dependencies", {}).get("nlp", [])
+    if not any(item.startswith("spacy>=3.8.16") for item in nlp_dependencies):
+        errors.append("spaCy optional dependency must retain Python-3.14-capable baseline")
+
     deps = load_toml(ROOT / ".context/dependencies.toml")
     ids = {dependency.get("id") for dependency in deps.get("dependency", [])}
     for required in {"sourceright", "citeweft", "authentext"}:

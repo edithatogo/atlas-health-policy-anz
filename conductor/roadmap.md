@@ -65,7 +65,7 @@ The items below are **not Conductor tracks** and should not be instantiated as t
 - **Adversarial mutation laboratory:** automatically mutate modality, actors, timeframes, exceptions, scope and negation to create controlled hard negatives and metamorphic tests.
 
 ### Representation and reasoning experiments
-- **Knowledge-graph projection:** source→document→section→assertion→concept→framework→comparison graph, while retaining Parquet/Gold as authoritative.
+- **Advanced graph projection/GraphRAG qualification:** the rebuildable source→segment→assertion→concept/framework→comparison graph and bounded path-preserving GraphRAG substrate are implemented. Later experiments should benchmark semantic graph seeding, community/cluster summaries, citation graphs and graph-consistency diagnostics while retaining Parquet/Gold as authoritative.
 - **Formal rule projection:** evaluate Datalog/logic/rules-engine representations for highly structured obligations and contradiction checks.
 - **Policy genealogy:** version/wording lineage, borrowing/diffusion and clause ancestry across jurisdictions.
 - **Equivalence-graph consistency:** triangle/cycle diagnostics to detect non-transitive or internally inconsistent equivalence classes.

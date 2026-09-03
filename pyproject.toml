@@ -11,6 +11,9 @@ license = "Apache-2.0"
 authors = [{ name = "edithatogo" }]
 dependencies = []
 
+[project.optional-dependencies]
+nlp = ["spacy>=3.8.16,<4"]
+
 [project.scripts]
 au-health-policy-atlas = "australian_health_policy_atlas.cli:main"
 

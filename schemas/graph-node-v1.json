@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edithatogo.github.io/australian-health-policy-atlas/schemas/graph-node-v1.json",
+  "title": "Policy graph node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["node_id", "kind", "label", "properties"],
+  "properties": {
+    "node_id": {"type": "string", "minLength": 1},
+    "kind": {"type": "string", "enum": ["source", "bronze_object", "segment", "assertion", "jurisdiction", "concept", "framework", "comparison_finding"]},
+    "label": {"type": "string"},
+    "properties": {"type": "object"}
+  }
+}

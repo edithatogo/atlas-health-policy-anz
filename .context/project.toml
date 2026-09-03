@@ -32,6 +32,7 @@ required_context = [
 
 required_manifests = [
   ".context/ecosystem.toml",
+  ".context/nlp-graph.toml",
   ".context/dependencies.toml",
   ".context/comparison.toml",
   ".context/frameworks.toml",

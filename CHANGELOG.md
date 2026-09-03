@@ -1,3 +1,11 @@
+
+## 2026-09-03 — GraphRAG and spaCy NLP substrate
+
+- Implemented rebuildable medallion knowledge-graph projection with provenance-preserving node/edge JSONL and checksum manifests.
+- Implemented path-preserving GraphRAG retrieval with lexical seeds, bounded graph expansion, exact Silver evidence recovery and an integration point for later qualified semantic seed scores.
+- Added optional spaCy NLP support for sentence segmentation and exact-offset modality, jurisdiction, framework, concept and role spans; rule-only spaCy output is explicitly non-independent triangulation evidence.
+- Integrated optional spaCy and graph generation into network-free local document preparation and added portable CLI `nlp-analyse` and `graph-query` commands.
+- Added graph node/edge schemas, tests and documentation.
 # Changelog
 
 ## Unreleased

@@ -23,12 +23,15 @@ This document distinguishes executable capability from roadmap intent. A passing
 - Hugging Face public upload/remote-revision verification script for use when credentials are supplied;
 - dependency-free Silver text/HTML normalization;
 - optional parser hooks for PyMuPDF/pypdf and python-docx without making those parsers authoritative before benchmark qualification;
+- optional spaCy exact-offset NLP projection for sentences, modality spans, jurisdictions, frameworks, configured concepts and policy roles; rule-only spaCy is explicitly non-independent triangulation evidence;
 - deterministic Gold modality, timeframe and conservative simple actor/action/object extraction;
 - transparent Platinum baseline similarity/comparability primitives that explicitly do not claim semantic equivalence;
+- rebuildable Bronze→Silver→Gold→Platinum policy graph projection with checksum manifests;
+- path-preserving GraphRAG retrieval using lexical seeds today and an explicit hook for later qualified semantic seed scores;
 - finite release qualification receipts.
 
 ### Local and sensitive comparison
-- network-free local document preparation;
+- network-free local document preparation, including optional spaCy feature and graph generation;
 - institution-owned gap runner against a pinned public Gold JSONL baseline;
 - portable `policy-gap-analysis` Agent Skill patterned on `rcagent`;
 - content-addressed offline bundle builder/verifier;
@@ -36,7 +39,7 @@ This document distinguishes executable capability from roadmap intent. A passing
 - local model manifest contract and task-specific benchmark harness.
 
 ### CI/CD and automation
-- 90 deterministic tests currently pass with 95.96% branch-aware package coverage;
+- 103 deterministic tests currently pass with 96.61% branch-aware package coverage;
 - context/security/dependency-review workflows;
 - Test-Goblin-style unit/integration/smoke/property/contract matrix;
 - 95% branch-coverage target in CI;
@@ -50,6 +53,8 @@ This document distinguishes executable capability from roadmap intent. A passing
 
 The following code exists but its production route still requires the relevant track benchmark or corpus gate:
 
+- statistical spaCy pipelines and any use of them as independent triangulation evidence;
+- semantic/vector seeding of GraphRAG and advanced graph reasoning/community summaries;
 - PDF and DOCX parsers;
 - lexical Platinum candidate matching;
 - local generative inference;

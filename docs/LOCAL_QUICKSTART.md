@@ -55,3 +55,25 @@ schema-constrained output. The model endpoint is restricted to loopback.
 The deterministic path remains available if the model is absent, fails, or
 abstains. A weak model result changes the evidence state rather than blocking
 completion of unrelated findings.
+
+## Optional local NLP and GraphRAG
+
+If spaCy is installed, prepare a sensitive/local policy with exact-offset NLP
+features and a rebuildable private graph without network use:
+
+```console
+au-health-policy-atlas prepare-local local-policy.docx \
+  --source-id local.policy \
+  --output-dir build/local-policy \
+  --spacy --graph
+```
+
+Query the local derived graph:
+
+```console
+au-health-policy-atlas graph-query build/local-policy/graph \
+  "clinical deterioration escalation"
+```
+
+The graph and spaCy outputs are derived local artefacts. They do not upgrade
+Gold/Platinum evidence and are not uploaded by the local workflow.

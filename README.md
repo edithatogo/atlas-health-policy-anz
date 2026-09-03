@@ -59,3 +59,7 @@ python dist/au-health-policy-atlas.pyz classify-modality "The service must act."
 
 ## Project governance
 Conductor is the authoritative context and delivery system. CI/CD and dependency policy are defined in `.context/ci.toml` and `docs/CI_CD.md`; tiny-model rules are defined in `.context/tiny-models.toml` and `docs/TINY_MODEL_EXECUTION.md`.
+
+## GraphRAG and NLP
+
+A rebuildable non-authoritative medallion graph, path-preserving GraphRAG retrieval, and optional spaCy exact-offset NLP projection are implemented. See `docs/GRAPHRAG_NLP.md`.

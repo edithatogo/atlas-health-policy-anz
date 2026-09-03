@@ -12,6 +12,9 @@ These are target agents to be developed and benchmarked under T07. They are role
 | Lineage Agent | Maintain page/DOM/cell/span lineage Bronze→Silver→Gold | Mechanical evidence |
 | Assertion Extractor | Propose atomic actor/modality/action/object/condition/timeframe assertions | Candidate only |
 | Assertion Verifier | Validate extracted fields against exact source spans and deterministic constraints | May promote qualified assertions according to A0–A4 contract |
+| NLP Projection Agent | Emit exact-offset spaCy sentence/entity/concept/role/framework features with model provenance | Derived evidence only; rule-only spaCy is not independent triangulation |
+| Graph Projection Agent | Rebuild Bronze→Silver→Gold→Platinum node/edge projections from canonical identifiers | Mechanical derived index only; cannot create canonical facts |
+| GraphRAG Retrieval Agent | Seed and expand the policy graph with explicit paths and exact evidence segments | Candidate retrieval only; cannot promote equivalence or confidence |
 | Equivalence Candidate Agent | Retrieve likely cross-jurisdiction equivalents using lexical/semantic/ontology signals | Candidate only |
 | Equivalence Judge | Apply scope/authority/time/NLI/cross-encoder/LLM comparison contract | Emits evidence state; can autonomously promote A0/A1 only |
 | Framework Agent | Apply one versioned framework projection without contaminating other lenses | Derived analysis with A0–A4 state |
