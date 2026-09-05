@@ -4,8 +4,9 @@ Existing tracks: **T00** (quality integration), **T06** (comparison assurance),
 **T07** (bounded workflows). No new tracks, release closure or medallion promotion.
 
 The source base is `99140d55c9d570abdf746a7d1f8de07dd03e7133`, subsequently
-merged through PR #7. Follow-up remediation retains the ANZ/NZ registry and its
-identity-sensitive coverage contracts without modifying the acquisition universe.
+merged through PR #7 at `5c16abba4db722d3e2228d4137c06f8ee730cf26`. The follow-up
+branch is `fix/strict-type-quality`. ANZ/NZ registry and identity-sensitive coverage
+contracts remain unchanged.
 
 ## Implemented
 
@@ -23,18 +24,35 @@ identity-sensitive coverage contracts without modifying the acquisition universe
 
 ## Local evidence
 
-See `quality/strict-remediation-local.json` and `quality/README.md`. The governed
-runners pass Ruff, formatting, basedpyright and ty for the whole source/script/test
-scope, serial coverage, parallel repetition and the CPU benchmark. Conductor
-reconciliation and the deterministic modality benchmark also pass. The central
-configuration and dependency lock retain their exact hashes.
+`quality/strict-remediation-local.json` records the exact restored CI runtime,
+zero failures in all four strict checkers, 348 tests, and 97.19% combined coverage.
+Those local results are retained separately from the hosted run below.
 
-## Remote completion criteria
+## Hosted repair qualification
 
-Apply the exact tested patch without changing main directly or rewriting history;
-verify its path/object inventory; run the locked complete acceptance gates;
-commit the resulting source to a follow-up PR; remove the one-off transport and
-write-enabled repair workflow; inspect the normal read-only validation workflows
-on the final PR head. Local results alone do not satisfy those hosted criteria.
+Run: https://github.com/edithatogo/atlas-health-policy-anz/actions/runs/33970080952
+
+The run passed all transport, inventory, strict-checker, serial coverage, parallel
+repeat, benchmark, Conductor and whitespace checks before creating source commit
+`0e0e821ba354ddbf10cb938a85b047fdde75fe3a`. All 104 reviewed changed paths were
+verified against their exact Git object identities and file modes. The central
+quality configuration and `uv.lock` retain their original hashes.
+
+- Python 3.14.6 and the committed locked tools; no host-compatibility override.
+- Ruff, Ruff format, basedpyright and ty: passed over src, scripts and tests.
+- Tests: 348, with zero failures, errors or skips. Parallel execution repeats
+  these tests and is not counted as another 348 unique cases.
+- Hosted combined coverage: 97.30%; statement coverage: 98.19%; branch-only
+  coverage: 93.86%. The unchanged gate is 95% combined coverage.
+- Durable evidence: `quality/strict-remediation-hosted.json` and the run artifact.
+
+The temporary write-enabled repair workflow and all transport files are removed
+from the final working tree. They remain in Git history for audit, not execution.
+The ordinary PR workflows must now independently validate the final PR head,
+including complete-history Gitleaks, CodeQL, actionlint, zizmor, the locked
+vulnerability audit and SBOM generation. A repair-run pass alone is not a claim
+that those independent checks have passed.
+
 Public HF deployment and sequential Bronze/Silver/Gold/Platinum completion remain
-separate unfinished data-product milestones.
+separate unfinished data-product milestones. No HF write or policy capture was
+performed, no main branch was directly changed, and no automatic merge was enabled.
