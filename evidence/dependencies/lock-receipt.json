@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "kind": "resolved-dependency-lock",
+  "input_commit": "5aeb54587c49701a7d9af777d3c74b307498d6c7",
+  "pyproject_sha256": "023b4fa8097d4414fb561b1278e6f5e359966ad0e23e91be9690aaa48b25a7ee",
+  "lock_sha256": "0d7d79a01f2873a84e704e36a92697d40a29c912315231ca6e7b2f6fbe71b478",
+  "packages": 117,
+  "python": "3.14.6",
+  "uv": "0.11.29",
+  "workflow_run_id": "33958741115",
+  "audit_passed": false
+}
