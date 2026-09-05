@@ -1,0 +1,132 @@
+name: Import recovered Atlas history
+
+on:
+  push:
+    branches: [bootstrap/import-recovered-atlas]
+    paths: [.bootstrap/READY]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atlas-initial-history-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/bootstrap/import-recovered-atlas'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify transport, reconstruct exact history, and merge without rewriting
+        env:
+          PYTHONPATH: src
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import lzma
+          import os
+          from pathlib import Path
+          import subprocess
+          import tempfile
+
+          expected_commit = '368e3ba44fedc19236fcd8690c02e3e3c982acff'
+          expected_tree = '48fdebf11d0a2882ccc7341379f461f68a914efd'
+          expected_compressed = 'e3cfa7395ef487b932e44d07a61fa80558a03e083f9faf30178230c479bde0e4'
+          root = Path.cwd()
+          def run(*args, **kwargs):
+              return subprocess.check_output(args, text=True, **kwargs).strip()
+          present = subprocess.run(['git', 'cat-file', '-e', expected_commit], capture_output=True).returncode == 0
+          if present and subprocess.run(['git', 'merge-base', '--is-ancestor', expected_commit, 'HEAD']).returncode == 0:
+              print('Exact recovered source already imported; no changes required.')
+              raise SystemExit(0)
+          manifest = json.loads(Path('.bootstrap/manifest.json').read_text())
+          if manifest['source_commit'] != expected_commit or manifest['source_tree'] != expected_tree:
+              raise SystemExit('Unexpected source identity')
+          payloads = []
+          for item in manifest['parts']:
+              path = Path(item['path'])
+              if path.parent != Path('.bootstrap') or not path.name.startswith('history.part-'):
+                  raise SystemExit('Unsafe transport path')
+              content = path.read_bytes()
+              if len(content) != item['size'] or hashlib.sha256(content).hexdigest() != item['sha256']:
+                  raise SystemExit('Transport part integrity failure: ' + str(path))
+              payloads.append(content)
+          compressed = b''.join(payloads)
+          if len(compressed) != manifest['compressed_bytes'] or hashlib.sha256(compressed).hexdigest() != expected_compressed:
+              raise SystemExit('Compressed transport identity failure')
+          decoder = lzma.LZMADecompressor(memlimit=536870912)
+          stream = decoder.decompress(compressed, max_length=manifest['uncompressed_bytes'] + 1)
+          if not decoder.eof or decoder.unused_data or len(stream) != manifest['uncompressed_bytes']:
+              raise SystemExit('Uncompressed stream length or framing failure')
+          if hashlib.sha256(stream).hexdigest() != manifest['uncompressed_sha256']:
+              raise SystemExit('Uncompressed stream identity failure')
+          base = run('git', 'rev-parse', 'HEAD')
+          with tempfile.TemporaryDirectory(prefix='atlas-history-') as temp:
+              bare = Path(temp) / 'history.git'
+              subprocess.run(['git', 'init', '--bare', str(bare)], check=True)
+              subprocess.run(['git', '-C', str(bare), 'fast-import', '--quiet'], input=stream, check=True)
+              actual = run('git', '-C', str(bare), 'rev-parse', manifest['import_ref'])
+              if actual != expected_commit or run('git', '-C', str(bare), 'rev-parse', actual + '^{tree}') != expected_tree:
+                  raise SystemExit('Reconstructed Git identity failure')
+              subprocess.run(['git', '-C', str(bare), 'fsck', '--full'], check=True)
+              subprocess.run(['git', 'fetch', str(bare), manifest['import_ref']], check=True)
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'merge', '--no-ff', '--no-commit', '--allow-unrelated-histories', expected_commit], check=True)
+          changed_workflows = run('git', 'diff', '--cached', '--name-only', '--', '.github/workflows')
+          if changed_workflows:
+              raise SystemExit('Source workflow contents must be pre-seeded through the connector: ' + changed_workflows)
+          source = subprocess.check_output(['git', 'ls-tree', '-r', '-z', expected_commit]).split(b'\0')
+          checked = 0
+          for entry in source:
+              if not entry:
+                  continue
+              meta, path = entry.split(b'\t', 1)
+              mode, kind, sha = meta.decode().split()
+              name = path.decode()
+              index = run('git', 'ls-files', '--stage', '--', name)
+              if not index.startswith(mode + ' ' + sha + ' 0\t'):
+                  raise SystemExit('Imported source path differs: ' + name)
+              checked += 1
+          subprocess.run(['python3', '-m', 'compileall', '-q', 'src', 'scripts'], check=True)
+          subprocess.run(['python3', 'scripts/validate_context.py'], check=True)
+          receipt = {
+              'schema_version': 1,
+              'kind': 'history-preserving-github-import',
+              'source_commit': expected_commit,
+              'source_tree': expected_tree,
+              'source_files_verified': checked,
+              'bootstrap_parent': base,
+              'recovered_commit_preserved': '9cb1e709b8380dd71d35f22f866a02187119a3e2',
+              'compressed_sha256': expected_compressed,
+              'context_validation': 'passed',
+              'python_syntax': 'passed',
+              'full_test_suite': 'not_run_by_importer',
+              'production_runtime_qualified': False,
+              'hugging_face_publication': False,
+              'production_medallion_qualified': False,
+              'workflow_run_id': os.environ.get('GITHUB_RUN_ID'),
+              'repository': os.environ.get('GITHUB_REPOSITORY'),
+          }
+          Path('.bootstrap/import-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          subprocess.run(['git', 'add', '.bootstrap/import-receipt.json'], check=True)
+          subprocess.run(['git', 'diff', '--cached', '--check'], check=True)
+          subprocess.run(['git', 'commit', '-m', 'chore: import verified Atlas source and preserve recovered Git history'], check=True)
+          subprocess.run(['git', 'fsck', '--full'], check=True)
+          print(json.dumps(receipt, indent=2))
+          print('Imported commit:', run('git', 'rev-parse', 'HEAD'))
+          PY
+      - name: Fast-forward the import branch only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:refs/heads/bootstrap/import-recovered-atlas
