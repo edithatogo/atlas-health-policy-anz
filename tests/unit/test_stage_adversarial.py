@@ -1,18 +1,25 @@
 from __future__ import annotations
 
-import pathlib
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pathlib
+    from pathlib import Path
+
+
 from dataclasses import replace
+from typing import override
 
 import pytest
 
 from australian_health_policy_atlas.hashing import sha256_bytes
 from australian_health_policy_atlas.hub_staging import (
     ConcurrentUpdateError,
-    _remote_stage,
     build_stage,
     index_path,
     publish_stage,
     restore_source,
+    restore_stage,
     verify_stage,
 )
 from australian_health_policy_atlas.integrity import (
@@ -21,31 +28,38 @@ from australian_health_policy_atlas.integrity import (
     read_json,
     sealed,
 )
+from australian_health_policy_atlas.records import array, record, records, string
 from tests.unit.test_crawl_runtime import policy
 from tests.unit.test_hub_staging_runtime import MemoryHub, stage
 
 
 @pytest.mark.parametrize("mutation", ["kind", "duplicates", "identity", "unreferenced"])
 def test_valid_selfhash_does_not_override_contract(
-    tmp_path: pathlib.Path, mutation
+    tmp_path: pathlib.Path, mutation: str
 ) -> None:
     source = stage(tmp_path)
     manifest = read_json((source / "manifest.json").read_bytes())
     if mutation == "kind":
         manifest["kind"] = "medallion-release"
     if mutation == "duplicates":
-        manifest["files"].append(dict(manifest["files"][0]))
+        array(manifest["files"]).append(dict(records(manifest["files"])[0]))
     if mutation == "identity":
-        manifest["files"][0]["sha256"] = "invalid"
+        records(manifest["files"])[0]["sha256"] = "invalid"
     if mutation == "unreferenced":
         (source / "unreferenced.txt").write_bytes(b"x")
-        manifest["files"].append({
+        array(manifest["files"]).append({
             "path": "unreferenced.txt",
             "sha256": sha256_bytes(b"x"),
             "size_bytes": 1,
         })
     atomic_json(source / "manifest.json", sealed(manifest))
-    with pytest.raises(ValueError):
+    expected_message = {
+        "kind": "not a staging contract",
+        "duplicates": "invalid stage inventory",
+        "identity": "invalid object identity",
+        "unreferenced": "not bound to captured evidence",
+    }[mutation]
+    with pytest.raises(ValueError, match=expected_message):
         verify_stage(source)
 
 
@@ -56,10 +70,10 @@ def test_nested_stage_is_forbidden(tmp_path: pathlib.Path) -> None:
 
 
 @pytest.mark.parametrize("mutation", ["revision", "identity", "source", "hash"])
-def test_remote_reference_validation(tmp_path: pathlib.Path, mutation) -> None:
+def test_remote_reference_validation(tmp_path: pathlib.Path, mutation: str) -> None:
     hub = MemoryHub()
     observation = publish_stage(hub, stage(tmp_path))
-    reference = dict(observation["reference"])
+    reference = dict(record(observation["reference"]))
     if mutation == "revision":
         reference["revision"] = "main"
     if mutation == "identity":
@@ -69,21 +83,27 @@ def test_remote_reference_validation(tmp_path: pathlib.Path, mutation) -> None:
     if mutation == "hash":
         prefix = f"staging/{reference['source_id']}/{reference['manifest_sha256']}"
         manifest = read_json(
-            hub.snapshots[reference["revision"]][prefix + "/manifest.json"]
+            hub.snapshots[string(reference["revision"])][prefix + "/manifest.json"]
         )
         manifest["extra"] = "changed"
-        hub.snapshots[reference["revision"]][prefix + "/manifest.json"] = (
+        hub.snapshots[string(reference["revision"])][prefix + "/manifest.json"] = (
             canonical_json_bytes(sealed(manifest))
         )
-    with pytest.raises(ValueError):
-        _remote_stage(hub, sealed(reference), tmp_path / "restore")
+    expected_message = {
+        "revision": "invalid remote reference",
+        "identity": "invalid remote reference",
+        "source": "unsafe source identity",
+        "hash": "remote manifest identity mismatch",
+    }[mutation]
+    with pytest.raises(ValueError, match=expected_message):
+        restore_stage(hub, sealed(reference), tmp_path / "restore")
 
 
 def test_nonempty_restore_refused(tmp_path: pathlib.Path) -> None:
     hub = MemoryHub()
     observation = publish_stage(hub, stage(tmp_path))
     with pytest.raises(ValueError, match="empty"):
-        _remote_stage(hub, observation["reference"], tmp_path / "stage")
+        restore_stage(hub, record(observation["reference"]), tmp_path / "stage")
 
 
 def test_conflicting_generation_is_refused(tmp_path: pathlib.Path) -> None:
@@ -108,7 +128,8 @@ def test_source_scope_cannot_be_substituted(tmp_path: pathlib.Path) -> None:
 
 def test_pointer_tamper_detected_after_commit(tmp_path: pathlib.Path) -> None:
     class Hub(MemoryHub):
-        def get(self, path, revision):
+        @override
+        def get(self, path: str, revision: str) -> bytes:
             value = super().get(path, revision)
             return b"altered" if "staging/index/" in path else value
 
@@ -118,7 +139,10 @@ def test_pointer_tamper_detected_after_commit(tmp_path: pathlib.Path) -> None:
 
 def test_concurrent_source_change_is_not_overwritten(tmp_path: pathlib.Path) -> None:
     class Hub(MemoryHub):
-        def put(self, files, *, parent=None):
+        @override
+        def put(
+            self, files: dict[str, Path | bytes], *, parent: str | None = None
+        ) -> str:
             result = super().put(files, parent=parent)
             if any("/manifest.json" in n for n in files):
                 super().put({index_path(policy()): b'{"a":"concurrent"}'})
@@ -130,15 +154,19 @@ def test_concurrent_source_change_is_not_overwritten(tmp_path: pathlib.Path) -> 
 
 @pytest.mark.parametrize("conflicts", [1, 3])
 def test_conditional_commit_conflicts_retry_boundedly(
-    tmp_path: pathlib.Path, conflicts
+    tmp_path: pathlib.Path, conflicts: int
 ) -> None:
     class Hub(MemoryHub):
         failures = 0
 
-        def put(self, files, *, parent=None):
+        @override
+        def put(
+            self, files: dict[str, Path | bytes], *, parent: str | None = None
+        ) -> str:
             if parent is not None and self.failures < conflicts:
                 self.failures += 1
-                raise ConcurrentUpdateError("fixture conflict")
+                message = "fixture conflict"
+                raise ConcurrentUpdateError(message)
             return super().put(files, parent=parent)
 
     hub = Hub()

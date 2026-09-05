@@ -2,21 +2,24 @@
 
 from __future__ import annotations
 
-import importlib.util
-import json
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pytest
+
+    from australian_health_policy_atlas.crawl import CrawlPolicy
+
+
 import pathlib
 from pathlib import Path
 
-import pytest
+from scripts import assess_bronze as module
 
 from australian_health_policy_atlas.integrity import sealed, verify_seal
+from australian_health_policy_atlas.records import decode_json, record, string
+from tests.support import ignoring_arguments
 
 ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location(
-    "assess_anz", ROOT / "scripts/assess_bronze.py"
-)
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
 
 
 def test_distinct_scope_identities() -> None:
@@ -34,7 +37,7 @@ def test_missing_credential_is_explicit(
 ) -> None:
     monkeypatch.delenv("HF_TOKEN", raising=False)
     assert module.main(["--collection", "nz-v1"]) == 2
-    assert json.loads(capsys.readouterr().out)["collection"] == "nz-v1"
+    assert record(decode_json(capsys.readouterr().out))["collection"] == "nz-v1"
 
 
 def test_assessment_binds_selected_scope_without_network(
@@ -44,10 +47,18 @@ def test_assessment_binds_selected_scope_without_network(
 ) -> None:
     monkeypatch.setenv("HF_TOKEN", "fixture-only-no-credential")
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(module.subprocess, "check_output", lambda *a, **k: "1" * 40)
-    monkeypatch.setattr(module, "HfStore", lambda *a: object())
+    monkeypatch.setattr(
+        module.subprocess, "check_output", ignoring_arguments(lambda: "1" * 40)
+    )
+    monkeypatch.setattr(module, "HfStore", ignoring_arguments(object))
 
-    def assess(hub, policies, *, census_sha256, code_revision):
+    def assess(
+        _hub: object,
+        policies: list[CrawlPolicy],
+        *,
+        census_sha256: str,
+        code_revision: str,
+    ) -> dict[str, object]:
         assert len(policies) == 81
         assert code_revision == "1" * 40
         return sealed({
@@ -58,9 +69,18 @@ def test_assessment_binds_selected_scope_without_network(
 
     monkeypatch.setattr(module, "qualify_remote_bronze", assess)
     assert module.main(["--collection", "nz-v1"]) == 0
-    row = json.loads(capsys.readouterr().out)
+    row = record(decode_json(capsys.readouterr().out))
     verify_seal(row)
     assert row["collection"] == "nz-v1"
     assert row["gate_b_passed"] is False
-    assert "not-document-census" in row["scope_identity_kind"]
-    assert json.loads(Path("build/receipts/bronze-assessment.json").read_text()) == row
+    assert "not-document-census" in string(row["scope_identity_kind"])
+    assert (
+        record(
+            decode_json(
+                Path("build/receipts/bronze-assessment.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+        )
+        == row
+    )

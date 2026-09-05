@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Publish only a hash-verified source-stage package to the public Bronze dataset."""
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
@@ -9,11 +11,24 @@ from pathlib import Path
 from australian_health_policy_atlas.hub_staging import HfStore, publish_stage
 
 
+class Arguments(argparse.Namespace):
+    """Typed values produced by this command's explicit argparse contract."""
+
+    candidate_dir: str
+    repo_id: str
+
+
 def main() -> int:
+    """Publish a qualified candidate and retain remote verification evidence.
+
+    Returns:
+        Zero on success; a nonzero process status on a blocked or failed operation.
+
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("candidate_dir")
     parser.add_argument("--repo-id", default="edithatogo/au-health-policy-atlas-bronze")
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=Arguments())
     token = os.environ.get("HF_TOKEN")
     if not token:
         print(

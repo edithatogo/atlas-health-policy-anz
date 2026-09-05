@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from australian_health_policy_atlas.crawl import run_crawl
+from australian_health_policy_atlas.crawl import CrawlPolicy, run_crawl
 from australian_health_policy_atlas.hub_staging import (
     build_stage,
     index_path,
@@ -20,6 +20,8 @@ from australian_health_policy_atlas.integrity import (
     read_json,
     sealed,
 )
+from australian_health_policy_atlas.records import array, integer, record
+from tests.support import ignoring_arguments
 from tests.unit.test_crawl_runtime import fetcher, policy
 
 
@@ -27,29 +29,31 @@ class MemoryHub:
     """Simulated transactions only; never a live publication receipt."""
 
     def __init__(self) -> None:
-        self.snapshots = {"0" * 40: {}}
+        self.snapshots: dict[str, dict[str, bytes]] = {"0" * 40: {}}
         self.latest = "0" * 40
         self.public = True
         self.corrupt = False
-        self.calls = []
+        self.calls: list[tuple[str, str]] = []
 
     def ensure_public(self) -> None:
         if not self.public:
-            raise ValueError("private target")
+            message = "private target"
+            raise ValueError(message)
 
-    def head(self):
+    def head(self) -> str:
         return self.latest
 
-    def get(self, path, revision):
+    def get(self, path: str, revision: str) -> bytes:
         self.calls.append((path, revision))
         if path not in self.snapshots[revision]:
             raise FileNotFoundError(path)
         value = self.snapshots[revision][path]
         return b"tampered" if self.corrupt and "/cas/" in path else value
 
-    def put(self, files, *, parent=None):
+    def put(self, files: dict[str, Path | bytes], *, parent: str | None = None) -> str:
         if parent is not None and parent != self.latest:
-            raise ValueError("transaction conflict")
+            message = "transaction conflict"
+            raise ValueError(message)
         result = dict(self.snapshots[self.latest])
         result.update({
             name: value.read_bytes() if isinstance(value, Path) else value
@@ -61,7 +65,7 @@ class MemoryHub:
         return revision
 
 
-def stage(tmp_path: pathlib.Path):
+def stage(tmp_path: pathlib.Path) -> Path:
     root, destination = tmp_path / "crawl", tmp_path / "stage"
     run_crawl(
         policy(), root, fetch=fetcher({policy().seed_url: b"original exact bytes"})
@@ -79,13 +83,15 @@ def test_publish_restore_and_assess(tmp_path: pathlib.Path) -> None:
     assert len({revision for _, revision in hub.calls}) >= 2
     restored = tmp_path / "restore"
     result = restore_source(hub, policy(), restored, revision=hub.head())
-    assert result["readiness"]["scope_complete"]
+    assert record(result["readiness"])["scope_complete"]
     assert not (restored / "manifest.json").exists()
     # Restored checkpoints can actually be resumed with no acquisition.
     run_crawl(
         policy(),
         restored,
-        fetch=lambda *_args, **_kw: (_ for _ in ()).throw(AssertionError("recaptured")),
+        fetch=ignoring_arguments(
+            lambda: (_ for _ in ()).throw(AssertionError("recaptured"))
+        ),
     )
     assessed = qualify_remote_bronze(
         hub, [policy()], census_sha256="a" * 64, code_revision="b" * 40
@@ -117,11 +123,11 @@ def test_missing_source_blocks_remote_assessment() -> None:
         hub, [policy()], census_sha256="a" * 64, code_revision="b" * 40
     )
     assert not result["data_candidate_ready"]
-    assert len(result["blocked"]) == 1
+    assert len(array(result["blocked"])) == 1
 
 
 @pytest.mark.parametrize("policies", [[], [policy(), policy()]])
-def test_empty_or_duplicate_scope_refused(policies) -> None:
+def test_empty_or_duplicate_scope_refused(policies: list[CrawlPolicy]) -> None:
     with pytest.raises(ValueError, match="unique"):
         qualify_remote_bronze(
             MemoryHub(), policies, census_sha256="a" * 64, code_revision="b" * 40
@@ -149,7 +155,7 @@ def test_local_extra_or_changed_file_rejected(tmp_path: pathlib.Path) -> None:
 def test_self_sealed_readiness_forgery_rejected(tmp_path: pathlib.Path) -> None:
     source = stage(tmp_path)
     manifest = read_json((source / "manifest.json").read_bytes())
-    manifest["readiness"]["gate_b_passed"] = True
+    record(manifest["readiness"])["gate_b_passed"] = True
     atomic_json(source / "manifest.json", sealed(manifest))
     with pytest.raises(ValueError, match="disagrees"):
         verify_stage(source)
@@ -160,7 +166,7 @@ def test_stale_checkpoint_cannot_overwrite(tmp_path: pathlib.Path) -> None:
     hub = MemoryHub()
     publish_stage(hub, source)
     previous = read_json(hub.get(index_path(policy()), hub.head()))
-    previous["generation"] += 10
+    previous["generation"] = integer(previous["generation"]) + 10
     hub.put({index_path(policy()): canonical_json_bytes(sealed(previous))})
     with pytest.raises(ValueError, match="rollback"):
         publish_stage(hub, source)

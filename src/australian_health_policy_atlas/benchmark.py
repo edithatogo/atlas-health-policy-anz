@@ -2,14 +2,22 @@
 
 from __future__ import annotations
 
-import json
-from collections.abc import Callable, Iterable
-from dataclasses import asdict, dataclass
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
+
+
+from dataclasses import dataclass
 from pathlib import Path
+
+from .records import decode_json, record
 
 
 @dataclass(frozen=True, slots=True)
 class ClassificationMetrics:
+    """Counts, abstentions and accuracy for one labelled classification benchmark."""
+
     total: int
     correct: int
     accuracy: float
@@ -17,12 +25,30 @@ class ClassificationMetrics:
     errors: tuple[str, ...]
 
     def as_dict(self) -> dict[str, object]:
-        return asdict(self)
+        """Return this typed record as a serialization-ready dictionary.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "total": self.total,
+            "correct": self.correct,
+            "accuracy": self.accuracy,
+            "abstentions": self.abstentions,
+            "errors": self.errors,
+        }
 
 
 def load_jsonl(path: str | Path) -> list[dict[str, object]]:
+    """Decode nonblank JSONL rows into explicitly validated string-keyed records.
+
+    Returns:
+        Decoded records in input order, excluding blank lines.
+
+    """
     return [
-        json.loads(line)
+        record(decode_json(line))
         for line in Path(path).read_text(encoding="utf-8").splitlines()
         if line.strip()
     ]
@@ -32,6 +58,12 @@ def evaluate_classifier(
     cases: Iterable[dict[str, object]],
     classifier: Callable[[str], str | None],
 ) -> ClassificationMetrics:
+    """Measure labelled classification results, including abstentions and errors.
+
+    Returns:
+        Counts, accuracy, abstentions and failed case identities.
+
+    """
     total = correct = abstentions = 0
     errors: list[str] = []
     for case in cases:

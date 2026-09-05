@@ -2,11 +2,23 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Mapping
-from dataclasses import asdict, dataclass
+from typing import TYPE_CHECKING
 
-from .graph import GraphEdge, GraphNode, PolicyGraph
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
+
+    from .graph import GraphEdge, GraphNode, PolicyGraph
+
+
+import math
+from collections import deque
+from dataclasses import dataclass
+from typing import TypedDict, Unpack
+
 from .platinum import jaccard_similarity
+
+MAX_GRAPH_HOPS = 8
+
 
 _RELATION_WEIGHTS: dict[str, float] = {
     "SUPPORTS": 0.28,
@@ -23,16 +35,30 @@ _RELATION_WEIGHTS: dict[str, float] = {
 
 @dataclass(frozen=True, slots=True)
 class GraphPathStep:
+    """A traversed relation retained to explain a retrieved evidence path."""
+
     source: str
     relation: str
     target: str
 
-    def as_dict(self) -> dict[str, str]:
-        return asdict(self)
+    def as_dict(self) -> dict[str, object]:
+        """Return the record without losing its declared field types.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "source": self.source,
+            "relation": self.relation,
+            "target": self.target,
+        }
 
 
 @dataclass(frozen=True, slots=True)
 class GraphRagHit:
+    """One retrieved graph node, its score and its supporting traversal path."""
+
     node_id: str
     kind: str
     label: str
@@ -42,6 +68,12 @@ class GraphRagHit:
     path: tuple[GraphPathStep, ...]
 
     def as_dict(self) -> dict[str, object]:
+        """Serialize the declared fields without losing evidence or provenance metadata.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
         return {
             "node_id": self.node_id,
             "kind": self.kind,
@@ -55,12 +87,20 @@ class GraphRagHit:
 
 @dataclass(frozen=True, slots=True)
 class GraphRagContext:
+    """Bounded retrieval hits and exact evidence segments for a downstream task."""
+
     query: str
     hits: tuple[GraphRagHit, ...]
     evidence_segments: tuple[GraphNode, ...]
     reason_codes: tuple[str, ...]
 
     def as_dict(self) -> dict[str, object]:
+        """Serialize the declared fields without losing evidence or provenance metadata.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
         return {
             "query": self.query,
             "hits": [item.as_dict() for item in self.hits],
@@ -87,49 +127,56 @@ def _node_text(node: GraphNode) -> str:
     return " ".join(values)
 
 
-def _edge_step(current: str, edge: GraphEdge, other: str) -> GraphPathStep:
+def _edge_step(current: str, edge: GraphEdge) -> GraphPathStep:
     if edge.source == current:
         return GraphPathStep(edge.source, edge.relation, edge.target)
     return GraphPathStep(edge.target, f"INVERSE_{edge.relation}", edge.source)
 
 
-def retrieve_graph_context(
-    graph: PolicyGraph,
-    query: str,
-    *,
-    top_k: int = 12,
-    seed_k: int = 6,
-    max_hops: int = 2,
-    allowed_kinds: Iterable[str] | None = None,
-    external_seed_scores: Mapping[str, float] | None = None,
-) -> GraphRagContext:
-    """Retrieve lexical/vector seeds then deterministically expand graph paths.
+class RetrievalOptions(TypedDict, total=False):
+    """Finite retrieval settings; external scores remain candidate signals only."""
 
-    ``external_seed_scores`` is the integration point for later qualified
-    embeddings/rerankers.  Graph traversal remains deterministic and every hit
-    carries its path, so a tiny model receives compact evidence rather than an
-    opaque graph summary.
-    """
-    allowed = set(allowed_kinds) if allowed_kinds is not None else None
+    top_k: int
+    seed_k: int
+    max_hops: int
+    allowed_kinds: Iterable[str] | None
+    external_seed_scores: Mapping[str, float] | None
+
+
+type PathScore = tuple[float, float, int, tuple[GraphPathStep, ...]]
+type Expansion = tuple[str, float, float, int, tuple[GraphPathStep, ...]]
+
+
+def _seed_nodes(
+    graph: PolicyGraph, query: str, options: RetrievalOptions
+) -> list[tuple[float, str]]:
+    kinds = options.get("allowed_kinds")
+    allowed = set(kinds) if kinds is not None else None
+    external_scores = options.get("external_seed_scores") or {}
     seeds: list[tuple[float, str]] = []
     for node_id, node in graph.nodes.items():
         if allowed is not None and node.kind not in allowed:
             continue
-        lexical = jaccard_similarity(query, _node_text(node))
-        external = (external_seed_scores or {}).get(node_id, 0.0)
-        seed_score = max(lexical, external)
-        if seed_score > 0:
-            seeds.append((seed_score, node_id))
+        external = external_scores.get(node_id, 0.0)
+        if not math.isfinite(external) or external < 0:
+            message = "external seed scores must be finite and non-negative"
+            raise ValueError(message)
+        score = max(jaccard_similarity(query, _node_text(node)), external)
+        if score > 0:
+            seeds.append((score, node_id))
     seeds.sort(key=lambda item: (-item[0], item[1]))
-    seeds = seeds[:seed_k]
+    return seeds[: options.get("seed_k", 6)]
 
-    best: dict[str, tuple[float, float, int, tuple[GraphPathStep, ...]]] = {}
-    queue: list[tuple[str, float, float, int, tuple[GraphPathStep, ...]]] = []
-    for seed_score, node_id in seeds:
-        queue.append((node_id, seed_score, seed_score, 0, ()))
 
+def _expand_paths(
+    graph: PolicyGraph, seeds: list[tuple[float, str]], max_hops: int
+) -> dict[str, PathScore]:
+    best: dict[str, PathScore] = {}
+    queue: deque[Expansion] = deque(
+        (node_id, score, score, 0, ()) for score, node_id in seeds
+    )
     while queue:
-        node_id, score, seed_score, hops, path = queue.pop(0)
+        node_id, score, seed_score, hops, path = queue.popleft()
         previous = best.get(node_id)
         if previous is not None and previous[0] >= score:
             continue
@@ -137,18 +184,61 @@ def retrieve_graph_context(
         if hops >= max_hops:
             continue
         for edge, neighbour in graph.neighbours(node_id):
-            relation = edge.relation
-            weight = _RELATION_WEIGHTS.get(relation, 0.08)
-            next_score = score + weight / (hops + 2)
-            step = _edge_step(node_id, edge, neighbour.node_id)
+            weight = _RELATION_WEIGHTS.get(edge.relation, 0.08)
             queue.append((
                 neighbour.node_id,
-                next_score,
+                score + weight / (hops + 2),
                 seed_score,
                 hops + 1,
-                path + (step,),
+                (*path, _edge_step(node_id, edge)),
             ))
+    return best
 
+
+def _path_evidence(
+    graph: PolicyGraph, hits: tuple[GraphRagHit, ...]
+) -> tuple[GraphNode, ...]:
+    identities: dict[str, None] = {}
+    for hit in hits:
+        candidates = [hit.node_id]
+        for step in hit.path:
+            candidates.extend((step.source, step.target))
+        for node_id in candidates:
+            node = graph.nodes.get(node_id)
+            if node is not None and node.kind == "segment":
+                identities[node_id] = None
+    return tuple(graph.nodes[node_id] for node_id in identities)
+
+
+def retrieve_graph_context(
+    graph: PolicyGraph, query: str, **options: Unpack[RetrievalOptions]
+) -> GraphRagContext:
+    """Retrieve candidate seeds and expand finite, source-preserving graph paths.
+
+    External scores select candidates; they cannot promote a claim or establish
+    policy equivalence. Each hit retains the exact edges traversed.
+
+    Returns:
+        Bounded hits with explicit traversal paths and supporting Silver text.
+
+    Raises:
+        TypeError: An input or external return value has an incompatible concrete
+        type.
+        ValueError: Graph identities, relationships or retrieval bounds are invalid.
+
+    """
+    top_k, seed_k, max_hops = (
+        options.get("top_k", 12),
+        options.get("seed_k", 6),
+        options.get("max_hops", 2),
+    )
+    if type(top_k) is not int or type(seed_k) is not int or type(max_hops) is not int:
+        message = "retrieval budgets must be integers"
+        raise TypeError(message)
+    if top_k <= 0 or seed_k <= 0 or not 0 <= max_hops <= MAX_GRAPH_HOPS:
+        message = "positive candidate budgets and zero to eight hops required"
+        raise ValueError(message)
+    best = _expand_paths(graph, _seed_nodes(graph, query, options), max_hops)
     ordered = sorted(best.items(), key=lambda item: (-item[1][0], item[0]))[:top_k]
     hits = tuple(
         GraphRagHit(
@@ -162,24 +252,13 @@ def retrieve_graph_context(
         )
         for node_id, values in ordered
     )
-    evidence_ids: list[str] = []
-    for hit in hits:
-        if hit.kind == "segment" and hit.node_id not in evidence_ids:
-            evidence_ids.append(hit.node_id)
-        for step in hit.path:
-            for node_id in (step.source, step.target):
-                if (
-                    node_id in graph.nodes
-                    and graph.nodes[node_id].kind == "segment"
-                    and node_id not in evidence_ids
-                ):
-                    evidence_ids.append(node_id)
-    evidence = tuple(graph.nodes[node_id] for node_id in evidence_ids)
-    reasons = ["derived_graph_non_authoritative", "path_preserving_retrieval"]
-    if external_seed_scores:
-        reasons.append("external_semantic_seed_scores_supplied")
-    else:
-        reasons.append("lexical_seed_only")
+    reasons = [
+        "derived_graph_non_authoritative",
+        "path_preserving_retrieval",
+        "external_semantic_seed_scores_supplied"
+        if options.get("external_seed_scores")
+        else "lexical_seed_only",
+    ]
     if not hits:
         reasons.append("no_graph_candidate_found")
-    return GraphRagContext(query, hits, evidence, tuple(reasons))
+    return GraphRagContext(query, hits, _path_evidence(graph, hits), tuple(reasons))

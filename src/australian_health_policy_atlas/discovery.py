@@ -4,11 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from html.parser import HTMLParser
+from typing import override
 from urllib.parse import urldefrag, urljoin, urlparse
 
 
 @dataclass(frozen=True, slots=True)
 class DiscoveredLink:
+    """One resolved portal link with its observed label and candidate media type."""
+
     url: str
     anchor_text: str
     likely_document: bool
@@ -22,15 +25,18 @@ class _LinkParser(HTMLParser):
         self._href: str | None = None
         self._text: list[str] = []
 
+    @override
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         if tag == "a":
             self._href = dict(attrs).get("href")
             self._text = []
 
+    @override
     def handle_data(self, data: str) -> None:
         if self._href is not None:
             self._text.append(data)
 
+    @override
     def handle_endtag(self, tag: str) -> None:
         if tag == "a" and self._href is not None:
             self.links.append((self._href, " ".join(self._text).strip()))
@@ -53,6 +59,12 @@ def discover_links(
         ".htm",
     ),
 ) -> list[DiscoveredLink]:
+    """Resolve observed HTML links into deduplicated acquisition candidates.
+
+    Returns:
+        Deduplicated links within the requested host and count limits.
+
+    """
     parser = _LinkParser()
     parser.feed(html_text)
     base_host = urlparse(base_url).hostname

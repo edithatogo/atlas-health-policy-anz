@@ -1,6 +1,7 @@
 import pytest
 
 from australian_health_policy_atlas.hashing import sha256_text
+from australian_health_policy_atlas.records import record, records
 from australian_health_policy_atlas.verification import (
     VerificationError,
     verify_model_output,
@@ -29,7 +30,7 @@ def base_packet() -> dict[str, object]:
 
 def test_evidence_hash_mismatch() -> None:
     packet = base_packet()
-    packet["evidence_refs"][0]["sha256"] = "0" * 64  # type: ignore[index]
+    records(packet["evidence_refs"])[0]["sha256"] = "0" * 64
     with pytest.raises(VerificationError, match="hash mismatch"):
         verify_packet_evidence(packet)
 
@@ -48,7 +49,7 @@ def test_evidence_hash_mismatch() -> None:
 )
 def test_minimal_schema_failures(value: object, message: str) -> None:
     with pytest.raises(VerificationError, match=message):
-        verify_output_minimal(base_packet()["output_schema"], value)  # type: ignore[arg-type]
+        verify_output_minimal(record(base_packet()["output_schema"]), value)
 
 
 def test_source_span_must_exist() -> None:

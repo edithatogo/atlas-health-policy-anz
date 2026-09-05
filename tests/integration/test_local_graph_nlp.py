@@ -1,7 +1,13 @@
-import json
-from pathlib import Path
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 from australian_health_policy_atlas.local_runner import prepare_local_document
+from australian_health_policy_atlas.records import decode_json, record, records
 
 
 def test_local_preparation_emits_spacy_and_graph(tmp_path: Path) -> None:
@@ -23,9 +29,11 @@ def test_local_preparation_emits_spacy_and_graph(tmp_path: Path) -> None:
     assert receipt["network_used"] is False
     assert receipt["nlp_enabled"] is True
     assert receipt["nlp_row_count"] == 1
-    assert receipt["graph_projection"]["authoritative"] is False
-    nlp_row = json.loads((output / "nlp-features.jsonl").read_text(encoding="utf-8"))
-    labels = {row["label"] for row in nlp_row["spans"]}
+    assert record(receipt["graph_projection"])["authoritative"] is False
+    nlp_row = record(
+        decode_json((output / "nlp-features.jsonl").read_text(encoding="utf-8"))
+    )
+    labels = {row["label"] for row in records(nlp_row["spans"])}
     assert "POLICY_CONCEPT" in labels
     nodes = (output / "graph" / "nodes.jsonl").read_text(encoding="utf-8")
     assert "concept:clinical deterioration" in nodes

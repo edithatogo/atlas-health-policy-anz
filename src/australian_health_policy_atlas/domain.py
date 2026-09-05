@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Any
 
 
 class EvidenceState(StrEnum):
+    """Claim-level evidence states; model agreement is not ground truth."""
+
     VERIFIED = "A0"
     HIGH_CONFIDENCE = "A1"
     SUPPORTED_NEEDS_VERIFICATION = "A2"
@@ -16,6 +17,8 @@ class EvidenceState(StrEnum):
 
 
 class MedallionLayer(StrEnum):
+    """Ordered data products with independently qualified promotion prerequisites."""
+
     CENSUS = "census"
     BRONZE = "bronze"
     SILVER = "silver"
@@ -25,6 +28,8 @@ class MedallionLayer(StrEnum):
 
 
 class ReleaseStatus(StrEnum):
+    """Finite release lifecycle states, distinct from individual claim confidence."""
+
     PLANNED = "planned"
     EXECUTING = "executing"
     CANDIDATE = "candidate"
@@ -33,6 +38,8 @@ class ReleaseStatus(StrEnum):
 
 
 class WorkStatus(StrEnum):
+    """Lifecycle of a bounded work item, including terminal failure or abstention."""
+
     QUEUED = "queued"
     EVIDENCE_READY = "evidence_ready"
     CANDIDATE = "candidate"
@@ -45,18 +52,34 @@ class WorkStatus(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class EvidenceSpan:
+    """Exact source text and offsets used to ground an assertion or model packet."""
+
     source_id: str
     span_id: str
     text: str
     sha256: str
     context_role: str = "primary"
 
-    def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+    def as_dict(self) -> dict[str, object]:
+        """Return the record without losing its declared field types.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "source_id": self.source_id,
+            "span_id": self.span_id,
+            "text": self.text,
+            "sha256": self.sha256,
+            "context_role": self.context_role,
+        }
 
 
 @dataclass(frozen=True, slots=True)
 class PolicyAssertion:
+    """Typed policy proposition with source anchors and explicit uncertainty."""
+
     assertion_id: str
     jurisdiction: str
     source_id: str
@@ -74,14 +97,37 @@ class PolicyAssertion:
     evidence_state: EvidenceState = EvidenceState.PROVISIONAL
     reason_codes: tuple[str, ...] = field(default_factory=tuple)
 
-    def as_dict(self) -> dict[str, Any]:
-        value = asdict(self)
-        value["evidence_state"] = self.evidence_state.value
-        return value
+    def as_dict(self) -> dict[str, object]:
+        """Return the record without losing its declared field types.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "assertion_id": self.assertion_id,
+            "jurisdiction": self.jurisdiction,
+            "source_id": self.source_id,
+            "source_span_id": self.source_span_id,
+            "actor": self.actor,
+            "modality": self.modality,
+            "action": self.action,
+            "object": self.object,
+            "condition": self.condition,
+            "timeframe": self.timeframe,
+            "authority_type": self.authority_type,
+            "valid_from": self.valid_from,
+            "valid_to": self.valid_to,
+            "observed_at": self.observed_at,
+            "evidence_state": self.evidence_state.value,
+            "reason_codes": self.reason_codes,
+        }
 
 
 @dataclass(frozen=True, slots=True)
 class ComparisonFinding:
+    """Pairwise policy comparison retaining evidence state and diagnostic reasons."""
+
     finding_id: str
     left_assertion_id: str
     right_assertion_id: str
@@ -91,14 +137,29 @@ class ComparisonFinding:
     method_evidence: tuple[str, ...] = field(default_factory=tuple)
     coverage: float | None = None
 
-    def as_dict(self) -> dict[str, Any]:
-        value = asdict(self)
-        value["evidence_state"] = self.evidence_state.value
-        return value
+    def as_dict(self) -> dict[str, object]:
+        """Return the record without losing its declared field types.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "finding_id": self.finding_id,
+            "left_assertion_id": self.left_assertion_id,
+            "right_assertion_id": self.right_assertion_id,
+            "relationship": self.relationship,
+            "evidence_state": self.evidence_state.value,
+            "reason_codes": self.reason_codes,
+            "method_evidence": self.method_evidence,
+            "coverage": self.coverage,
+        }
 
 
 @dataclass(frozen=True, slots=True)
 class ConfidenceSignals:
+    """Independent evidence dimensions supplied to the confidence composer."""
+
     provenance_ok: bool
     exact_span_ok: bool
     scope_ok: bool
@@ -114,12 +175,16 @@ class ConfidenceSignals:
 
 @dataclass(frozen=True, slots=True)
 class ConfidenceResult:
+    """Composed evidence state and the reasons determining that state."""
+
     state: EvidenceState
     reason_codes: tuple[str, ...]
 
 
 @dataclass(frozen=True, slots=True)
 class ReleaseReceipt:
+    """Immutable release decision bound to scope, inputs and acceptance evidence."""
+
     release_id: str
     layer: MedallionLayer
     status: ReleaseStatus
@@ -129,9 +194,20 @@ class ReleaseReceipt:
     evidence_state: EvidenceState
     reason_codes: tuple[str, ...]
 
-    def as_dict(self) -> dict[str, Any]:
-        value = asdict(self)
-        value["layer"] = self.layer.value
-        value["status"] = self.status.value
-        value["evidence_state"] = self.evidence_state.value
-        return value
+    def as_dict(self) -> dict[str, object]:
+        """Return the record without losing its declared field types.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "release_id": self.release_id,
+            "layer": self.layer.value,
+            "status": self.status.value,
+            "input_manifest_sha256": self.input_manifest_sha256,
+            "output_manifest_sha256": self.output_manifest_sha256,
+            "acceptance_results": self.acceptance_results,
+            "evidence_state": self.evidence_state.value,
+            "reason_codes": self.reason_codes,
+        }

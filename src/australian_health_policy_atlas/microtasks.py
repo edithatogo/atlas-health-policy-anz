@@ -2,11 +2,22 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
+
+
 from dataclasses import dataclass
-from typing import Any
+from typing import NotRequired, TypedDict, Unpack
 
 from .hashing import sha256_json, sha256_text
+from .records import records, strings
+
+MAX_INSTRUCTION_TOKENS = 900
+MAX_EVIDENCE_TOKENS = 6000
+MAX_OUTPUT_TOKENS = 1000
+
 
 ABSTENTION_CODES = frozenset({
     "evidence_missing",
@@ -34,12 +45,20 @@ ROUTES = frozenset({
 
 @dataclass(frozen=True, slots=True)
 class EvidenceInput:
+    """One exact evidence span supplied to a bounded model task."""
+
     source_id: str
     span_id: str
     text: str
     context_role: str = "primary"
 
     def as_packet_ref(self) -> dict[str, str]:
+        """Return exact text, identifiers and the evidence text hash for a model packet.
+
+        Returns:
+            A source-span reference whose text is bound to its SHA-256 hash.
+
+        """
         return {
             "source_id": self.source_id,
             "span_id": self.span_id,
@@ -49,6 +68,20 @@ class EvidenceInput:
         }
 
 
+class PacketOptions(TypedDict):
+    """Explicit schema, invariants and optional bounded model-routing controls."""
+
+    output_schema: Mapping[str, object]
+    invariants: Iterable[str]
+    stop_conditions: Iterable[str]
+    abstention_codes: Iterable[str]
+    model_route: NotRequired[str]
+    prompt_version: NotRequired[str]
+    instruction_tokens: NotRequired[int]
+    evidence_tokens: NotRequired[int]
+    output_tokens: NotRequired[int]
+
+
 def compile_packet(
     *,
     task_id: str,
@@ -56,32 +89,41 @@ def compile_packet(
     objective: str,
     open_question: str,
     evidence: Iterable[EvidenceInput],
-    output_schema: dict[str, Any],
-    invariants: Iterable[str],
-    stop_conditions: Iterable[str],
-    abstention_codes: Iterable[str],
-    model_route: str = "tiny_local_model",
-    prompt_version: str = "v1",
-    instruction_tokens: int = 400,
-    evidence_tokens: int = 2400,
-    output_tokens: int = 500,
-) -> dict[str, Any]:
+    **options: Unpack[PacketOptions],
+) -> dict[str, object]:
+    """Compile one evidence-bounded task, validating its route and token limits.
+
+    Returns:
+        The bounded task packet and its canonical content hash.
+
+    Raises:
+        ValueError: Routing, evidence, abstentions or token budgets are invalid.
+
+    """
+    model_route = options.get("model_route", "tiny_local_model")
+    instruction_tokens = options.get("instruction_tokens", 400)
+    evidence_tokens = options.get("evidence_tokens", 2400)
+    output_tokens = options.get("output_tokens", 500)
     if model_route not in ROUTES:
-        raise ValueError(f"unknown model route: {model_route}")
-    abstentions = list(abstention_codes)
+        message = f"unknown model route: {model_route}"
+        raise ValueError(message)
+    abstentions = list(options["abstention_codes"])
     unknown = sorted(set(abstentions) - ABSTENTION_CODES)
     if unknown:
-        raise ValueError(f"unknown abstention codes: {unknown}")
+        message = f"unknown abstention codes: {unknown}"
+        raise ValueError(message)
     refs = [item.as_packet_ref() for item in evidence]
     if not refs:
-        raise ValueError("at least one evidence span is required")
+        message = "at least one evidence span is required"
+        raise ValueError(message)
     if not (
-        1 <= instruction_tokens <= 900
-        and 1 <= evidence_tokens <= 6000
-        and 1 <= output_tokens <= 1000
+        1 <= instruction_tokens <= MAX_INSTRUCTION_TOKENS
+        and 1 <= evidence_tokens <= MAX_EVIDENCE_TOKENS
+        and 1 <= output_tokens <= MAX_OUTPUT_TOKENS
     ):
-        raise ValueError("context budget exceeds governed limits")
-    packet: dict[str, Any] = {
+        message = "context budget exceeds governed limits"
+        raise ValueError(message)
+    packet: dict[str, object] = {
         "packet_version": "1.0",
         "task_id": task_id,
         "skill_id": skill_id,
@@ -89,31 +131,35 @@ def compile_packet(
         "open_question": open_question,
         "allowed_inputs": ["evidence_refs"],
         "evidence_refs": refs,
-        "invariants": list(invariants),
-        "output_schema": output_schema,
-        "stop_conditions": list(stop_conditions),
+        "invariants": list(options["invariants"]),
+        "output_schema": options["output_schema"],
+        "stop_conditions": list(options["stop_conditions"]),
         "abstention_codes": abstentions,
         "context_budget": {
             "instruction_tokens": instruction_tokens,
             "evidence_tokens": evidence_tokens,
             "output_tokens": output_tokens,
         },
-        "prompt_version": prompt_version,
+        "prompt_version": options.get("prompt_version", "v1"),
         "model_route": model_route,
     }
     packet["packet_sha256"] = sha256_json(packet)
     return packet
 
 
-def render_prompt(packet: dict[str, Any]) -> str:
-    """Render a compact prompt whose facts are entirely packet-local."""
-    evidence_lines = []
-    for ref in packet["evidence_refs"]:
-        evidence_lines.append(
-            f"[{ref['span_id']}] ({ref.get('context_role', 'primary')}) {ref['text']}"
-        )
-    invariants = "\n".join(f"- {item}" for item in packet["invariants"])
-    abstentions = ", ".join(packet["abstention_codes"])
+def render_prompt(packet: Mapping[str, object]) -> str:
+    """Render a compact prompt whose facts are entirely packet-local.
+
+    Returns:
+        The evidence-local prompt rendered from the supplied packet.
+
+    """
+    evidence_lines = [
+        f"[{ref['span_id']}] ({ref.get('context_role', 'primary')}) {ref['text']}"
+        for ref in records(packet["evidence_refs"])
+    ]
+    invariants = "\n".join(f"- {item}" for item in strings(packet["invariants"]))
+    abstentions = ", ".join(strings(packet["abstention_codes"]))
     return (
         f"TASK: {packet['objective']}\n"
         f"QUESTION: {packet['open_question']}\n\n"

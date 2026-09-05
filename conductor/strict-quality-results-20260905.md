@@ -13,3 +13,9 @@ Subprocess coverage aliases map zipapp paths to the corresponding source instead
 Remaining bounded remediation: validate and type JSON/provenance records at their boundaries; replace untyped callback/mock/CLI signatures with concrete types or tested protocols; remove genuine unused/unbound paths; split excessive-complexity routines without changing acceptance gates; document public APIs and review narrow security exceptions. Retain real branch-specific diagnostics as the work queue, not as an acceptance baseline.
 
 The PR remains draft. The earlier all-green ANZ checkpoint applies only to its original four workflows at its recorded commit, not the newly enforced strict checks. Full security and testing checks must be read at the new head. Scheduled mutation/prerelease jobs are configured but not claimed executed by this normalization run. No HF writes, original captures or Bronze/Silver/Gold/Platinum promotions occurred.
+
+## Follow-up remediation
+
+See `conductor/strict-remediation-20260905.md` and
+`quality/strict-remediation-local.json` for the subsequent locally passing
+repair. The counts above remain historical, not current-head diagnostics.

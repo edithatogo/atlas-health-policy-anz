@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-import pathlib
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pathlib
+
+
 import sys
 from types import SimpleNamespace
 
@@ -8,6 +13,7 @@ import pytest
 
 from australian_health_policy_atlas.parsers import parse_file
 from australian_health_policy_atlas.platinum import baseline_relationship
+from tests.support import ignoring_arguments
 
 
 def test_cas_html_routes_without_extension(tmp_path: pathlib.Path) -> None:
@@ -43,8 +49,10 @@ def test_docx_tables_have_loss_warning(
         sys.modules,
         "docx",
         SimpleNamespace(
-            Document=lambda _p: SimpleNamespace(
-                paragraphs=[SimpleNamespace(text="Paragraph")], tables=[object()]
+            Document=ignoring_arguments(
+                lambda: SimpleNamespace(
+                    paragraphs=[SimpleNamespace(text="Paragraph")], tables=[object()]
+                )
             )
         ),
     )
@@ -65,7 +73,9 @@ def test_optional_parsers_missing_or_mocked(
         sys.modules,
         "pymupdf",
         SimpleNamespace(
-            open=lambda _p: [SimpleNamespace(get_text=lambda _kind: "text")]
+            open=ignoring_arguments(
+                lambda: [SimpleNamespace(get_text=ignoring_arguments(lambda: "text"))]
+            )
         ),
     )
     assert parse_file(file, source_id="s").parser_id == "pymupdf-v1"

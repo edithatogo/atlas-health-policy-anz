@@ -1,8 +1,15 @@
 from __future__ import annotations
 
-import pytest
+from typing import TYPE_CHECKING
+
+import spacy
+
+if TYPE_CHECKING:
+    import pytest
+
 
 from australian_health_policy_atlas import nlp as nlp_module
+from tests.support import ignoring_arguments
 
 
 def test_spacy_unavailable_is_bounded(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -13,8 +20,8 @@ def test_spacy_unavailable_is_bounded(monkeypatch: pytest.MonkeyPatch) -> None:
     assert result.reason_codes == ("spacy_not_installed",)
 
 
-def test_phrase_patterns_ignore_blank_values() -> None:
-    assert nlp_module._phrase_patterns("X", ["a", " "]) == [
+def testphrase_patterns_ignore_blank_values() -> None:
+    assert nlp_module.phrase_patterns("X", ["a", " "]) == [
         {"label": "X", "pattern": "a"}
     ]
 
@@ -54,9 +61,8 @@ def test_spacy_statistical_flag_with_injected_pipeline(
 ) -> None:
     if not nlp_module.spacy_available():
         return
-    import spacy
 
-    monkeypatch.setattr(spacy, "load", lambda _name: spacy.blank("en"))
+    monkeypatch.setattr(spacy, "load", ignoring_arguments(lambda: spacy.blank("en")))
     result = nlp_module.analyse_with_spacy(
         "Nurses should escalate care.",
         model_name="fake-statistical-model",

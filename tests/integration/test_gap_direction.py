@@ -1,11 +1,17 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pathlib
+
+
 import json
-import pathlib
 
 from australian_health_policy_atlas.domain import EvidenceState, PolicyAssertion
 from australian_health_policy_atlas.gap import build_gap_rows
 from australian_health_policy_atlas.institutional import run_institutional_gap_analysis
+from australian_health_policy_atlas.records import decode_json, record
 
 
 def test_absent_reference_requirement_is_not_silently_omitted(
@@ -15,28 +21,28 @@ def test_absent_reference_requirement_is_not_silently_omitted(
     local.write_text("Nurses must document care.\n")
     base = tmp_path / "gold.jsonl"
     records = [
-        dict(
-            assertion_id="state-document",
-            jurisdiction="QLD",
-            source_id="state",
-            source_span_id="span1",
-            actor="Nurses",
-            action="document",
-            object="care",
-            modality="must",
-            evidence_state="A0",
-        ),
-        dict(
-            assertion_id="state-escalate",
-            jurisdiction="QLD",
-            source_id="state",
-            source_span_id="span2",
-            actor="Doctors",
-            action="escalate",
-            object="deterioration",
-            modality="must",
-            evidence_state="A0",
-        ),
+        {
+            "assertion_id": "state-document",
+            "jurisdiction": "QLD",
+            "source_id": "state",
+            "source_span_id": "span1",
+            "actor": "Nurses",
+            "action": "document",
+            "object": "care",
+            "modality": "must",
+            "evidence_state": "A0",
+        },
+        {
+            "assertion_id": "state-escalate",
+            "jurisdiction": "QLD",
+            "source_id": "state",
+            "source_span_id": "span2",
+            "actor": "Doctors",
+            "action": "escalate",
+            "object": "deterioration",
+            "modality": "must",
+            "evidence_state": "A0",
+        },
     ]
     base.write_text("".join(json.dumps(row) + "\n" for row in records))
     out = tmp_path / "out"
@@ -47,7 +53,8 @@ def test_absent_reference_requirement_is_not_silently_omitted(
         output_dir=out,
     )
     rows = [
-        json.loads(line) for line in (out / "gap-matrix.jsonl").read_text().splitlines()
+        record(decode_json(line))
+        for line in (out / "gap-matrix.jsonl").read_text().splitlines()
     ]
     assert len(rows) == 2
     assert {row["reference_assertion_id"] for row in rows} == {

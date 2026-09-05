@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "kind": "hosted-strict-remediation",
+  "source_base": "99140d55c9d570abdf746a7d1f8de07dd03e7133",
+  "repair_parent": "54a7392d0fa99dd3155e7af6827d1ac00c0408da",
+  "repository": "edithatogo/atlas-health-policy-anz",
+  "branch": "fix/strict-type-quality",
+  "tracks": [
+    "T00",
+    "T06",
+    "T07"
+  ],
+  "patch_sha256": "6881e47adfce8455fee746f2de866bda375b58aff7a1386b23b832aaf282f3f6",
+  "inventory_sha256": "4d3542cd8f7245fb9e5b8bfc9f7557bcf94caeb48ab78eb7142f1734a7e65a26",
+  "reviewed_paths": 104,
+  "contracts": {
+    "pyproject.toml": "69ca7eab1fdd3d3231758ff93d5e44409ba132401e4d89c3d7b67a9147393099",
+    "uv.lock": "8d19325b11a134540c41566bd37a8b36dabba1b729d05e072f18ae3503219d60"
+  },
+  "checks": {
+    "ruff": {
+      "status": "passed",
+      "receipt_sha256": "c957b0cb9346870e242c68071f22516580d0fc7afe188e73782265454d908a0a"
+    },
+    "format": {
+      "status": "passed",
+      "receipt_sha256": "3ec99256293668d718c14981206c1c5071f7292c718b7633c37d590ce90fb517"
+    },
+    "basedpyright": {
+      "status": "passed",
+      "receipt_sha256": "07f1fab2638b005fee63e1e1bde81a2212c380493f10b348c09389bb1bd5af96"
+    },
+    "ty": {
+      "status": "passed",
+      "receipt_sha256": "14095f7060224cf97c08660a8161d55a3d0d19b1fd09e7e296f76f2f9cab3c11"
+    },
+    "coverage": {
+      "status": "passed",
+      "receipt_sha256": "8f60f3e785b0bec2d5d7b5203c22f6ff6dc030858116ee4a09bb4e282f73628a"
+    },
+    "parallel": {
+      "status": "passed",
+      "receipt_sha256": "61c7ce9f4ccebc91625c99140314fa76fd6e97301c96af79ad4925660c2cccfa"
+    },
+    "benchmark": {
+      "status": "passed",
+      "receipt_sha256": "ea38d53670037927e485419c2b406a5662ede6e78a46e333c53e612a72c9910a"
+    }
+  },
+  "tests": {
+    "tests": 348,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "coverage_totals": {
+    "covered_lines": 2663,
+    "num_statements": 2712,
+    "percent_covered": 97.30363423212192,
+    "percent_covered_display": "97.30",
+    "missing_lines": 49,
+    "excluded_lines": 96,
+    "percent_statements_covered": 98.19321533923303,
+    "percent_statements_covered_display": "98.19",
+    "num_branches": 700,
+    "num_partial_branches": 41,
+    "covered_branches": 657,
+    "missing_branches": 43,
+    "percent_branches_covered": 93.85714285714286,
+    "percent_branches_covered_display": "93.86"
+  },
+  "python": "3.14.6 (main, Jun 23 2026, 15:18:23) [Clang 22.1.3 ]",
+  "workflow_run_id": "33970080952",
+  "config_and_lock_unchanged": true,
+  "hf_writes": 0,
+  "original_policy_payloads_captured": 0,
+  "medallion_promotion": false,
+  "normal_final_pr_workflows": "pending; this is the repair-run receipt"
+}

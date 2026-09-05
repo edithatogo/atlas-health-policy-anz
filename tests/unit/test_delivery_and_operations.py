@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import json
 import pathlib
-import subprocess
+import subprocess  # ruff: ignore[suspicious-subprocess-import] - Bounded argv-only maintenance; no policy text is executed.
 import sys
 import zipfile
 from pathlib import Path
@@ -14,6 +13,8 @@ from australian_health_policy_atlas.distribution import build_zipapp
 from australian_health_policy_atlas.hashing import sha256_file
 from australian_health_policy_atlas.hub_staging import index_path
 from australian_health_policy_atlas.integrity import atomic_json, read_json
+from australian_health_policy_atlas.records import decode_json, record, string, strings
+from tests.support import ignoring_arguments
 from tests.unit.test_crawl_runtime import fetcher, policy
 from tests.unit.test_hub_staging_runtime import MemoryHub
 
@@ -32,7 +33,7 @@ def test_zipapp_is_deterministic_and_works_outside_checkout(
             "__pycache__" in n or n.endswith(".pyc") for n in archive.namelist()
         )
         assert any(n.endswith("crawl-policies-v1.json") for n in archive.namelist())
-    observed = subprocess.run(
+    observed = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - Trusted executable and fixed argv; shell remains disabled.
         [sys.executable, str(one), "doctor"],
         cwd=tmp_path,
         capture_output=True,
@@ -40,8 +41,8 @@ def test_zipapp_is_deterministic_and_works_outside_checkout(
         check=True,
         timeout=15,
     )
-    assert json.loads(observed.stdout)["status"] == "ok"
-    observed = subprocess.run(
+    assert record(decode_json(observed.stdout))["status"] == "ok"
+    observed = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - Trusted executable and fixed argv; shell remains disabled.
         [
             sys.executable,
             str(one),
@@ -54,7 +55,7 @@ def test_zipapp_is_deterministic_and_works_outside_checkout(
         check=True,
         timeout=15,
     )
-    assert json.loads(observed.stdout)["modality"] == "must_not"
+    assert record(decode_json(observed.stdout))["modality"] == "must_not"
 
 
 def test_bad_package_cannot_build(tmp_path: pathlib.Path) -> None:
@@ -84,12 +85,12 @@ def test_source_pipeline_can_resume_from_simulated_remote(
     first = operations.run_source(
         policy(), tmp_path / "first", hub=hub, request_budget=1, fetch=fetcher(pages)
     )
-    assert first["readiness"]["counts"]["queued"] == 1
+    assert record(record(first["readiness"])["counts"])["queued"] == 1
     second = operations.run_source(
         policy(), tmp_path / "second", hub=hub, request_budget=1, fetch=fetcher(pages)
     )
     assert second["restored"]
-    assert second["readiness"]["scope_complete"]
+    assert record(second["readiness"])["scope_complete"]
     operations.run_source(
         policy(), tmp_path / "second", hub=hub, request_budget=1, fetch=fetcher(pages)
     )
@@ -109,32 +110,31 @@ def test_missing_remote_object_is_not_first_run(tmp_path: pathlib.Path) -> None:
         policy(), tmp_path / "first", hub=hub, fetch=fetcher({policy().seed_url: b"x"})
     )
     ref = read_json(hub.get(index_path(policy()), hub.head()))
-    files = hub.snapshots[ref["revision"]]
+    files = hub.snapshots[string(ref["revision"])]
     files.pop(next(n for n in files if "/cas/" in n))
     with pytest.raises(ValueError, match="checkpoint"):
         operations.run_source(policy(), tmp_path / "second", hub=hub)
 
 
 def test_operational_cli_has_no_secret_no_network_mode(
-    tmp_path: pathlib.Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     policies = REPO / "data/sources/crawl-policies-v1.json"
     monkeypatch.delenv("HF_TOKEN", raising=False)
     assert operations.main(["--policies", str(policies), "--matrix"]) == 0
-    matrix = json.loads(capsys.readouterr().out)
-    assert len(matrix["source_id"]) == 28
+    matrix = record(decode_json(capsys.readouterr().out))
+    assert len(strings(matrix["source_id"])) == 28
     assert (
         operations.main([
             "--policies",
             str(policies),
             "--source-id",
-            matrix["source_id"][0],
+            strings(matrix["source_id"])[0],
         ])
         == 2
     )
-    assert json.loads(capsys.readouterr().out)["network_used"] is False
+    assert record(decode_json(capsys.readouterr().out))["network_used"] is False
     with pytest.raises(SystemExit):
         operations.main(["--policies", str(policies), "--source-id", "not-known"])
 
@@ -142,11 +142,12 @@ def test_operational_cli_has_no_secret_no_network_mode(
 def test_operations_cli_dispatch(
     tmp_path: pathlib.Path,
     monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
 ) -> None:
     policies = REPO / "data/sources/crawl-policies-v1.json"
     source = operations.load_policies(policies)[0]
-    monkeypatch.setattr(operations, "run_source", lambda *_a, **_kw: {"done": True})
+    monkeypatch.setattr(
+        operations, "run_source", ignoring_arguments(lambda: {"done": True})
+    )
     assert (
         operations.main([
             "--policies",
@@ -158,7 +159,7 @@ def test_operations_cli_dispatch(
         == 0
     )
     monkeypatch.setenv("HF_TOKEN", "test-placeholder")
-    monkeypatch.setattr(operations, "HfStore", lambda *_a: MemoryHub())
+    monkeypatch.setattr(operations, "HfStore", ignoring_arguments(MemoryHub))
     assert (
         operations.main(["--policies", str(policies), "--source-id", source.source_id])
         == 0

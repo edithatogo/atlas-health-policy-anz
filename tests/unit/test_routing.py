@@ -5,17 +5,25 @@ from australian_health_policy_atlas.routing import RouteQualification, choose_ro
 
 def test_route_chooses_smallest_qualified() -> None:
     routes = [
-        RouteQualification("tiny_local_model", frozenset({"x"}), True),
-        RouteQualification("deterministic_rule", frozenset({"x"}), True),
+        RouteQualification("tiny_local_model", frozenset({"x"}), benchmark_passed=True),
+        RouteQualification(
+            "deterministic_rule", frozenset({"x"}), benchmark_passed=True
+        ),
     ]
     assert choose_route("x", routes) == "deterministic_rule"
 
 
 def test_route_skips_unavailable_or_failed() -> None:
     routes = [
-        RouteQualification("deterministic_rule", frozenset({"x"}), False),
-        RouteQualification("tiny_local_model", frozenset({"x"}), True, available=False),
-        RouteQualification("small_local_model", frozenset({"x"}), True),
+        RouteQualification(
+            "deterministic_rule", frozenset({"x"}), benchmark_passed=False
+        ),
+        RouteQualification(
+            "tiny_local_model", frozenset({"x"}), benchmark_passed=True, available=False
+        ),
+        RouteQualification(
+            "small_local_model", frozenset({"x"}), benchmark_passed=True
+        ),
     ]
     assert choose_route("x", routes) == "small_local_model"
 

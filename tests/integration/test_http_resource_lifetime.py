@@ -11,6 +11,7 @@ import pytest
 
 from australian_health_policy_atlas.capture import capture_url
 from australian_health_policy_atlas.crawl import CrawlPolicy, run_crawl
+from australian_health_policy_atlas.records import record
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -67,7 +68,7 @@ def test_crawl_closes_error_from_injected_capture_boundary(
     try:
         result = run_crawl(policy, tmp_path, request_budget=1, fetch=fetch)
         assert body.closed
-        assert result["counts"][disposition] == 1
+        assert record(result["counts"])[disposition] == 1
         assert result["gate_b_passed"] is False
         fetch.assert_called_once()
     finally:

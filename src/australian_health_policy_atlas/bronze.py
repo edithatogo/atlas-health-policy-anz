@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+
 import json
 import mimetypes
 import shutil
-from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -15,6 +20,8 @@ from .hashing import sha256_file, sha256_json
 
 @dataclass(frozen=True, slots=True)
 class BronzeObject:
+    """Identity and provenance of an immutable captured or ingested source object."""
+
     object_id: str
     source_id: str
     source_uri: str
@@ -33,6 +40,15 @@ def ingest_local_file(
     cas_root: str | Path,
     observed_at: str | None = None,
 ) -> BronzeObject:
+    """Copy an original source file into content-addressed Bronze storage.
+
+    Returns:
+        A Bronze object binding the original bytes to their source metadata.
+
+    Raises:
+        OSError: Source I/O or content-addressed byte verification fails.
+
+    """
     source = Path(source_path)
     digest = sha256_file(source)
     target = Path(cas_root) / "sha256" / digest[:2] / digest
@@ -41,7 +57,8 @@ def ingest_local_file(
         shutil.copyfile(source, target)
     stored_digest = sha256_file(target)
     if stored_digest != digest:
-        raise OSError("CAS verification failed after copy")
+        message = "CAS verification failed after copy"
+        raise OSError(message)
     media_type = mimetypes.guess_type(source.name)[0] or "application/octet-stream"
     return BronzeObject(
         object_id=f"sha256:{digest}",
@@ -58,6 +75,12 @@ def ingest_local_file(
 def write_manifest(
     objects: Iterable[BronzeObject], path: str | Path, *, release_id: str
 ) -> dict[str, object]:
+    """Bind captured objects into a self-hashed release candidate manifest.
+
+    Returns:
+        The self-hashed manifest written to the requested destination.
+
+    """
     records = [asdict(item) for item in objects]
     payload: dict[str, object] = {
         "schema_version": "1.0",

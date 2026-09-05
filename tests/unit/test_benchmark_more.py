@@ -1,6 +1,15 @@
-from pathlib import Path
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+import pytest
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 from australian_health_policy_atlas.benchmark import evaluate_classifier, load_jsonl
+from tests.support import ignoring_arguments
 
 
 def test_load_jsonl_skips_blank_lines(tmp_path: Path) -> None:
@@ -10,6 +19,6 @@ def test_load_jsonl_skips_blank_lines(tmp_path: Path) -> None:
 
 
 def test_empty_benchmark_accuracy_zero() -> None:
-    result = evaluate_classifier([], lambda _text: "x")
+    result = evaluate_classifier([], ignoring_arguments(lambda: "x"))
     assert result.total == 0
-    assert result.accuracy == 0.0
+    assert result.accuracy == pytest.approx(0.0)

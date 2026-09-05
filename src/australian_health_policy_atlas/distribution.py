@@ -2,9 +2,14 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+
 import io
 import zipfile
-from pathlib import Path
 
 from .hashing import sha256_file
 from .integrity import atomic_bytes
@@ -13,26 +18,30 @@ PACKAGE = "australian_health_policy_atlas"
 
 
 def build_zipapp(repo: Path, destination: Path) -> dict[str, object]:
+    """Build a deterministic portable runner with its governed source registries.
+
+    Returns:
+        Portable artifact identity, size and bundled-source metadata.
+
+    Raises:
+        ValueError: The supplied data violates the function's documented validation
+        contract.
+
+    """
     package = repo / "src" / PACKAGE
     if not (package / "cli.py").is_file():
-        raise ValueError("source package is missing")
+        message = "source package is missing"
+        raise ValueError(message)
     files: dict[str, bytes] = {
         "__main__.py": (
             f"from {PACKAGE}.cli import main\nraise SystemExit(main())\n"
         ).encode()
     }
-    for path in sorted(package.rglob("*.py")):
-        if "__pycache__" in path.parts or path.is_symlink():
-            continue
-        files[f"{PACKAGE}/{path.relative_to(package).as_posix()}"] = path.read_bytes()
-    for path in sorted((repo / "data" / "sources").glob("*")):
-        if path.suffix not in {".json", ".csv"}:
-            continue
-        if path.is_symlink():
-            raise ValueError("registry symlinks are forbidden")
-        files[f"{PACKAGE}/_data/{path.name}"] = path.read_bytes()
+    files.update(_source_files(package))
+    files.update(_registry_files(repo))
     if f"{PACKAGE}/_data/jurisdictions-v1.json" not in files:
-        raise ValueError("portable registry missing")
+        message = "portable registry missing"
+        raise ValueError(message)
     output = io.BytesIO()
     output.write(b"#!/usr/bin/env python3\n")
     with zipfile.ZipFile(
@@ -51,3 +60,24 @@ def build_zipapp(repo: Path, destination: Path) -> dict[str, object]:
         "members": len(files),
         "runtime_qualified": False,
     }
+
+
+def _source_files(package: Path) -> dict[str, bytes]:
+    files: dict[str, bytes] = {}
+    for path in sorted(package.rglob("*.py")):
+        if "__pycache__" in path.parts or path.is_symlink():
+            continue
+        files[f"{PACKAGE}/{path.relative_to(package).as_posix()}"] = path.read_bytes()
+    return files
+
+
+def _registry_files(repo: Path) -> dict[str, bytes]:
+    files: dict[str, bytes] = {}
+    for path in sorted((repo / "data" / "sources").glob("*")):
+        if path.suffix not in {".json", ".csv"}:
+            continue
+        if path.is_symlink():
+            message = "registry symlinks are forbidden"
+            raise ValueError(message)
+        files[f"{PACKAGE}/_data/{path.name}"] = path.read_bytes()
+    return files

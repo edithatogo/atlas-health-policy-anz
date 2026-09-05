@@ -4,6 +4,10 @@ from __future__ import annotations
 
 from .domain import ConfidenceResult, ConfidenceSignals, EvidenceState
 
+MIN_INDEPENDENT_METHODS = 2
+MIN_COVERAGE = 0.95
+
+
 HARD_GATE_NAMES = (
     "provenance_ok",
     "exact_span_ok",
@@ -14,6 +18,12 @@ HARD_GATE_NAMES = (
 
 
 def compose_confidence(signals: ConfidenceSignals) -> ConfidenceResult:
+    """Compose claim confidence without allowing soft evidence to override hard gates.
+
+    Returns:
+        The resulting evidence state and its determining reason codes.
+
+    """
     failed_hard = [
         name.removesuffix("_ok")
         for name in HARD_GATE_NAMES
@@ -29,10 +39,10 @@ def compose_confidence(signals: ConfidenceSignals) -> ConfidenceResult:
     if signals.deterministic_evidence:
         return ConfidenceResult(EvidenceState.VERIFIED, ("deterministic_evidence",))
     if (
-        signals.independent_methods_total >= 2
+        signals.independent_methods_total >= MIN_INDEPENDENT_METHODS
         and signals.independent_methods_agree == signals.independent_methods_total
         and signals.benchmark_passed
-        and (signals.coverage is None or signals.coverage >= 0.95)
+        and (signals.coverage is None or signals.coverage >= MIN_COVERAGE)
     ):
         return ConfidenceResult(
             EvidenceState.HIGH_CONFIDENCE,

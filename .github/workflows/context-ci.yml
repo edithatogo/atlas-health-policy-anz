@@ -24,5 +24,7 @@ jobs:
           enable-cache: true
       - name: Install exact Python runtime
         run: uv python install 3.14.6
-      - name: Validate governed context and contracts
-        run: uv run --isolated --no-project --python 3.14.6 python scripts/validate_context.py
+      - name: Validate governed context without installed site packages
+        env:
+          PYTHONPATH: src
+        run: uv run --isolated --no-project --python 3.14.6 python -S -m scripts.validate_context

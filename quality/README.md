@@ -31,3 +31,33 @@ Combined statement/branch coverage: **97.63%**; statement-only: **98.66%**; bran
 At that checkpoint, Ruff reported **1102 diagnostics**, basedpyright **1585 errors**, and ty **107 diagnostics**. Formatting passed. Those findings include pre-existing code and must be resolved through real annotations, validated typed data boundaries, smaller functions and explicit adapter contracts, not blanket ignores, fabricated casts, or lowering strictness. Current-head counts may change as repairs are committed; always consult that head's receipts.
 
 The one-off write-enabled lock/normalization workflows are removed after their completed work. Routine tests, linting, typing and frontier experiments remain read-only. Nothing in this checkpoint qualifies source capture, public HF publication or a production medallion release.
+
+
+## Strict remediation: local checkpoint, 5 September 2026
+
+`strict-remediation-local.json` records 348 unique passing tests (279 retained and
+69 new regression cases), a repeat two-worker run, one CPU benchmark and all four
+strict checks passing across `src`, `scripts` and `tests`. This measurement uses
+the same Python 3.14.6 and locked installed tools as the hosted environment, with
+no compatibility override. The repository's `pyproject.toml` and `uv.lock` bytes
+are unchanged. Combined coverage is 97.19%, statement-only 98.12%, and branch-only
+93.57%; the unchanged acceptance minimum is 95% combined, not branch-only.
+
+The earlier failed diagnostic checkpoints remain historical evidence, not an
+accepted baseline. This local checkpoint does not claim hosted CI, vulnerability
+audit or medallion qualification. Inspect the new PR head's workflow results.
+
+The fixes validate JSON container/field shapes, remove `Any` propagation from
+serialization, type callback/fixture/CLI contracts and split complex control
+flow. Strict JSON rejects duplicate keys, non-finite constants and overflowed
+numeric exponents. Empty benchmarks cannot pass; local rule extraction remains
+A2/A3 candidate evidence, never automatic A0 verification. Regression tests also
+cover malformed HTTP/parser/runtime interfaces and response cleanup. Local
+inference bypasses environmental proxies, refuses redirects and validates its
+loopback endpoint, output cardinality and response-size budget. This is not an
+operating-system network sandbox.
+
+No generic type-ignore directives were added. Narrow line-level Ruff exceptions
+remain only at documented optional-dependency imports, validated URL operations,
+and intentional shell-free subprocess boundaries. They do not exclude files,
+disable checking of data returned by adapters, or relax the central ruleset.

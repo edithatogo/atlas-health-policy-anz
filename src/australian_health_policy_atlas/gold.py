@@ -36,18 +36,29 @@ _MODALITY_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 
 @dataclass(frozen=True, slots=True)
 class ModalityResult:
+    """Detected deontic modality or an explicit ambiguity reason."""
+
     modality: str | None
     deterministic: bool
     reason_code: str
 
 
 def classify_modality(text: str) -> ModalityResult:
+    """Detect normative phrases while retaining ambiguity across distinct clauses.
+
+    Returns:
+        A phrase-derived modality or an explicit ambiguity result.
+
+    """
     raw: list[tuple[str, int, int]] = []
     for name, pattern in _MODALITY_PATTERNS:
-        for match in pattern.finditer(text):
-            raw.append((name, match.start(), match.end()))
+        raw.extend(
+            (name, match.start(), match.end()) for match in pattern.finditer(text)
+        )
     if not raw:
-        return ModalityResult(None, False, "ambiguous_modality")
+        return ModalityResult(
+            None, deterministic=False, reason_code="ambiguous_modality"
+        )
 
     # Higher-priority phrases such as "must not" suppress lower-priority
     # matches wholly contained within the same source span. Distinct clauses
@@ -66,8 +77,12 @@ def classify_modality(text: str) -> ModalityResult:
         kept.append(candidate)
     unique = {name for name, _start, _end in kept}
     if len(unique) > 1:
-        return ModalityResult(None, False, "conflicting_modality_signals")
-    return ModalityResult(kept[0][0], True, "deterministic_modality_pattern")
+        return ModalityResult(
+            None, deterministic=False, reason_code="conflicting_modality_signals"
+        )
+    return ModalityResult(
+        kept[0][0], deterministic=True, reason_code="deterministic_modality_pattern"
+    )
 
 
 def _priority(name: str) -> int:
@@ -76,6 +91,12 @@ def _priority(name: str) -> int:
 
 
 def extract_timeframe(text: str) -> str | None:
+    """Return the first supported relative deadline without inferring missing timing.
+
+    Returns:
+        The observed relative deadline, or None when no supported form exists.
+
+    """
     match = re.search(
         r"\bwithin\s+(\d+)\s+(minute|minutes|hour|hours|day|days|week|weeks)\b",
         text,
@@ -86,6 +107,8 @@ def extract_timeframe(text: str) -> str | None:
 
 @dataclass(frozen=True, slots=True)
 class SimpleAssertionFields:
+    """Conservative clause fields; extraction alone is not qualification."""
+
     actor: str | None
     action: str | None
     object: str | None
@@ -96,7 +119,12 @@ class SimpleAssertionFields:
 
 
 def extract_simple_assertion_fields(text: str) -> SimpleAssertionFields:
-    """Extract only simple actor-modal-verb-object clauses; abstain otherwise."""
+    """Extract only simple actor-modal-verb-object clauses; abstain otherwise.
+
+    Returns:
+        Conservative fields and the rule or abstention reason.
+
+    """
     modality_result = classify_modality(text)
     if modality_result.modality is None:
         return SimpleAssertionFields(
@@ -105,8 +133,8 @@ def extract_simple_assertion_fields(text: str) -> SimpleAssertionFields:
             None,
             None,
             extract_timeframe(text),
-            False,
-            modality_result.reason_code,
+            deterministic=False,
+            reason_code=modality_result.reason_code,
         )
     modal_phrases = {
         "must_not": r"must\s+not|shall\s+not|is\s+prohibited\s+from",
@@ -127,8 +155,8 @@ def extract_simple_assertion_fields(text: str) -> SimpleAssertionFields:
             None,
             modality_result.modality,
             extract_timeframe(text),
-            False,
-            "complex_clause_requires_structured_extraction",
+            deterministic=False,
+            reason_code="complex_clause_requires_structured_extraction",
         )
     obj = match.group("object").strip()
     timeframe = extract_timeframe(obj)

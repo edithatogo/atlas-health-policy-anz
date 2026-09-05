@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "kind": "local-strict-remediation-checkpoint",
+  "source_base": "99140d55c9d570abdf746a7d1f8de07dd03e7133",
+  "canonical_repository": "edithatogo/atlas-health-policy-anz",
+  "existing_tracks": [
+    "T00",
+    "T06",
+    "T07"
+  ],
+  "runtime": {
+    "python": "3.14.6",
+    "pytest": "9.1.1",
+    "ruff": "0.16.6",
+    "basedpyright": "1.39.10",
+    "ty": "0.0.78",
+    "origin": "locked GitHub Actions artifact 9968912808"
+  },
+  "tests": {
+    "tests": 348,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "new_regression_cases": 69,
+  "checks": {
+    "ruff": {
+      "status": "passed",
+      "returncode": 0,
+      "receipt_sha256": "990928b35bbc56e71778ff731e7cb736cc61b8e61178bac7f9dc7af925dd07c3"
+    },
+    "format": {
+      "status": "passed",
+      "returncode": 0,
+      "receipt_sha256": "0f2e95b48cb0f6005af0f86544766765d75988cb4b97c38000e7ace1f726c05b"
+    },
+    "basedpyright": {
+      "status": "passed",
+      "returncode": 0,
+      "receipt_sha256": "7873896cc1c4112ab79c329b3b54c5e0006198fad758eadeee1afa4e983fd548"
+    },
+    "ty": {
+      "status": "passed",
+      "returncode": 0,
+      "receipt_sha256": "74562b728ab546767924f13ec7a4e8150d40fe26ee948266ae45ca1c627f66c9"
+    },
+    "coverage": {
+      "status": "passed",
+      "returncode": 0,
+      "receipt_sha256": "201807d15fe509e1c9227b3dc6bf1a6a7b32a4b79a49946347ef11f0f65d1269"
+    },
+    "parallel": {
+      "status": "passed",
+      "returncode": 0,
+      "receipt_sha256": "6aba5299daf99f14fda7b499a96704aba7d2ce2844b75a9f62dfb6f462844304"
+    },
+    "benchmark": {
+      "status": "passed",
+      "returncode": 0,
+      "receipt_sha256": "ac6bd24465de6827d8e4a14d64d22dd5dd54ee25e2462592b9e0b2e3e10ac31c"
+    }
+  },
+  "coverage": {
+    "combined_percent": 97.18640093786635,
+    "statement_percent": 98.11946902654867,
+    "branch_percent": 93.57142857142857,
+    "minimum_combined_percent": 95
+  },
+  "contracts": {
+    "pyproject.toml": "69ca7eab1fdd3d3231758ff93d5e44409ba132401e4d89c3d7b67a9147393099",
+    "uv.lock": "8d19325b11a134540c41566bd37a8b36dabba1b729d05e072f18ae3503219d60"
+  },
+  "rules_or_thresholds_changed": false,
+  "type_ignore_comments_added": false,
+  "hosted_verification": "pending at this local checkpoint",
+  "hf_writes": 0,
+  "policy_payloads_captured": 0,
+  "medallion_promotion": false
+}

@@ -1,10 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
 import json
-from pathlib import Path
 
 from australian_health_policy_atlas.cli import main
 
 
-def test_cli_modality_and_prepare_local(tmp_path: Path, capsys: object) -> None:
+def test_cli_modality_and_prepare_local(tmp_path: Path) -> None:
     assert main(["classify-modality", "Nurse may act."]) == 0
     path = tmp_path / "x.txt"
     path.write_text("Nurse may act.", encoding="utf-8")
@@ -21,7 +27,7 @@ def test_cli_modality_and_prepare_local(tmp_path: Path, capsys: object) -> None:
     )
 
 
-def test_cli_bundle_build_and_verify(tmp_path: Path, capsys: object) -> None:
+def test_cli_bundle_build_and_verify(tmp_path: Path) -> None:
     payload = tmp_path / "baseline.jsonl"
     payload.write_text("{}\n", encoding="utf-8")
     bundle = tmp_path / "bundle"
@@ -41,7 +47,7 @@ def test_cli_bundle_build_and_verify(tmp_path: Path, capsys: object) -> None:
     assert main(["bundle-verify", str(bundle)]) == 1
 
 
-def test_cli_institutional_gap(tmp_path: Path, capsys: object) -> None:
+def test_cli_institutional_gap(tmp_path: Path) -> None:
     local = tmp_path / "local.txt"
     local.write_text("The nurse must review the patient.", encoding="utf-8")
     baseline = tmp_path / "gold.jsonl"

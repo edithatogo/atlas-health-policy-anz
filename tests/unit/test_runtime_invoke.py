@@ -1,21 +1,27 @@
 from __future__ import annotations
 
-import json
+from typing import TYPE_CHECKING, Self
 
-import pytest
+if TYPE_CHECKING:
+    import pytest
+
+
+import json
 
 from australian_health_policy_atlas.hashing import sha256_text
 from australian_health_policy_atlas.runtime import llamacpp
+from tests.support import ignoring_arguments
 
 
 class Response:
-    def __enter__(self) -> Response:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *args: object) -> None:
         return None
 
-    def read(self) -> bytes:
+    @staticmethod
+    def read(_amount: int) -> bytes:
         return json.dumps({
             "choices": [
                 {
@@ -31,7 +37,7 @@ class Response:
 
 
 def test_invoke_loopback(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(llamacpp, "urlopen", lambda *_args, **_kwargs: Response())
+    monkeypatch.setattr(llamacpp, "urlopen", ignoring_arguments(Response))
     packet = {
         "objective": "x",
         "open_question": "q",
