@@ -8,7 +8,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 
-JURISDICTIONS = frozenset({"Cth", "ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"})
+JURISDICTIONS = frozenset({"Cth", "ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA", "NZ", "ANZ"})
 
 
 def load_registry(path: str | Path | None = None) -> dict[str, Any]:

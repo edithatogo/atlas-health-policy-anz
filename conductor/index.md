@@ -10,14 +10,12 @@ Each active track has:
 
 The master registry is `conductor/registry.toml`. Completed tracks remain in place as part of project memory.
 
-
 Execution models do not consume this context wholesale. For model-backed work, the deterministic orchestrator compiles the relevant Conductor/skill/evidence state into a bounded microtask packet under `.context/tiny-models.toml`. CI/context drift is governed by `.context/ci.toml` and `scripts/validate_context.py`.
 
-## Current recovery checkpoint
+## Recovery and deployment checkpoints
 
-Read `docs/IMPLEMENTATION_STATUS.md` and
-`evidence/engineering/recovery-20260905/` before continuing. This pass recovered
-`a15c911`, rebuilt operational staging and corrected institutional gap direction.
-T00/T02/T07 remain active. No production layer was closed. No new tracks were
-created. Later features named in earlier chat summaries require code evidence;
-they must not be assumed present.
+Read `docs/IMPLEMENTATION_STATUS.md`, `evidence/engineering/recovery-20260905/`, and `conductor/deployment-import-20260905.md` for the preserved recovery/import evidence. Source restoration and CI qualification do not close a production medallion layer. Later features named in historical chat summaries require code evidence; they must not be assumed present.
+
+## Current ANZ expansion
+
+Read [ANZ source and authority checkpoint](anz-scope-20260905.md) last. It supersedes older NZ-future-only roadmap wording and records the current source registration, coverage denominators, execution interfaces and CI evidence boundaries. No additional Conductor tracks are introduced.

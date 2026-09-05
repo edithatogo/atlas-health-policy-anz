@@ -98,3 +98,11 @@ repository = "edithatogo/au-health-policy-atlas-platinum"
 authority = "planned-public-platinum-comparative-dataset"
 disposition = "planned-create"
 publication_gate = "platinum-maturity-plus-replay-plus-remote-verification"
+
+[[github]]
+id = "nlp-policy-nz"
+repository = "edithatogo/nlp-policy-nz"
+authority = "nz-policy-processing-and-federated-provenance"
+disposition = "reference-contract"
+qualification = "interoperability-not-yet-qualified"
+local_boundary = "nz-processing/federation"

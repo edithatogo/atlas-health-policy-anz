@@ -14,6 +14,7 @@ from urllib.parse import urlsplit, urldefrag
 from .capture import CaptureReceipt, capture_url
 from .discovery import discover_links
 from .hashing import sha256_file, sha256_json
+from .source_registry import JURISDICTIONS
 from .integrity import IDENTIFIER, atomic_json, read_json, safe_path, sealed, verify_seal
 
 
@@ -34,7 +35,7 @@ class CrawlPolicy:
     def validate(self) -> None:
         if not IDENTIFIER.fullmatch(self.source_id):
             raise ValueError("invalid source identity")
-        if self.jurisdiction not in {"Cth", "ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA"}:
+        if self.jurisdiction not in JURISDICTIONS:
             raise ValueError("invalid jurisdiction")
         if not self.cutoff or not self.allowed_hosts or any(h != h.lower() or not h or "/" in h for h in self.allowed_hosts):
             raise ValueError("explicit cutoff and lowercase allowed hosts required")

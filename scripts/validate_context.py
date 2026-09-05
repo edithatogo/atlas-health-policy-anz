@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import sys
+
 import hashlib
 import json
 from pathlib import Path
@@ -249,6 +251,12 @@ def main() -> int:
     validate_microtask(errors)
     validate_ci(errors)
     validate_public_corpus(errors)
+    try:
+        sys.path.insert(0, str(ROOT / "src"))
+        from australian_health_policy_atlas.authorities import load_authorities, load_contract, assert_directory_coverage
+        assert_directory_coverage(load_authorities(ROOT / "data/sources"), load_contract(ROOT / "data/sources"))
+    except (ValueError, OSError, KeyError, TypeError) as exc:
+        errors.append(f"ANZ authority registry invalid: {exc}")
 
     if errors:
         for error in errors:

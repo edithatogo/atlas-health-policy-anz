@@ -1,4 +1,4 @@
-name: Bounded public Bronze capture
+name: Bounded public ANZ Bronze capture
 on:
   workflow_dispatch:
   schedule:
@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   preflight:
-    name: Check publication prerequisites and source matrix
+    name: Check publication prerequisites and ANZ source matrix
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
@@ -33,12 +33,12 @@ jobs:
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
       - id: matrix
-        name: Build bounded source matrix
+        name: Build bounded ANZ source matrix
         env:
           PYTHONPATH: src
         shell: bash
         run: |
-          matrix=$(python -m australian_health_policy_atlas.operations --matrix)
+          matrix=$(python -m australian_health_policy_atlas.operations --collection anz-v1 --matrix)
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
   capture:
     name: Capture and verify public source ${{ matrix.source_id }}
@@ -60,7 +60,7 @@ jobs:
           enable-cache: true
       - name: Install locked publication dependencies
         run: uv sync --python 3.14.6 --locked --no-default-groups --group publication
-      - name: Restore, capture, publish, and verify bounded source checkpoints
+      - name: Restore, capture, publish, and verify bounded ANZ source checkpoints
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           SOURCE_ID: ${{ matrix.source_id }}
@@ -68,7 +68,7 @@ jobs:
         run: |
           mkdir -p build/receipts
           uv run --no-sync python -m australian_health_policy_atlas.operations \
-            --source-id "$SOURCE_ID" --workspace "$RUNNER_TEMP/atlas-source" \
+            --collection anz-v1 --source-id "$SOURCE_ID" --workspace "$RUNNER_TEMP/atlas-source" \
             --request-budget 20 > "build/receipts/${SOURCE_ID}.json"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()

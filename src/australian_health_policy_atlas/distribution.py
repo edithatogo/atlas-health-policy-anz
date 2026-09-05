@@ -22,7 +22,9 @@ def build_zipapp(repo: Path, destination: Path) -> dict[str, object]:
         if "__pycache__" in path.parts or path.is_symlink():
             continue
         files[f"{PACKAGE}/{path.relative_to(package).as_posix()}"] = path.read_bytes()
-    for path in sorted((repo / "data" / "sources").glob("*.json")):
+    for path in sorted((repo / "data" / "sources").glob("*")):
+        if path.suffix not in {".json", ".csv"}:
+            continue
         if path.is_symlink():
             raise ValueError("registry symlinks are forbidden")
         files[f"{PACKAGE}/_data/{path.name}"] = path.read_bytes()
