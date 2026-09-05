@@ -12,3 +12,12 @@
 - [x] Implement and benchmark the microtask compiler/state machine before adding open-ended agent loops.
 - [x] Build the rcagent-style portable local/sensitive skill package and offline integration fixtures.
 - [ ] Qualify tiny/small model routes using temporal/jurisdiction hold-outs and adversarial mutations.
+
+## Recovery pass, 5 September 2026
+- [x] Rebuild portable zipapp with bundled registries and no cached bytecode.
+- [x] Test the zipapp from outside its checkout and require deterministic rebuilds.
+- [x] Correct institutional gap direction; retain a separately labelled reverse view.
+- [x] Bound candidate confidence by source assertions; remove regex-only A0 claims.
+- [x] Test malformed JSON, tampered manifests, retry/state boundaries and anonymous Hub verification.
+- [x] Record surviving-versus-unrecovered implementation boundaries in current context.
+- [ ] Qualify production runtime/static/security gates and real model routes.

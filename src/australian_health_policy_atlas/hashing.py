@@ -14,6 +14,7 @@ def canonical_json_bytes(value: Any) -> bytes:
         value,
         ensure_ascii=False,
         sort_keys=True,
+        allow_nan=False,
         separators=(",", ":"),
     ).encode("utf-8")
 

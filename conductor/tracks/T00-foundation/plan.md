@@ -19,6 +19,14 @@
 - [x] Add rcagent-inspired local/sensitive execution architecture.
 - [x] Add current CI/CD/supply-chain baseline and shared Renovate policy.
 - [x] Add bleeding-edge/free-resource experiments to the roadmap without creating tracks.
-- [ ] Resolve exact canonical repositories/revisions for SourceRight, CiteWeft and Authentext.
+- [x] Resolve exact canonical revisions for SourceRight, CiteWeft and Authentext (identity observation, not native execution).
 - [ ] Add native thin adapters once dependency interfaces are inspected.
 - [ ] Map tracks to GitHub issue/project hierarchy when the remote repository is created/connected.
+
+## Recovery pass, 5 September 2026
+- [x] Recover intact Git history from `a15c911`; retain negative artifact evidence.
+- [x] Reject empty acceptance checks and truthy non-boolean promotion inputs.
+- [x] Reconcile dependency identities and all workflow pin/credential checks.
+- [x] Add fail-closed clean-clone/reopened-archive packaging verification.
+- [ ] Resolve and qualify production Python 3.14 dependency lock and hosted CI.
+- [ ] Qualify native dependency integrations; generic command wrappers do not satisfy this task.

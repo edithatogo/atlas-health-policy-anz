@@ -26,7 +26,7 @@ def build_parser() -> argparse.ArgumentParser:
         "doctor",
         help="validate bundled source registry and report runtime state",
     )
-    doctor.add_argument("--registry", default="data/sources/jurisdictions-v1.json")
+    doctor.add_argument("--registry", default=None)
 
     bronze = sub.add_parser(
         "bronze-ingest",

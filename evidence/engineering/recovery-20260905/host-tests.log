@@ -1,0 +1,57 @@
+........................................................................ [ 32%]
+........................................................................ [ 64%]
+........................................................................ [ 97%]
+......                                                                   [100%]
+=============================== warnings summary ===============================
+../../../../opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1428
+  /opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1428: PytestConfigWarning: Unknown config option: timeout
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.13.5-final-0 ________________
+
+Name                                                     Stmts   Miss Branch BrPart  Cover   Missing
+----------------------------------------------------------------------------------------------------
+src/australian_health_policy_atlas/__init__.py               3      0      0      0   100%
+src/australian_health_policy_atlas/benchmark.py             29      2      6      1    91%   20, 42
+src/australian_health_policy_atlas/bronze.py                38      1      4      2    93%   40->42, 44
+src/australian_health_policy_atlas/capture.py              108      1     36      2    98%   114->116, 117
+src/australian_health_policy_atlas/cli.py                   99      2     20      2    97%   187, 191
+src/australian_health_policy_atlas/confidence.py            16      0     10      0   100%
+src/australian_health_policy_atlas/crawl.py                162      1     74      2    99%   160, 174->176
+src/australian_health_policy_atlas/discovery.py             50      1     14      3    94%   26->exit, 35->exit, 57
+src/australian_health_policy_atlas/distribution.py          33      0     14      0   100%
+src/australian_health_policy_atlas/domain.py               110      1      0      0    99%   55
+src/australian_health_policy_atlas/external_tools.py        20      0      2      0   100%
+src/australian_health_policy_atlas/gap.py                   33      0     10      0   100%
+src/australian_health_policy_atlas/gold.py                  56      0     18      0   100%
+src/australian_health_policy_atlas/graph.py                134      0     52      1    99%   146->130
+src/australian_health_policy_atlas/graphrag.py              92      1     36      1    98%   118
+src/australian_health_policy_atlas/hashing.py               19      0      2      0   100%
+src/australian_health_policy_atlas/hub_staging.py          211      4     78      1    98%   77-80, 213->227
+src/australian_health_policy_atlas/institutional.py         39      1     10      1    96%   19
+src/australian_health_policy_atlas/integrity.py             57      1     18      2    96%   58->63, 64
+src/australian_health_policy_atlas/local_runner.py          57      1     20      3    95%   46, 92->82, 94->82
+src/australian_health_policy_atlas/microtasks.py            36      0     10      0   100%
+src/australian_health_policy_atlas/model_manifest.py        18      0      8      0   100%
+src/australian_health_policy_atlas/nlp.py                   65      0      8      2    97%   141->148, 149->156
+src/australian_health_policy_atlas/offline_bundle.py        35      0     10      0   100%
+src/australian_health_policy_atlas/operations.py            75      3     24      3    94%   44, 46, 90
+src/australian_health_policy_atlas/parsers.py               65      0     22      0   100%
+src/australian_health_policy_atlas/platinum.py              38      0     18      0   100%
+src/australian_health_policy_atlas/publication.py           30      1      6      2    92%   26->28, 29
+src/australian_health_policy_atlas/release.py               11      0      2      0   100%
+src/australian_health_policy_atlas/routing.py               16      0      4      0   100%
+src/australian_health_policy_atlas/runtime/llamacpp.py      28      0      2      0   100%
+src/australian_health_policy_atlas/silver.py                61      1     14      1    97%   41
+src/australian_health_policy_atlas/source_registry.py       33      1     16      1    96%   19
+src/australian_health_policy_atlas/state_machine.py         32      1     10      1    95%   46
+src/australian_health_policy_atlas/trace.py                 14      0      0      0   100%
+src/australian_health_policy_atlas/verification.py          44      2     30      3    93%   27->exit, 41, 47
+----------------------------------------------------------------------------------------------------
+TOTAL                                                     1967     26    608     34    98%
+Coverage JSON written to file build/assurance/coverage-final.json
+Required test coverage of 95.0% reached. Total coverage: 97.59%
+222 passed, 1 warning in 7.46s

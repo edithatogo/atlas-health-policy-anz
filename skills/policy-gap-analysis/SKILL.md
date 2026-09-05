@@ -32,3 +32,18 @@ If a request spans modes, run them in that order. Do not skip an unmet predecess
 - Preserve authority, scope and observation-time differences.
 - Emit source span identifiers for material claims.
 - Stop when the current open question is answered; do not stack methods for appearance of rigour.
+
+## Institutional gap direction
+
+Enumerate reference requirements against local evidence as the primary gap
+view. A local-to-reference view is supplementary and cannot identify reference
+requirements that have no local clause. Report the exact denominator, weaker
+input confidence and retrieval limitations. Do not call a missing candidate a
+confirmed breach or promote regex-only extraction to A0.
+
+## Current capability check
+
+Read the deployed version's implementation-status document before invoking a
+feature. Offline bundles are not replay capsules; generic route contracts are
+not trained or held-out-qualified model selectors. Do not infer feature
+availability from an earlier conversation or a successful package install.

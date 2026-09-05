@@ -72,7 +72,9 @@ def promotion_gate(
     reasons: list[str] = []
     if not predecessor_closed(layer, closed_layers):
         reasons.append("predecessor_release_not_closed")
-    failed = sorted(key for key, passed in acceptance_results.items() if not passed)
+    if not acceptance_results:
+        reasons.append("acceptance_evidence_missing")
+    failed = sorted(key for key, passed in acceptance_results.items() if passed is not True)
     if failed:
         reasons.extend(f"acceptance_failed:{key}" for key in failed)
     return PromotionDecision(not reasons, tuple(reasons))

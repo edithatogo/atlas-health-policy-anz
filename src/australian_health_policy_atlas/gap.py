@@ -39,5 +39,11 @@ def build_gap_rows(target: Iterable[PolicyAssertion], comparators: Iterable[Poli
             output.append(GapRow(target_assertion.assertion_id, None, "no_candidate_found", EvidenceState.PROVISIONAL, ("retrieval_coverage_required",)))
         else:
             relationship, state, reasons = best_result
+            weakest = max(int(state.value[1]), int(target_assertion.evidence_state.value[1]),
+                          int(best[1].evidence_state.value[1]))
+            state = EvidenceState(f"A{weakest}")
+            if weakest == 4:
+                relationship = "not_determined"
+            reasons = (*reasons, "confidence_bounded_by_inputs", "comparability_not_qualified")
             output.append(GapRow(target_assertion.assertion_id, best[1].assertion_id, relationship, state, reasons))
     return output

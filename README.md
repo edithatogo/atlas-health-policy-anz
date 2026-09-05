@@ -1,71 +1,88 @@
 # Australian Health Policy Atlas
 
-Evidence-first, reproducible computational comparison of Australian state and territory health policies, procedures and guidelines.
+Evidence-first computational comparison of Australian state and territory
+health policies, procedures and guidelines. This is a development repository,
+not a qualified national policy corpus or clinical decision service.
 
-## Architectural archetypes
+## Current implementation boundary
 
-- `edithatogo/archive-govt-nz`: acquisition, preservation, provenance, fixity, evidence gates, publication preparation.
-- `edithatogo/global-medicines-atlas`: canonical comparative evidence, bitemporality, validity/uncertainty, DuckDB/Parquet, optional semantic retrieval, Atlas/API/CLI.
+The public source-surface census contains 28 official entry points covering
+all eight states and territories plus Commonwealth comparators. A surface
+census is not a document census. No original government payload or public
+Hugging Face release was acquired in the latest execution environment.
 
-## Medallion model
+The code includes bounded resumable capture, content-addressed storage,
+public Hugging Face staging with anonymous byte verification, conservative
+local comparison, derived GraphRAG, optional spaCy features, and a portable
+Python runner. Production releases remain **Bronze → Silver → Gold → Platinum**.
+Decision products sit above Platinum; they are not a fifth medallion layer.
 
-- **Bronze**: immutable captured source evidence.
-- **Silver**: reproducibly parsed and normalised documents.
-- **Gold**: atomic, bitemporal, provenance-bearing policy assertions.
-- **Platinum**: validated cross-jurisdiction comparisons and analytical products.
-- **Diamond**: decision products, policy frontiers, recommendations and candidate reforms.
+**Artifact recovery, 5 September 2026:** the supplied `improved.zip` was an
+empty 22-byte archive, and its qualification receipt reported failure.
+Development resumed from the intact Git history at `a15c911`. Claims of later
+features were not accepted without code. The delivery builder now reopens the
+ZIP, verifies Git history and the expected commit, and checks portable-build
+reproducibility before exposing deliverables. See
+[implementation status](docs/IMPLEMENTATION_STATUS.md) and
+[recovery evidence](evidence/engineering/recovery-20260905/input-audit.json).
 
-## Analytical ladder
+## Use the deterministic local runner
 
-Analyses progress only as comparability is established:
+From a checkout with an appropriate Python environment:
 
-0. Identity and corpus coverage
-1. Document structure
-2. Atomic requirements
-3. Concepts
-4. Policy solutions
-5. Governance architecture
-6. Standards, legal and evidence concordance
-7. Consensus, variation and outliers
-8. Policy frontier and burden
-9. Temporal diffusion and genealogy
-10. Outcome-linked and causal analysis
-11. Normative synthesis and policy design
-
-See `conductor/roadmap.md`, `conductor/design.md` and `docs/COMPARISON_ASSURANCE.md`.
-
-
-## Public-corpus execution status
-
-As at **2026-09-03**, **Source Census v1 (T01) is closed** over 28 official source surfaces covering all eight states/territories plus Commonwealth comparators. **Bronze v1 (T02) is executing** with all 28 surfaces queued, but Gate B remains closed because this execution environment cannot retrieve original government bytes or write a Hugging Face dataset repository. T03–T05 therefore remain production-gated.
-
-A quarantined clinical-governance vertical slice exercises the downstream design without bypassing those gates: 9 source-grounded observations, 48 Gold concept candidates, a 9-row Platinum preview, and a 63-node/96-edge GraphRAG projection. Every artefact is stamped `not_a_medallion_release` and cannot be promoted into production. See `docs/IMPLEMENTATION_STATUS.md`.
-
-## Execution portability
-- The orchestrator owns state; language models answer bounded typed microtasks.
-- Deterministic and lexical methods precede tiny/local inference; larger models are fallbacks.
-- Model-backed canonical outputs use constrained schemas plus exact source-span/hash verification.
-- Sensitive institutional PPGs can be processed locally against pre-pinned public Atlas releases without upload.
-
-
-## Executable core
-
-For offline institutional use, see [`docs/LOCAL_QUICKSTART.md`](docs/LOCAL_QUICKSTART.md).
-
-The repository now contains a dependency-light reference implementation of the governed workflow, including Bronze CAS/receipts, Silver text/HTML normalization, conservative Gold extraction, baseline Platinum comparison primitives, A0–A4 confidence logic, tiny-model packets, local/offline execution, institutional gap analysis, Hugging Face publication preparation and a portable zipapp. See `docs/IMPLEMENTATION_STATUS.md` for the exact qualified/deferred boundary.
-
-Useful bootstrap commands (from a checkout):
-
-```sh
-PYTHONPATH=src python scripts/build_source_census.py
-PYTHONPATH=src python scripts/benchmark_modality.py
+```console
 PYTHONPATH=src python scripts/build_zipapp.py
-python dist/au-health-policy-atlas.pyz classify-modality "The service must act."
+python dist/au-health-policy-atlas.pyz doctor
+python dist/au-health-policy-atlas.pyz classify-modality "The service must not disclose the record."
 ```
 
-## Project governance
-Conductor is the authoritative context and delivery system. CI/CD and dependency policy are defined in `.context/ci.toml` and `docs/CI_CD.md`; tiny-model rules are defined in `.context/tiny-models.toml` and `docs/TINY_MODEL_EXECUTION.md`.
+For institutional comparison, the primary matrix enumerates **reference
+requirements against local candidates**, so a missing local clause is not
+silently omitted. The reverse view is also written. Results are retrieval
+candidates, not certified equivalence, compliance or non-compliance. See the
+[local quickstart](docs/LOCAL_QUICKSTART.md).
 
-## GraphRAG and NLP
+## Public remote-first capture
 
-A rebuildable non-authoritative medallion graph, path-preserving GraphRAG retrieval, and optional spaCy exact-offset NLP projection are implemented. See `docs/GRAPHRAG_NLP.md`.
+```console
+PYTHONPATH=src python -m australian_health_policy_atlas.operations --matrix
+```
+
+Capture uses governed scope, exact host allowlists, bounded target/link/depth
+budgets, durable checkpoints and source-specific dispositions. Immutable HF
+staging packages are independently downloaded and rehashed before their index
+is advanced. Restricted, missing and incomplete sources remain visible.
+
+Publication requires an actual HF write credential and a qualified locked
+runtime; it does not repeatedly request redistribution approval. The configured
+Actions workflow is not yet deployed or verified on a hosted runner. See
+[remote staging and handoff](docs/RECOVERY_AND_REMOTE_STAGING.md).
+
+## Architecture and governance
+
+`archive-govt-nz` supplies preservation patterns; `global-medicines-atlas`
+supplies comparative-evidence patterns; `rcagent` supplies portable-skill
+patterns. SourceRight, CiteWeft and Authentext identities are pinned in
+`.context/`; their native integration qualification remains open.
+
+Conductor owns plans and evidence. Deterministic code owns execution state;
+small models receive one bounded, source-grounded microtask. Lexical similarity,
+graph proximity, model agreement and repeated rules are not proofs of equivalence.
+Independent methods, calibration, extraction benchmarks and substantive
+frameworks remain a qualification programme, not an implemented guarantee.
+
+## Validation and distribution
+
+The production contract remains Python 3.14.6 with uv 0.11.29 and a committed
+lockfile. The current sandbox only supports a Python 3.13 compatibility run.
+Latest measured results and unrun checks are recorded in the dated engineering
+receipts; they must not be read as hosted CI or production qualification.
+
+```console
+PYTHONPATH=src python scripts/validate_context.py
+# After committing a clean tree:
+PYTHONPATH=src python scripts/build_delivery.py --output-dir dist/delivery
+```
+
+The delivery contains full Git history, a tested portable runner, and checksum
+receipts. Raw corpus objects are not committed to this code repository.

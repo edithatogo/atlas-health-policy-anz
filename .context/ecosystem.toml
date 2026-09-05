@@ -24,6 +24,8 @@ local_boundary = "comparison/validity/uncertainty"
 
 [[github]]
 id = "sourceright"
+snapshot = "c5fa583431390eee1bf5eae04dc47b01c50d4a1e"
+qualification = "identity-observed-native-execution-not-run"
 repository = "edithatogo/sourceright"
 authority = "source-provenance-source-quality-and-evidence-integrity"
 disposition = "dependency"
@@ -31,6 +33,8 @@ local_boundary = "quality/source-integrity"
 
 [[github]]
 id = "citeweft"
+snapshot = "b087e12730eaac427bc804bf6aaa04aa0f17c572"
+qualification = "identity-observed-native-execution-not-run"
 repository = "edithatogo/citeweft"
 authority = "citation-extraction-linkage-and-integrity"
 disposition = "dependency"
@@ -38,6 +42,8 @@ local_boundary = "quality/citation-integrity"
 
 [[github]]
 id = "authentext"
+snapshot = "ca39b86eb604a6fe4cfa9a0918638195af82c1af"
+qualification = "identity-observed-native-execution-not-run"
 repository = "edithatogo/authentext"
 authority = "humanization-readability-and-style-quality"
 disposition = "dependency"

@@ -1,90 +1,94 @@
 # Implementation status
 
-This document distinguishes executable capability from roadmap intent. A passing local test is evidence of software behavior only; it is not a claim that a medallion corpus release has been completed or published.
+Updated 5 September 2026. This file describes inspected code and measured
+engineering behaviour, not prospective capabilities or live corpus coverage.
 
-## Implemented now
+## Recovery and provenance
 
-### Deterministic orchestration and assurance
-- finite work-item and release state machines;
-- medallion predecessor gates;
-- A0–A4 claim-level confidence composition with non-compensatory hard gates;
-- content-addressed hashing, manifests, receipts and append-only traces;
-- bounded microtask compilation, compact prompt rendering, exact evidence-span/hash checks and minimal dependency-free schema validation;
-- smallest-qualified-route selection contract;
-- loopback-only OpenAI-compatible/llama.cpp adapter with structured-output verification.
+The received improved ZIP was empty. Its accompanying summary reported
+`qualified: false`, contrary to preceding conversational success claims. The
+intact older archive preserved history through `a15c911`; this history has not
+been rewritten. The audit is in
+`evidence/engineering/recovery-20260905/input-audit.json`.
 
-### Corpus and medallion substrate
-- closed Source Census v1 covering 28 official public source surfaces across ACT, NSW, NT, QLD, SA, TAS, VIC and WA plus Commonwealth comparators, with a hash-bound completion receipt and frozen Bronze publication contract;
-- deterministic source-census receipt generation and an active 28-surface Bronze capture queue;
-- partial document-level portal discovery evidence, including 213 current Safer Care Victoria publication results, 20 mandatory WA Clinical Governance/Safety/Quality policies, 20 SA Health policy domains, a 100-record ACT Health transparency-page snapshot, NSW's living Patient Matters manual, and the distributed NT Health Digital Library boundary;
-- bounded HTTPS capture into SHA-256 content-addressed storage with HTTP provenance receipts;
-- portal link discovery for likely policies/guidelines/procedures/frameworks;
-- Bronze local ingest and deterministic Bronze manifests;
-- Hugging Face Bronze candidate packaging with byte re-verification;
-- Hugging Face public upload/remote-revision verification script for use when credentials are supplied;
-- dependency-free Silver text/HTML normalization;
-- optional parser hooks for PyMuPDF/pypdf and python-docx without making those parsers authoritative before benchmark qualification;
-- optional spaCy exact-offset NLP projection for sentences, modality spans, jurisdictions, frameworks, configured concepts and policy roles; rule-only spaCy is explicitly non-independent triangulation evidence;
-- deterministic Gold modality, timeframe and conservative simple actor/action/object extraction;
-- transparent Platinum baseline similarity/comparability primitives that explicitly do not claim semantic equivalence;
-- rebuildable Bronze→Silver→Gold→Platinum policy graph projection with checksum manifests;
-- path-preserving GraphRAG retrieval using lexical seeds today and an explicit hook for later qualified semantic seed scores;
-- finite release qualification receipts.
+The following later claimed components were **not recovered and are not claimed
+implemented**: lineage-aware incremental invalidation, deterministic replay
+capsules, a systematic metamorphic mutation generator, a substantive analytical
+framework projection engine, a benchmark-trained model qualification router,
+and a qualified structural/semantic comparison engine. A basic offline bundle,
+route contracts and lexical candidate code exist; those are different things.
 
-### Local and sensitive comparison
-- network-free local document preparation, including optional spaCy feature and graph generation;
-- institution-owned gap runner against a pinned public Gold JSONL baseline;
-- portable `policy-gap-analysis` Agent Skill patterned on `rcagent`;
-- content-addressed offline bundle builder/verifier;
-- dependency-free Python zipapp build for portable execution;
-- local model manifest contract and task-specific benchmark harness.
+## Implemented and exercised in local software tests
 
-### CI/CD and automation
-- 106 deterministic tests currently pass; the package is at 97% branch-aware coverage in the current public-corpus execution state;
-- context/security/dependency-review workflows;
-- Test-Goblin-style unit/integration/smoke/property/contract matrix;
-- 95% branch-coverage target in CI;
-- deterministic modality benchmark in CI;
-- package build lane;
-- scheduled source-health portal capture without medallion promotion;
-- explicit Bronze Hugging Face publication workflow;
-- SHA-pinned Actions and disabled checkout credential persistence.
+| Component | Actual behaviour | Boundary |
+|---|---|---|
+| Capture | HTTPS validation, redirect host checks, bounded bodies/retries, CAS and receipts | No live corpus capture; no complete WARC capture |
+| Dynamic crawl | Exact policy-bound checkpoint, parent/depth lineage, retained-byte checks, persistent queue and dispositions | Generic discovery, not source-specific completeness |
+| HF staging | Immutable source packages, exact inventory, anonymous re-download/hash check, conditional pointer updates | Mocked Hub qualification only; no live upload |
+| Remote assessment | Verify every staged source at a pinned head and report readiness | `gate_b_passed` remains false; not final release closure |
+| Local comparison | Reference-to-local primary matrix plus local-to-reference view; confidence bounded by inputs | Conservative lexical candidates, no compliance certification |
+| Promotion checklist | Reject missing acceptance evidence and truthy non-booleans | Not a complete typed production qualification service |
+| Integrity | Strict JSON, self-hashes, safe paths, atomic writes and source-bound inventories | Hashes are not signatures or semantic truth |
+| Portable runner | Bundled source registry, cache-free deterministic zipapp, external-directory smoke test | Python 3.13 host tested; platform fleet not qualified |
+| Delivery | Clean Git requirement, fresh clone, reopened ZIP, fsck, expected HEAD, repeated zipapp identity | Packaging proof, not substantive or hosted qualification |
+| GraphRAG | Rebuildable graph and path-preserving lexical-seed retrieval | Semantic graph reasoning remains unqualified |
+| spaCy | Optional offsets, sentences, configured rule entities/concepts | Rule repetition is not independent triangulation |
+| SourceRight/CiteWeft/Authentext | Canonical revision observations and explicit adapter boundaries | Native execution and end-to-end integration not run |
 
-## Implemented but not yet qualified for production medallion promotion
+PDF/DOCX routing now uses captured MIME and original URI when the CAS object
+has no extension. Conflicting hints are rejected. The paragraph-only DOCX route
+reports unextracted tables instead of claiming lossless extraction. Parser
+coverage and layout/reading-order qualification remain open.
 
-The following code exists but its production route still requires the relevant track benchmark or corpus gate:
+## Production state
 
-- statistical spaCy pipelines and any use of them as independent triangulation evidence;
-- semantic/vector seeding of GraphRAG and advanced graph reasoning/community summaries;
-- PDF and DOCX parsers;
-- lexical Platinum candidate matching;
-- local generative inference;
-- semantic assertion extraction beyond conservative deterministic clauses;
-- institutional gap analysis beyond the deterministic baseline;
-- automatic Hugging Face publication of a real Bronze release.
+| Milestone | State |
+|---|---|
+| T00 Foundation | Active; exact dependency identities resolved, native integration and production toolchain incomplete |
+| T01 Source Census v1 | Closed finite 28-surface inventory, not an exhaustive document census |
+| T02 Bronze v1 | Active; capture/publication machinery tested locally, no current original-byte capture or remote publication |
+| T03 Silver v1 | Production-gated on Bronze and parser qualification |
+| T04 Gold v1 | Production-gated on Silver and extraction qualification |
+| T05 Platinum v1 | Production-gated on Gold and comparison qualification |
+| T07 Agent/workflow engineering | Active; this engineering pass belongs here and to T00/T02 |
 
-These remain deliberately unable to upgrade evidence merely because they execute successfully.
+Previously preserved shadow observations remain quarantined. They cannot
+substitute for captured originals or close a medallion gate. Later production
+tracks were not marked complete and no new tracks were created.
 
-## Current public-corpus release state
+## Latest measured software assurance
 
-- **T01 / Source Census v1:** completed. The release is intentionally a finite census of official source *surfaces*; individual-document completeness is a Bronze obligation.
-- **T02 / Bronze v1:** active. Twenty-eight source surfaces are queued, but zero original payloads have been captured in this execution environment, so Gate B correctly remains closed.
-- **T03 / Silver v1, T04 / Gold v1, T05 / Platinum v1:** production status remains planned because predecessor gates are non-compensatory.
-- **Shadow clinical-governance slice:** 9 source observations → 9 shadow Silver segments → 48 shadow Gold concept candidates → 9 Platinum preview rows → 63-node/96-edge graph. It is explicitly `not_a_medallion_release`.
-- **Hugging Face:** the four intended public dataset repositories do not yet exist. The authenticated connector exposes no dataset write action, and a `cpu-basic` Hugging Face Job attempt returned HTTP 402, so no upload is claimed. Publication candidate contracts and remote-verification machinery are ready.
+The local host run produced **222 tests passed** and **97.59% combined
+line/branch-aware package coverage**. Package coverage does not include every
+wrapper script; wrapper behaviour is exercised through integration tests.
 
-## Genuinely deferred
+This used Python 3.13.5 and pytest 9.0.2 with an explicit temporary CLI override
+of the production pytest minimum and strict configuration. The committed
+Python 3.14.6/pytest >=9.1 contract was not weakened. One warning reports the
+missing pytest-timeout plugin. Consequently this is host-compatibility evidence,
+not the declared production test environment. Statement coverage is 98.68%; branch-only coverage is 94.08%.
+The configured 95% combined aggregate target passes;
+100% critical-path coverage is not universally achieved.
 
-The remaining work is now predominantly data acquisition and empirical qualification rather than architecture:
+Ruff, basedpyright, ty, actionlint, zizmor, live dependency/security audits,
+production lock resolution, native external-tool execution and hosted GitHub
+Actions were not run here. No production-qualified binary, clinical validation,
+trained model bake-off or real policy-effect result is claimed.
 
-1. execute the networked 28-surface Bronze queue; recursively enumerate all in-scope public documents and assign every discovery a captured/duplicate/superseded/unavailable/out-of-scope disposition;
-2. publish and remotely verify the real public Bronze Hugging Face release;
-3. benchmark parser combinations on the captured PDF/DOCX/HTML corpus and select the qualified Silver route;
-4. construct/adjudicate Gold extraction benchmarks, including jurisdiction and temporal hold-outs;
-5. benchmark lexical, embedding, GraphRAG seed, cross-encoder, NLI and candidate generative methods on real comparison pairs;
-6. choose and pin the smallest passing local models/quantizations;
-7. generate and remotely verify the real public Silver, Gold and Platinum Hugging Face releases;
-8. qualify the final institutional runner against those releases;
-9. perform workstation-specific throughput/memory tuning only for any offline bundle that includes a local model runtime.
+## Concrete remaining work
 
-The intended local burden is therefore installation/selection/tuning of already-defined components, not architectural or workflow development.
+1. Provision and qualify the declared runtime and dependency lock without
+   changing requirements merely to fit a development host.
+2. Execute bounded live capture with a scoped public HF write credential;
+   qualify each source adapter, handle cross-host public document stores,
+   reconcile document-level inventories and disposition every boundary.
+3. Finish typed final Bronze publication/closure and clean-room recovery
+   qualification; source staging alone does not close Bronze.
+4. Use the captured corpus to qualify parsers, offsets, tables, references and
+   loss accounting, then complete Silver.
+5. Build genuine extraction and comparison benchmarks, method-independence
+   evidence and separate framework projections before Gold/Platinum promotion.
+
+The current blocker is not a need for more speculative architecture. It is
+access to an executable network/write runtime plus the remaining empirical and
+release-integration work documented above.

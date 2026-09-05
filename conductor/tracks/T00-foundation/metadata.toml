@@ -2,7 +2,7 @@ id = "T00"
 title = "Foundation and context management"
 status = "active"
 created = "2026-09-03"
-updated = "2026-09-03"
+updated = "2026-09-05"
 
 outputs = [
   ".context/project.toml",
@@ -32,7 +32,7 @@ outputs = [
 ]
 
 unresolved = [
-  "exact revisions and native interfaces for sourceright/citeweft/authentext",
+  "native execution qualification for pinned sourceright/citeweft/authentext",
   "GitHub remote repository plus issue/project reciprocal links",
   "target Hugging Face medallion dataset repositories are roadmap targets and not yet created",
 ]

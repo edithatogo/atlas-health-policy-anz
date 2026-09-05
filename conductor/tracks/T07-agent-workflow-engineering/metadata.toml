@@ -2,7 +2,7 @@ id = "T07"
 title = "Agents, skills and workflow engineering"
 status = "active"
 created = "2026-09-03"
-updated = "2026-09-03"
+updated = "2026-09-05"
 depends_on = ["T00"]
 
-unresolved = []
+unresolved = ["production-runtime-and-static-security-qualification", "native-quality-toolchain-integration", "real-model-and-corpus-benchmark-qualification"]

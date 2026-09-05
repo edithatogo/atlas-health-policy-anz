@@ -36,3 +36,11 @@ Read `.context/project.toml`, then every `required_context` entry in order befor
 - Keep commits scoped and descriptive.
 - Do not rewrite history after an evidence receipt references a commit.
 - Validation receipts should identify the commit they validate.
+
+## Recovery and delivery rule
+- Inspect the current code and `docs/IMPLEMENTATION_STATUS.md` before relying on a prior assistant's completion claim.
+- A failed/empty artifact or unrun tool is never a passing qualification. Record negative evidence.
+- Source staging and software fixtures never close production medallion gates.
+- Primary institutional gaps enumerate reference requirements against local evidence; preserve the reverse view separately.
+- Build final downloads only from a clean committed tree using `scripts/build_delivery.py`; verify the reopened archive, exact HEAD, portable smoke tests and checksums.
+- Host-only test overrides must be explicit in receipts; they do not qualify the declared production runtime.

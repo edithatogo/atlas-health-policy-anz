@@ -11,7 +11,7 @@ def test_modality_mismatch_is_material_even_when_text_similar() -> None:
         threshold=0.5,
     )
     assert relationship == "material_difference"
-    assert state is EvidenceState.VERIFIED
+    assert state is EvidenceState.SUPPORTED_NEEDS_VERIFICATION
     assert "modality_mismatch" in reasons
 
 

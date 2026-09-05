@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
+from urllib.parse import urlsplit
 
 from .silver import SilverSegment, normalize_html, normalize_text
 
@@ -17,9 +17,20 @@ class ParseResult:
     warnings: tuple[str, ...] = ()
 
 
-def parse_file(path: str | Path, *, source_id: str) -> ParseResult:
+def parse_file(path: str | Path, *, source_id: str, media_type: str | None = None,
+               source_uri: str | None = None) -> ParseResult:
     source = Path(path)
     suffix = source.suffix.lower()
+    types = {"application/pdf": ".pdf", "text/html": ".html", "application/xhtml+xml": ".html",
+        "text/plain": ".txt", "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx"}
+    hinted = Path(urlsplit(source_uri).path).suffix.lower() if source_uri else ""
+    mime_suffix = types.get((media_type or "").split(";", 1)[0].lower())
+    if mime_suffix:
+        if hinted in {".pdf", ".docx"} and hinted != mime_suffix:
+            raise ValueError("source URI and captured media type disagree; inspect original bytes")
+        suffix = mime_suffix
+    elif hinted:
+        suffix = hinted
     if suffix in {".txt", ".md", ".csv", ".json", ".xml"}:
         text = source.read_text(encoding="utf-8", errors="replace")
         return ParseResult(source_id, "plain-text-v1", tuple(normalize_text(source_id, text)))
@@ -64,4 +75,5 @@ def _parse_docx_optional(path: Path, source_id: str) -> ParseResult:
         raise RuntimeError("DOCX parsing requires the qualified optional parser python-docx") from exc
     document = docx.Document(path)
     text = "\n".join(paragraph.text for paragraph in document.paragraphs)
-    return ParseResult(source_id, "python-docx-v1", tuple(normalize_text(source_id, text, parser_id="python-docx-v1")))
+    warnings = ("docx_tables_not_extracted",) if getattr(document, "tables", ()) else ()
+    return ParseResult(source_id, "python-docx-v1", tuple(normalize_text(source_id, text, parser_id="python-docx-v1")), warnings)

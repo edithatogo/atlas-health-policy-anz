@@ -99,7 +99,10 @@ def validate_ci(errors: list[str]) -> None:
         "security-context.yml",
     }
     workflow_dir = ROOT / ".github/workflows"
-    for name in workflows:
+    missing_workflows = workflows - {path.name for path in workflow_dir.glob("*.yml")}
+    for missing in missing_workflows:
+        errors.append(f"missing required GitHub workflow: {missing}")
+    for name in sorted(path.name for path in workflow_dir.glob("*.yml")):
         path = workflow_dir / name
         if not path.exists():
             errors.append(f"missing required GitHub workflow: {name}")
@@ -223,6 +226,11 @@ def main() -> int:
         for name in ("spec.md", "plan.md", "metadata.toml"):
             if not (base / name).exists():
                 errors.append(f"track {track['id']} missing {name}")
+        metadata_path = base / "metadata.toml"
+        if metadata_path.exists():
+            metadata = load_toml(metadata_path)
+            if metadata.get("id") != track["id"] or metadata.get("status") != track["status"]:
+                errors.append(f"track {track['id']} metadata disagrees with registry")
         for dependency in track.get("depends_on", []):
             if dependency not in track_ids:
                 errors.append(f"track {track['id']} has unknown dependency: {dependency}")

@@ -57,9 +57,13 @@ def baseline_relationship(
     right_modality: str | None,
     threshold: float = 0.72,
 ) -> tuple[str, EvidenceState, tuple[str, ...]]:
+    if not 0 <= threshold <= 1:
+        raise ValueError("threshold must be between zero and one")
+    if not left_text.strip() or not right_text.strip():
+        return "not_determined", EvidenceState.NOT_DETERMINED, ("evidence_missing",)
     similarity = jaccard_similarity(left_text, right_text)
     if similarity < threshold:
-        return "not_equivalent", EvidenceState.SUPPORTED_NEEDS_VERIFICATION, ("lexical_similarity_below_threshold",)
+        return "not_determined", EvidenceState.NOT_DETERMINED, ("lexical_nonmatch_is_not_semantic_non_equivalence",)
     if left_modality and right_modality and left_modality != right_modality:
-        return "material_difference", EvidenceState.VERIFIED, ("modality_mismatch",)
+        return "material_difference", EvidenceState.SUPPORTED_NEEDS_VERIFICATION, ("modality_mismatch", "lexical_context_not_qualified")
     return "candidate_equivalent", EvidenceState.SUPPORTED_NEEDS_VERIFICATION, ("lexical_candidate_only",)

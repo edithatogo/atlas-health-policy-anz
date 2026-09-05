@@ -24,6 +24,7 @@ required_context = [
   "docs/LOCAL_SENSITIVE_EXECUTION.md",
   "docs/CI_CD.md",
   "docs/IMPLEMENTATION_STATUS.md",
+  "docs/RECOVERY_AND_REMOTE_STAGING.md",
   "docs/LOCAL_QUICKSTART.md",
   "agents/catalog.md",
   "skills/catalog.md",
@@ -54,6 +55,7 @@ required_manifests = [
   "schemas/release-receipt-v1.json",
   "schemas/model-manifest-v1.json",
   "data/sources/jurisdictions-v1.json",
+  "data/sources/crawl-policies-v1.json",
   "examples/model-manifest.example.json",
   "skills/policy-gap-analysis/SKILL.md",
 ]

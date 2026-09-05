@@ -65,23 +65,33 @@ def run_institutional_gap_analysis(
                 action=row.get("action"),
                 object=row.get("object"),
                 timeframe=row.get("timeframe"),
-                evidence_state=EvidenceState.VERIFIED if row.get("deterministic") else EvidenceState.PROVISIONAL,
+                evidence_state=EvidenceState.SUPPORTED_NEEDS_VERIFICATION if row.get("deterministic") else EvidenceState.PROVISIONAL,
                 reason_codes=(row.get("reason_code", "unknown"),),
             )
         )
     baseline = _load_public_assertions(public_gold_jsonl)
-    rows = build_gap_rows(local_assertions, baseline)
+    # A coverage matrix must visit every reference requirement, not only local clauses.
+    rows = build_gap_rows(baseline, local_assertions)
+    reverse_rows = build_gap_rows(local_assertions, baseline)
     root.mkdir(parents=True, exist_ok=True)
     matrix_path = root / "gap-matrix.jsonl"
     with matrix_path.open("w", encoding="utf-8") as handle:
         for row in rows:
             handle.write(json.dumps({
+                "reference_assertion_id": row.target_assertion_id,
+                "local_candidate_assertion_id": row.comparator_assertion_id,
                 "target_assertion_id": row.target_assertion_id,
                 "comparator_assertion_id": row.comparator_assertion_id,
                 "relationship": row.relationship,
                 "evidence_state": row.evidence_state.value,
                 "reason_codes": list(row.reason_codes),
             }, sort_keys=True) + "\n")
+    with (root / "local-to-reference-candidates.jsonl").open("w", encoding="utf-8") as handle:
+        for row in reverse_rows:
+            handle.write(json.dumps({"local_assertion_id": row.target_assertion_id,
+                "reference_candidate_assertion_id": row.comparator_assertion_id,
+                "relationship": row.relationship, "evidence_state": row.evidence_state.value,
+                "reason_codes": list(row.reason_codes)}, sort_keys=True) + "\n")
     receipt: dict[str, Any] = {
         "schema_version": "1.0",
         "local_document_sha256": sha256_file(local_document),
@@ -89,8 +99,13 @@ def run_institutional_gap_analysis(
         "local_assertions": len(local_assertions),
         "public_assertions": len(baseline),
         "gap_rows": len(rows),
+        "direction": "reference_requirements_against_local_corpus",
+        "coverage_denominator": "reference_assertion_count",
+        "matrix_sha256": sha256_file(matrix_path),
+        "reverse_matrix_sha256": sha256_file(root / "local-to-reference-candidates.jsonl"),
         "network_used": False,
         "limitations": [
+            "no_candidate_found is a retrieval result, not confirmed policy non-compliance",
             "deterministic simple-clause extraction only unless a qualified model/parser is added",
             "baseline lexical matching is candidate-level and must not be treated as semantic equivalence without Platinum evidence",
         ],

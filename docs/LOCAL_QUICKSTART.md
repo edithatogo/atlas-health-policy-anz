@@ -9,7 +9,7 @@ pinned by SHA-256.
 
 Requirements:
 
-- Python 3.11+ for the portable `.pyz` deterministic core;
+- a compatible Python interpreter (portable deterministic core tested here on Python 3.13.5; production package contract remains Python 3.14.6);
 - one local policy/document; and
 - one pinned public Gold JSONL baseline.
 
@@ -77,3 +77,18 @@ au-health-policy-atlas graph-query build/local-policy/graph \
 
 The graph and spaCy outputs are derived local artefacts. They do not upgrade
 Gold/Platinum evidence and are not uploaded by the local workflow.
+
+## Direction, limitations and confidence
+
+`gap-matrix.jsonl` enumerates each reference requirement against local candidates.
+`local-to-reference-candidates.jsonl` separately reports the reverse direction.
+The receipt records the direction and reference denominator. An absent local
+candidate is a retrieval observation requiring verification, not confirmed
+non-compliance. Candidate confidence cannot exceed the weaker input assertion.
+The conservative regex extractor is A2, not a semantic A0 authority.
+
+The runner makes no deliberate network calls on this deterministic path.
+For sensitive use, enforce network denial in the deployment and inspect host
+logging/model settings; a `network_used: false` receipt is not a sandbox proof.
+No qualified public Gold/Platinum snapshot has been published by this project yet.
+Use synthetic fixtures for software trials and label them explicitly.

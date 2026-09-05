@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-09-05 — Artifact recovery and operational staging
+
+- Recovered real Git history at `a15c911` after the supplied improved ZIP proved empty and its own receipt reported failure. Retained the negative evidence; did not fabricate missing commits/features.
+- Implemented policy-bound dynamic crawl checkpoints, bounded retries/discovery, exact host checks, explicit scope boundaries and retained-object verification.
+- Added immutable public HF source staging, anonymous exact-revision byte verification, safe restores, generation checks and conditional index updates. SDK interactions are simulated in tests; no live upload occurred.
+- Added bounded Actions orchestration and staging assessment; require a production lock and write secret. Keep raw objects out of Actions artifacts. Staging is not Bronze maturity.
+- Corrected reference-to-local institutional gap direction, retained reverse candidates, bounded confidence by input evidence, and made low lexical similarity abstain.
+- Added CAS MIME/URI parser routing, conflicting-hint rejection and DOCX table-loss diagnostics.
+- Rejected empty/truthy promotion checklists, ambiguous JSON and tampered manifests.
+- Rebuilt portable packaging with bundled registries and no bytecode caches; added clean-clone/reopened-ZIP/Git-fsck/expected-commit delivery gates.
+- Re-observed SourceRight/CiteWeft/Authentext pins without claiming native integration qualification.
+- Recorded 222 passing host-compatibility tests and 97.59% package coverage. Production Python 3.14, lock/static/security/hosted gates remain unqualified. No medallion production layer was closed.
+- Reconciled current Conductor context without creating new tracks. Decision products are not an additional Diamond medallion layer.
+
+
 ## 2026-09-03 — GraphRAG and spaCy NLP substrate
 
 - Implemented rebuildable medallion knowledge-graph projection with provenance-preserving node/edge JSONL and checksum manifests.

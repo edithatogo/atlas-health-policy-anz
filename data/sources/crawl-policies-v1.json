@@ -1,0 +1,429 @@
+{
+  "census_sha256": "2732105bdeaa01d02e67401a448ec3c61032aaaf6674d3361cd595047c3af5e0",
+  "cutoff_semantics": "source-surface inventory freeze; not a claim that later payloads existed at that time",
+  "policies": [
+    {
+      "allowed_hosts": [
+        "www.health.qld.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "QLD",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.qld.gov.au/system-governance/policies-standards",
+      "source_id": "qld-policies-standards-root"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.qld.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "QLD",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.qld.gov.au/system-governance/policies-standards/doh-policy",
+      "source_id": "qld-doh-policy"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.qld.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "QLD",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.qld.gov.au/system-governance/policies-standards/health-service-directives",
+      "source_id": "qld-hsd"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.qld.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "QLD",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.qld.gov.au/system-governance/policies-standards/guidelines",
+      "source_id": "qld-guidelines"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.qld.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "QLD",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.qld.gov.au/public-health/topics/mental-health-alcohol-and-other-drugs/for-healthcare-providers/clinical-guidelines-policies-and-resources/cp-policies-forms-flowcharts-and-resources",
+      "source_id": "qld-mhaod-chief-psychiatrist"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.qld.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "QLD",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.qld.gov.au/clinical-practice/guidelines-procedures",
+      "source_id": "qld-clinical-guidelines"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.nsw.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "NSW",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.nsw.gov.au/policies/pages/default.aspx",
+      "source_id": "nsw-policy-home"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.nsw.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "NSW",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.nsw.gov.au/policies/manuals/Pages/patient-matters-manual.aspx",
+      "source_id": "nsw-patient-matters"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.nsw.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "NSW",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.nsw.gov.au/policies/manuals/pages/corporate-governance-compendium.aspx",
+      "source_id": "nsw-corporate-governance-compendium"
+    },
+    {
+      "allowed_hosts": [
+        "cec.health.nsw.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "NSW",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://cec.health.nsw.gov.au/governance-and-policy",
+      "source_id": "nsw-cec-governance-policy"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.vic.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "VIC",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.vic.gov.au/publications/policies-and-guidelines",
+      "source_id": "vic-health-policies-guidelines"
+    },
+    {
+      "allowed_hosts": [
+        "www.safercare.vic.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "VIC",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.safercare.vic.gov.au/publications",
+      "source_id": "vic-safer-care-publications"
+    },
+    {
+      "allowed_hosts": [
+        "www.safercare.vic.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "VIC",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.safercare.vic.gov.au/best-practice-improvement/clinical-governance",
+      "source_id": "vic-clinical-governance"
+    },
+    {
+      "allowed_hosts": [
+        "www.sahealth.sa.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "SA",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.sahealth.sa.gov.au/wps/wcm/connect/Public%20Content/SA%20Health%20Internet/About%20us/Governance/Policy%20governance/Policy%20governance?mr-pg=1",
+      "source_id": "sa-policy-governance"
+    },
+    {
+      "allowed_hosts": [
+        "www.sahealth.sa.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "SA",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.sahealth.sa.gov.au/wps/wcm/connect/public%2Bcontent/sa%2Bhealth%2Binternet/about%2Bus/governance/policy%2Bgovernance/about%2Bpolicy%2Bgovernance/about%2Bpolicy%2Bgovernance",
+      "source_id": "sa-policy-governance-framework"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.wa.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "WA",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.wa.gov.au/About-us/Policy-frameworks",
+      "source_id": "wa-policy-frameworks"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.wa.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "WA",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.wa.gov.au/About-us/Policy-frameworks/Search",
+      "source_id": "wa-policy-search"
+    },
+    {
+      "allowed_hosts": [
+        "www.wacountry.health.wa.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "WA",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.wacountry.health.wa.gov.au/About-us/Publications/Policies",
+      "source_id": "wa-wachs-policy-library"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.tas.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "TAS",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.tas.gov.au/",
+      "source_id": "tas-health-root"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.tas.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "TAS",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.tas.gov.au/sites/default/files/2024-07/tasmanian_health_service_-_service_plan_2024-25_0.pdf",
+      "source_id": "tas-ths-service-plan-2024-25"
+    },
+    {
+      "allowed_hosts": [
+        "www.health.tas.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "TAS",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.health.tas.gov.au/publications",
+      "source_id": "tas-ths-service-plans"
+    },
+    {
+      "allowed_hosts": [
+        "www.act.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "ACT",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.act.gov.au/open/act-health-policies",
+      "source_id": "act-health-policies"
+    },
+    {
+      "allowed_hosts": [
+        "www.act.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "ACT",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.act.gov.au/directorates-and-agencies/health-and-community-services-directorate/office-of-the-chief-medical-officer",
+      "source_id": "act-clinical-system-governance"
+    },
+    {
+      "allowed_hosts": [
+        "health.nt.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "NT",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://health.nt.gov.au/professionals",
+      "source_id": "nt-health-professionals"
+    },
+    {
+      "allowed_hosts": [
+        "digitallibrary.health.nt.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "NT",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://digitallibrary.health.nt.gov.au/",
+      "source_id": "nt-health-digital-library"
+    },
+    {
+      "allowed_hosts": [
+        "health.nt.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "NT",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://health.nt.gov.au/professionals/sepsis-information",
+      "source_id": "nt-sepsis"
+    },
+    {
+      "allowed_hosts": [
+        "www.safetyandquality.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "Cth",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.safetyandquality.gov.au/clinical-topics/clinical-governance/2026-national-model",
+      "source_id": "cth-national-model-clinical-governance-2026"
+    },
+    {
+      "allowed_hosts": [
+        "www.safetyandquality.gov.au"
+      ],
+      "cutoff": "2026-09-03",
+      "jurisdiction": "Cth",
+      "max_attempts": 3,
+      "max_bytes": 33554432,
+      "max_depth": 2,
+      "max_links_per_page": 100,
+      "max_targets": 250,
+      "policy_version": "bounded-html-v1",
+      "seed_url": "https://www.safetyandquality.gov.au/national-standards/nsqhs-standards/clinical-governance-standard",
+      "source_id": "cth-nsqhs-clinical-governance-standard"
+    }
+  ],
+  "schema_version": "1.0",
+  "source_adapter_qualification": "pending-live-corpus-observation",
+  "status": "initial-bounded-discovery-contracts-not-source-qualified"
+}

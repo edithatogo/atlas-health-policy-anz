@@ -100,7 +100,9 @@ jobs:
         if: always()
         with:
           name: supply-chain-receipt
-          path: build/
+          path: |
+            build/sbom.cdx.json
+            build/supply-chain-bootstrap.json
           if-no-files-found: error
           retention-days: 30
 

@@ -1,27 +1,17 @@
 #!/usr/bin/env python3
-"""Build a dependency-free portable Atlas zipapp from the stdlib core."""
-
-from __future__ import annotations
-
-import argparse
-import zipapp
+"""Build the deterministic portable Atlas application, excluding caches."""
 from pathlib import Path
+import argparse
+import json
+from australian_health_policy_atlas.distribution import build_zipapp
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="dist/au-health-policy-atlas.pyz")
     args = parser.parse_args()
-    output = Path(args.output)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    zipapp.create_archive(
-        "src",
-        target=output,
-        main="australian_health_policy_atlas.cli:main",
-        interpreter="/usr/bin/env python3",
-        compressed=True,
-    )
-    print(output)
+    result = build_zipapp(Path(__file__).resolve().parents[1], Path(args.output))
+    print(json.dumps(result, sort_keys=True))
     return 0
 
 

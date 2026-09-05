@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
-import json
+import ipaddress
+import socket
 import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import urlparse
-from urllib.request import Request, urlopen
+from urllib.error import HTTPError
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .hashing import sha256_bytes, sha256_json
+from .integrity import atomic_bytes, atomic_json
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,6 +39,44 @@ def _validate_public_https(url: str) -> None:
         raise ValueError("capture only permits explicit HTTPS URLs")
     if parsed.username or parsed.password:
         raise ValueError("credentials must not be embedded in source URLs")
+    if parsed.port not in (None, 443) or any(ord(c) < 33 for c in url):
+        raise ValueError("unsafe HTTPS source URL")
+    host = parsed.hostname
+    if host == "localhost" or host.endswith((".localhost", ".local", ".internal")):
+        raise ValueError("non-public source host")
+    try:
+        address = ipaddress.ip_address(host)
+    except ValueError:
+        return
+    if not address.is_global:
+        raise ValueError("non-public source address")
+
+
+def _resolve_public(url: str) -> None:
+    _validate_public_https(url)
+    host = urlparse(url).hostname
+    answers = socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)
+    if not answers or any(not ipaddress.ip_address(a[4][0]).is_global for a in answers):
+        raise ValueError("source DNS resolved to non-public address")
+
+
+class _SourceRedirect(HTTPRedirectHandler):
+    def __init__(self, hosts: tuple[str, ...]) -> None:
+        self.hosts = hosts
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        _validate_public_https(newurl)
+        if urlparse(newurl).hostname not in self.hosts:
+            raise ValueError("redirect outside explicit source hosts")
+        _resolve_public(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def urlopen(request: Request, *, timeout: int):
+    """Restricted urllib boundary; DNS checking does not replace deployment egress rules."""
+    _resolve_public(request.full_url)
+    hosts = getattr(request, "atlas_allowed_hosts", (urlparse(request.full_url).hostname,))
+    return build_opener(_SourceRedirect(hosts)).open(request, timeout=timeout)
 
 
 def capture_url(
@@ -46,14 +87,24 @@ def capture_url(
     max_bytes: int = 128 * 1024 * 1024,
     timeout_seconds: int = 60,
     retries: int = 2,
+    allowed_hosts: tuple[str, ...] | None = None,
     user_agent: str = "AustralianHealthPolicyAtlas/0.1 (+public-policy-research)",
 ) -> CaptureReceipt:
     _validate_public_https(url)
+    hosts = allowed_hosts or (urlparse(url).hostname,)
+    if urlparse(url).hostname not in hosts:
+        raise ValueError("requested URL outside source hosts")
+    if type(max_bytes) is not int or max_bytes <= 0 or type(retries) is not int or retries < 0 or timeout_seconds <= 0:
+        raise ValueError("invalid acquisition budget")
     last_error: Exception | None = None
     for attempt in range(retries + 1):
         try:
             request = Request(url, headers={"User-Agent": user_agent, "Accept": "*/*"})
+            request.atlas_allowed_hosts = hosts
             with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310 - URL validated as HTTPS
+                _validate_public_https(response.geturl())
+                if urlparse(response.geturl()).hostname not in hosts:
+                    raise ValueError("final response outside source hosts")
                 data = response.read(max_bytes + 1)
                 if len(data) > max_bytes:
                     raise ValueError(f"source exceeds max_bytes={max_bytes}")
@@ -61,7 +112,7 @@ def capture_url(
                 target = Path(cas_root) / "sha256" / digest[:2] / digest
                 target.parent.mkdir(parents=True, exist_ok=True)
                 if not target.exists():
-                    target.write_bytes(data)
+                    atomic_bytes(target, data)
                 if sha256_bytes(target.read_bytes()) != digest:
                     raise OSError("CAS fixity verification failed")
                 headers = response.headers
@@ -83,10 +134,14 @@ def capture_url(
                     path.parent.mkdir(parents=True, exist_ok=True)
                     payload = receipt.as_dict()
                     payload["receipt_sha256"] = sha256_json(payload)
-                    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+                    atomic_json(path, payload)
                 return receipt
         except Exception as exc:  # noqa: BLE001 - errors are preserved and bounded for retries
             last_error = exc
+            if isinstance(exc, ValueError):
+                raise
+            if isinstance(exc, HTTPError) and exc.code not in {408, 425, 429} and exc.code < 500:
+                raise
             if attempt < retries:
                 time.sleep(min(2**attempt, 4))
     assert last_error is not None

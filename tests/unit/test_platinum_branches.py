@@ -12,7 +12,7 @@ def test_candidate_equivalent_and_not_equivalent() -> None:
     assert relationship == "candidate_equivalent"
     assert state is EvidenceState.SUPPORTED_NEEDS_VERIFICATION
     relationship2, _, _ = baseline_relationship("a", "z", left_modality=None, right_modality=None, threshold=0.5)
-    assert relationship2 == "not_equivalent"
+    assert relationship2 == "not_determined"
 
 
 def test_temporal_and_authority_failures() -> None:
