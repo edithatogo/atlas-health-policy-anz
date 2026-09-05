@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import json
+import pathlib
 import subprocess
 import sys
 import zipfile
@@ -17,7 +20,9 @@ from tests.unit.test_hub_staging_runtime import MemoryHub
 REPO = Path(__file__).resolve().parents[2]
 
 
-def test_zipapp_is_deterministic_and_works_outside_checkout(tmp_path):
+def test_zipapp_is_deterministic_and_works_outside_checkout(
+    tmp_path: pathlib.Path,
+) -> None:
     one, two = tmp_path / "first.pyz", tmp_path / "second.pyz"
     result = build_zipapp(REPO, one)
     build_zipapp(REPO, two)
@@ -52,7 +57,7 @@ def test_zipapp_is_deterministic_and_works_outside_checkout(tmp_path):
     assert json.loads(observed.stdout)["modality"] == "must_not"
 
 
-def test_bad_package_cannot_build(tmp_path):
+def test_bad_package_cannot_build(tmp_path: pathlib.Path) -> None:
     with pytest.raises(ValueError, match="package"):
         build_zipapp(tmp_path, tmp_path / "x.pyz")
     pkg = tmp_path / "src/australian_health_policy_atlas"
@@ -68,7 +73,9 @@ def test_bad_package_cannot_build(tmp_path):
         build_zipapp(tmp_path, tmp_path / "x.pyz")
 
 
-def test_source_pipeline_can_resume_from_simulated_remote(tmp_path):
+def test_source_pipeline_can_resume_from_simulated_remote(
+    tmp_path: pathlib.Path,
+) -> None:
     hub = MemoryHub()
     pages = {
         policy().seed_url: b'<a href="/a.pdf">Policy</a>',
@@ -88,7 +95,7 @@ def test_source_pipeline_can_resume_from_simulated_remote(tmp_path):
     )
 
 
-def test_source_pipeline_without_hub(tmp_path):
+def test_source_pipeline_without_hub(tmp_path: pathlib.Path) -> None:
     result = operations.run_source(
         policy(), tmp_path, fetch=fetcher({policy().seed_url: b"x"})
     )
@@ -96,7 +103,7 @@ def test_source_pipeline_without_hub(tmp_path):
     assert not result["gate_b_passed"]
 
 
-def test_missing_remote_object_is_not_first_run(tmp_path):
+def test_missing_remote_object_is_not_first_run(tmp_path: pathlib.Path) -> None:
     hub = MemoryHub()
     operations.run_source(
         policy(), tmp_path / "first", hub=hub, fetch=fetcher({policy().seed_url: b"x"})
@@ -108,7 +115,11 @@ def test_missing_remote_object_is_not_first_run(tmp_path):
         operations.run_source(policy(), tmp_path / "second", hub=hub)
 
 
-def test_operational_cli_has_no_secret_no_network_mode(tmp_path, monkeypatch, capsys):
+def test_operational_cli_has_no_secret_no_network_mode(
+    tmp_path: pathlib.Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     policies = REPO / "data/sources/crawl-policies-v1.json"
     monkeypatch.delenv("HF_TOKEN", raising=False)
     assert operations.main(["--policies", str(policies), "--matrix"]) == 0
@@ -128,7 +139,11 @@ def test_operational_cli_has_no_secret_no_network_mode(tmp_path, monkeypatch, ca
         operations.main(["--policies", str(policies), "--source-id", "not-known"])
 
 
-def test_operations_cli_dispatch(tmp_path, monkeypatch, capsys):
+def test_operations_cli_dispatch(
+    tmp_path: pathlib.Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     policies = REPO / "data/sources/crawl-policies-v1.json"
     source = operations.load_policies(policies)[0]
     monkeypatch.setattr(operations, "run_source", lambda *_a, **_kw: {"done": True})

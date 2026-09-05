@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import importlib.util
+import pathlib
 import subprocess
 import zipfile
 from pathlib import Path
@@ -13,7 +16,9 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
-def test_empty_archive_and_wrong_project_cannot_be_delivered(tmp_path):
+def test_empty_archive_and_wrong_project_cannot_be_delivered(
+    tmp_path: pathlib.Path,
+) -> None:
     archive = tmp_path / "empty.zip"
     with zipfile.ZipFile(archive, "w"):
         pass
@@ -25,11 +30,13 @@ def test_empty_archive_and_wrong_project_cannot_be_delivered(tmp_path):
         module.verify_archive(archive, "a" * 40)
 
 
-def test_delivery_rejects_dirty_tree_and_reopens_valid_git(tmp_path):
+def test_delivery_rejects_dirty_tree_and_reopens_valid_git(
+    tmp_path: pathlib.Path,
+) -> None:
     repo = tmp_path / "repo"
     repo.mkdir()
 
-    def git(*args):
+    def git(*args) -> None:
         subprocess.run(
             ["git", "-C", str(repo), *args], check=True, capture_output=True, timeout=10
         )

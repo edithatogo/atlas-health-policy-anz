@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import pathlib
 from dataclasses import replace
 from urllib.error import HTTPError, URLError
 
@@ -47,7 +50,7 @@ def fetcher(pages, seen=None):
     return fetch
 
 
-def test_crawl_resume_without_recapture(tmp_path):
+def test_crawl_resume_without_recapture(tmp_path: pathlib.Path) -> None:
     pages = {
         "https://health.test/policies": b'<a href="/policy.pdf">Policy</a>',
         "https://health.test/policy.pdf": b"%PDF-original-fixture",
@@ -72,7 +75,9 @@ def test_crawl_resume_without_recapture(tmp_path):
         ({"max_links_per_page": 1}, "link_limit"),
     ],
 )
-def test_limits_are_not_exhaustive_coverage(tmp_path, changes, reason):
+def test_limits_are_not_exhaustive_coverage(
+    tmp_path: pathlib.Path, changes, reason
+) -> None:
     pages = {
         "https://health.test/policies": b'<a href="/a.pdf">A</a><a href="/b.pdf">B</a>',
         "https://health.test/a.pdf": b"a",
@@ -87,7 +92,7 @@ def test_limits_are_not_exhaustive_coverage(tmp_path, changes, reason):
     }
 
 
-def test_external_link_is_accounted(tmp_path):
+def test_external_link_is_accounted(tmp_path: pathlib.Path) -> None:
     result = run_crawl(
         policy(),
         tmp_path,
@@ -110,7 +115,7 @@ def test_external_link_is_accounted(tmp_path):
         (503, "retryable"),
     ],
 )
-def test_http_dispositions(tmp_path, status, expected):
+def test_http_dispositions(tmp_path: pathlib.Path, status, expected) -> None:
     result = run_crawl(
         policy(),
         tmp_path,
@@ -124,7 +129,7 @@ def test_http_dispositions(tmp_path, status, expected):
     assert not result["scope_complete"]
 
 
-def test_retries_are_bounded(tmp_path):
+def test_retries_are_bounded(tmp_path: pathlib.Path) -> None:
     fetch = fetcher({"https://health.test/policies": URLError("network unavailable")})
     for _ in range(5):
         result = run_crawl(policy(max_attempts=2), tmp_path, fetch=fetch)
@@ -141,14 +146,14 @@ def test_retries_are_bounded(tmp_path):
         (OSError("temporary"), "retryable"),
     ],
 )
-def test_capture_errors(tmp_path, error, kind):
+def test_capture_errors(tmp_path: pathlib.Path, error, kind) -> None:
     result = run_crawl(
         policy(), tmp_path, fetch=fetcher({"https://health.test/policies": error})
     )
     assert result["counts"][kind] == 1
 
 
-def test_scope_drift_and_tamper_rejected(tmp_path):
+def test_scope_drift_and_tamper_rejected(tmp_path: pathlib.Path) -> None:
     fetch = fetcher({"https://health.test/policies": b"hello"})
     run_crawl(policy(), tmp_path, fetch=fetch)
     with pytest.raises(ValueError, match="policy changed"):
@@ -159,7 +164,7 @@ def test_scope_drift_and_tamper_rejected(tmp_path):
         run_crawl(policy(), tmp_path, fetch=fetch)
 
 
-def test_resume_selfhash_fails(tmp_path):
+def test_resume_selfhash_fails(tmp_path: pathlib.Path) -> None:
     run_crawl(policy(), tmp_path, fetch=fetcher({"https://health.test/policies": b"x"}))
     state = read_json((tmp_path / "state.json").read_bytes())
     state["generation"] += 1
@@ -180,11 +185,11 @@ def test_resume_selfhash_fails(tmp_path):
         {"allowed_hosts": ("wrong.test",)},
     ],
 )
-def test_invalid_policy(changes):
+def test_invalid_policy(changes) -> None:
     with pytest.raises(ValueError):
         policy(**changes).validate()
 
 
-def test_request_budget(tmp_path):
+def test_request_budget(tmp_path: pathlib.Path) -> None:
     with pytest.raises(ValueError):
         run_crawl(policy(), tmp_path, request_budget=0)

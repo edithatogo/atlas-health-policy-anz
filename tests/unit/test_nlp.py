@@ -1,7 +1,11 @@
+from __future__ import annotations
+
+import pytest
+
 from australian_health_policy_atlas import nlp as nlp_module
 
 
-def test_spacy_unavailable_is_bounded(monkeypatch) -> None:
+def test_spacy_unavailable_is_bounded(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(nlp_module, "spacy_available", lambda: False)
     result = nlp_module.analyse_with_spacy("Nurses must escalate care.")
     assert result.available is False
@@ -45,7 +49,9 @@ def test_spacy_missing_named_model_is_bounded() -> None:
     assert result.reason_codes == ("spacy_model_unavailable",)
 
 
-def test_spacy_statistical_flag_with_injected_pipeline(monkeypatch) -> None:
+def test_spacy_statistical_flag_with_injected_pipeline(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     if not nlp_module.spacy_available():
         return
     import spacy

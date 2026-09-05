@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import pathlib
 from dataclasses import replace
 
 import pytest
@@ -23,7 +26,9 @@ from tests.unit.test_hub_staging_runtime import MemoryHub, stage
 
 
 @pytest.mark.parametrize("mutation", ["kind", "duplicates", "identity", "unreferenced"])
-def test_valid_selfhash_does_not_override_contract(tmp_path, mutation):
+def test_valid_selfhash_does_not_override_contract(
+    tmp_path: pathlib.Path, mutation
+) -> None:
     source = stage(tmp_path)
     manifest = read_json((source / "manifest.json").read_bytes())
     if mutation == "kind":
@@ -44,14 +49,14 @@ def test_valid_selfhash_does_not_override_contract(tmp_path, mutation):
         verify_stage(source)
 
 
-def test_nested_stage_is_forbidden(tmp_path):
+def test_nested_stage_is_forbidden(tmp_path: pathlib.Path) -> None:
     stage(tmp_path)
     with pytest.raises(ValueError, match="outside"):
         build_stage(tmp_path / "crawl", tmp_path / "crawl/nested")
 
 
 @pytest.mark.parametrize("mutation", ["revision", "identity", "source", "hash"])
-def test_remote_reference_validation(tmp_path, mutation):
+def test_remote_reference_validation(tmp_path: pathlib.Path, mutation) -> None:
     hub = MemoryHub()
     observation = publish_stage(hub, stage(tmp_path))
     reference = dict(observation["reference"])
@@ -74,14 +79,14 @@ def test_remote_reference_validation(tmp_path, mutation):
         _remote_stage(hub, sealed(reference), tmp_path / "restore")
 
 
-def test_nonempty_restore_refused(tmp_path):
+def test_nonempty_restore_refused(tmp_path: pathlib.Path) -> None:
     hub = MemoryHub()
     observation = publish_stage(hub, stage(tmp_path))
     with pytest.raises(ValueError, match="empty"):
         _remote_stage(hub, observation["reference"], tmp_path / "stage")
 
 
-def test_conflicting_generation_is_refused(tmp_path):
+def test_conflicting_generation_is_refused(tmp_path: pathlib.Path) -> None:
     source = stage(tmp_path)
     hub = MemoryHub()
     publish_stage(hub, source)
@@ -92,7 +97,7 @@ def test_conflicting_generation_is_refused(tmp_path):
         publish_stage(hub, source)
 
 
-def test_source_scope_cannot_be_substituted(tmp_path):
+def test_source_scope_cannot_be_substituted(tmp_path: pathlib.Path) -> None:
     hub = MemoryHub()
     publish_stage(hub, stage(tmp_path))
     other = replace(policy(), max_depth=3)
@@ -101,7 +106,7 @@ def test_source_scope_cannot_be_substituted(tmp_path):
         restore_source(hub, other, tmp_path / "restore", revision=hub.head())
 
 
-def test_pointer_tamper_detected_after_commit(tmp_path):
+def test_pointer_tamper_detected_after_commit(tmp_path: pathlib.Path) -> None:
     class Hub(MemoryHub):
         def get(self, path, revision):
             value = super().get(path, revision)
@@ -111,7 +116,7 @@ def test_pointer_tamper_detected_after_commit(tmp_path):
         publish_stage(Hub(), stage(tmp_path))
 
 
-def test_concurrent_source_change_is_not_overwritten(tmp_path):
+def test_concurrent_source_change_is_not_overwritten(tmp_path: pathlib.Path) -> None:
     class Hub(MemoryHub):
         def put(self, files, *, parent=None):
             result = super().put(files, parent=parent)
@@ -124,7 +129,9 @@ def test_concurrent_source_change_is_not_overwritten(tmp_path):
 
 
 @pytest.mark.parametrize("conflicts", [1, 3])
-def test_conditional_commit_conflicts_retry_boundedly(tmp_path, conflicts):
+def test_conditional_commit_conflicts_retry_boundedly(
+    tmp_path: pathlib.Path, conflicts
+) -> None:
     class Hub(MemoryHub):
         failures = 0
 

@@ -1,8 +1,13 @@
 """Different collections cannot borrow the AU v1 completeness denominator."""
 
+from __future__ import annotations
+
 import importlib.util
 import json
+import pathlib
 from pathlib import Path
+
+import pytest
 
 from australian_health_policy_atlas.integrity import sealed, verify_seal
 
@@ -14,7 +19,7 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
-def test_distinct_scope_identities():
+def test_distinct_scope_identities() -> None:
     au, au_hash, au_kind = module.assessment_scope("au-v1")
     nz, nz_hash, nz_kind = module.assessment_scope("nz-v1")
     anz, anz_hash, anz_kind = module.assessment_scope("anz-v1")
@@ -24,13 +29,19 @@ def test_distinct_scope_identities():
     assert nz_kind == anz_kind
 
 
-def test_missing_credential_is_explicit(monkeypatch, capsys):
+def test_missing_credential_is_explicit(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.delenv("HF_TOKEN", raising=False)
     assert module.main(["--collection", "nz-v1"]) == 2
     assert json.loads(capsys.readouterr().out)["collection"] == "nz-v1"
 
 
-def test_assessment_binds_selected_scope_without_network(monkeypatch, tmp_path, capsys):
+def test_assessment_binds_selected_scope_without_network(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: pathlib.Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     monkeypatch.setenv("HF_TOKEN", "fixture-only-no-credential")
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(module.subprocess, "check_output", lambda *a, **k: "1" * 40)

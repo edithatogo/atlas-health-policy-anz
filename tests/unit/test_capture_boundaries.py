@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import pathlib
 from types import SimpleNamespace
 from urllib.error import HTTPError
 from urllib.request import Request
@@ -20,16 +23,16 @@ from tests.unit.test_capture import FakeResponse
         "https://health.test/a b",
     ],
 )
-def test_nonpublic_capture_url(url):
+def test_nonpublic_capture_url(url) -> None:
     with pytest.raises(ValueError):
         capture._validate_public_https(url)
 
 
-def test_public_literal_accepted():
+def test_public_literal_accepted() -> None:
     capture._validate_public_https("https://8.8.8.8/a")
 
 
-def test_dns_and_redirect_boundaries(monkeypatch):
+def test_dns_and_redirect_boundaries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         capture.socket,
         "getaddrinfo",
@@ -60,10 +63,12 @@ def test_dns_and_redirect_boundaries(monkeypatch):
     assert capture.urlopen(Request("https://health.test/x"), timeout=1) == "opened"
 
 
-def test_permanent_http_errors_are_not_retried(monkeypatch, tmp_path):
+def test_permanent_http_errors_are_not_retried(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
+) -> None:
     calls = []
 
-    def error(*_a, **_kw):
+    def error(*_a, **_kw) -> None:
         calls.append(1)
         raise HTTPError("https://health.test/x", 404, "gone", {}, None)
 
@@ -73,9 +78,11 @@ def test_permanent_http_errors_are_not_retried(monkeypatch, tmp_path):
     assert len(calls) == 1
 
 
-def test_final_redirect_guard_precedes_body_read(monkeypatch, tmp_path):
+def test_final_redirect_guard_precedes_body_read(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
+) -> None:
     class Response(FakeResponse):
-        def read(self, _size):
+        def read(self, _size) -> None:
             raise AssertionError("body must not be read")
 
     monkeypatch.setattr(
@@ -88,6 +95,6 @@ def test_final_redirect_guard_precedes_body_read(monkeypatch, tmp_path):
 @pytest.mark.parametrize(
     "params", [{"max_bytes": 0}, {"retries": -1}, {"allowed_hosts": ("else.test",)}]
 )
-def test_invalid_capture_budgets(tmp_path, params):
+def test_invalid_capture_budgets(tmp_path: pathlib.Path, params) -> None:
     with pytest.raises(ValueError):
         capture.capture_url("https://health.test/x", cas_root=tmp_path, **params)

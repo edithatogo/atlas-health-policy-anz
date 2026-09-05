@@ -1,6 +1,9 @@
 """Independent directory completeness, country boundaries and catalogue safety."""
 
+from __future__ import annotations
+
 import json
+import pathlib
 import subprocess
 import sys
 from copy import deepcopy
@@ -20,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCES = ROOT / "data/sources"
 
 
-def test_independent_closed_directory_denominators():
+def test_independent_closed_directory_denominators() -> None:
     report = a.assert_directory_coverage(a.load_authorities(), a.load_contract())
     verify_seal(report)
     expected = {
@@ -47,7 +50,7 @@ def test_independent_closed_directory_denominators():
     assert report["registered_bodies"] >= 212
 
 
-def test_missing_and_substituted_members_cannot_hide_behind_counts():
+def test_missing_and_substituted_members_cannot_hide_behind_counts() -> None:
     rows = a.load_authorities()
     next(row for row in rows if row["body_id"] == "nz-dental-council")["body_id"] = (
         "nz-invented-council"
@@ -88,7 +91,7 @@ def test_missing_and_substituted_members_cannot_hide_behind_counts():
         ("topics", []),
     ],
 )
-def test_invalid_body_fields(field, value):
+def test_invalid_body_fields(field, value) -> None:
     row = deepcopy(
         next(x for x in a.load_authorities() if x["body_id"] == "au-medical-board")
     )
@@ -97,7 +100,7 @@ def test_invalid_body_fields(field, value):
         a.validate_authorities([row])
 
 
-def test_empty_and_duplicate_bodies():
+def test_empty_and_duplicate_bodies() -> None:
     with pytest.raises(ValueError):
         a.validate_authorities([])
     row = a.load_authorities()[0]
@@ -121,7 +124,7 @@ def test_empty_and_duplicate_bodies():
         "bad-url",
     ],
 )
-def test_invalid_coverage_contract(mutation):
+def test_invalid_coverage_contract(mutation) -> None:
     c = deepcopy(a.load_contract())
     rows = a.load_authorities()
     if mutation == "schema-bool":
@@ -150,7 +153,7 @@ def test_invalid_coverage_contract(mutation):
         a.coverage_report(rows, c)
 
 
-def test_expanded_collection_preserves_frozen_au_v1():
+def test_expanded_collection_preserves_frozen_au_v1() -> None:
     au = load_collection("au-v1")
     nz = load_collection("nz-v1")
     full = load_collection("anz-v1")
@@ -168,7 +171,7 @@ def test_expanded_collection_preserves_frozen_au_v1():
         a.acquisition_sources("au-v1")
 
 
-def test_shared_portal_deduplicates_capture_not_bodies():
+def test_shared_portal_deduplicates_capture_not_bodies() -> None:
     sources = a.acquisition_sources()
     councils = [
         s for s in sources if s["url"] == "https://www.hpca.nsw.gov.au/councils"
@@ -182,7 +185,7 @@ def test_shared_portal_deduplicates_capture_not_bodies():
     )
 
 
-def test_graph_does_not_forge_legal_edges():
+def test_graph_does_not_forge_legal_edges() -> None:
     g = a.authority_graph()
     assert len([n for n in g.nodes.values() if n.kind == "authority"]) == 212
     assert {e.relation for e in g.edges} == {
@@ -196,7 +199,7 @@ def test_graph_does_not_forge_legal_edges():
     assert g.nodes["authority:nz-medsafe"].properties["role"] == "sector_regulator"
 
 
-def test_new_country_values_but_no_legacy_dhb_jurisdictions():
+def test_new_country_values_but_no_legacy_dhb_jurisdictions() -> None:
     for j in ["NZ", "ANZ"]:
         CrawlPolicy(
             "test", j, "https://example.org/", ("example.org",), "2026-09-05"
@@ -211,7 +214,7 @@ def test_new_country_values_but_no_legacy_dhb_jurisdictions():
         ).validate()
 
 
-def test_nz_nlp_exact_offsets_and_no_fake_independence():
+def test_nz_nlp_exact_offsets_and_no_fake_independence() -> None:
     text = "In New Zealand, Ngā Paerewa and Te Tiriti o Waitangi matter."
     result = analyse_with_spacy(text)
     assert result.available
@@ -222,7 +225,9 @@ def test_nz_nlp_exact_offsets_and_no_fake_independence():
     assert all(text[s.start_char : s.end_char] == s.text for s in result.spans)
 
 
-def test_cli_and_portable_data(tmp_path, capsys):
+def test_cli_and_portable_data(
+    tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     assert a.main([]) == 0
     assert json.loads(capsys.readouterr().out)["registered_bodies"] == 212
     assert a.main(["--sources", "nz-v1"]) == 0
@@ -250,7 +255,7 @@ def test_cli_and_portable_data(tmp_path, capsys):
     assert result.stdout.strip() == "212"
 
 
-def test_bad_csv_and_symlink(tmp_path):
+def test_bad_csv_and_symlink(tmp_path: pathlib.Path) -> None:
     p = tmp_path / "authorities-anz-v1.csv"
     p.write_text("wrong,columns\n")
     with pytest.raises(ValueError):

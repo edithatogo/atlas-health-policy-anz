@@ -1,5 +1,10 @@
+from __future__ import annotations
+
 import json
+import pathlib
 from pathlib import Path
+
+import pytest
 
 from australian_health_policy_atlas.cli import main
 
@@ -31,7 +36,9 @@ def test_bronze_cli(tmp_path: Path, capsys: object) -> None:
     assert value["record_count"] == 1
 
 
-def test_cli_nlp_and_graph_query(tmp_path, capsys) -> None:
+def test_cli_nlp_and_graph_query(
+    tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     from australian_health_policy_atlas.graph import build_policy_graph, write_graph
     from australian_health_policy_atlas.silver import normalize_text
 

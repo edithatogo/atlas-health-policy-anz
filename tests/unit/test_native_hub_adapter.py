@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import pathlib
 from types import SimpleNamespace
 
 import pytest
@@ -5,7 +8,9 @@ import pytest
 from australian_health_policy_atlas.hub_staging import HfStore
 
 
-def test_native_hf_adapter_contract_without_network(monkeypatch, tmp_path):
+def test_native_hf_adapter_contract_without_network(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
+) -> None:
     import huggingface_hub as hf
     from huggingface_hub.errors import EntryNotFoundError
 
@@ -16,10 +21,10 @@ def test_native_hf_adapter_contract_without_network(monkeypatch, tmp_path):
         sha = "a" * 40
         oid = "b" * 40
 
-        def __init__(self, **kwargs):
+        def __init__(self, **kwargs) -> None:
             calls.append(("init", kwargs))
 
-        def create_repo(self, *args, **kwargs):
+        def create_repo(self, *args, **kwargs) -> None:
             calls.append(("create_repo", kwargs))
 
         def repo_info(self, *args, **kwargs):
