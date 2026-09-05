@@ -1,0 +1,5 @@
+{"id":"must-1","text":"The registered nurse must notify the medical officer.","expected":"must","mutation_family":"baseline"}
+{"id":"mustnot-1","text":"The registered nurse must not administer the medicine.","expected":"must_not","mutation_family":"negation"}
+{"id":"should-1","text":"The service should document the reason for departure.","expected":"should","mutation_family":"modality"}
+{"id":"may-1","text":"The clinician may escalate the matter to the director.","expected":"may","mutation_family":"modality"}
+{"id":"ambiguous-1","text":"Escalation to the director is appropriate in some circumstances.","expected":null,"mutation_family":"ambiguity"}

@@ -1,0 +1,32 @@
+{
+  "observed_at": "2026-09-05T05:49:26.022664+00:00",
+  "recoverable_commit": "a15c911",
+  "intact_archive_sha256": "6eb1afcf467b21fd772edb4a549d951aee52bf433a06968e4d65910742e4f7b5",
+  "rejected_archive": {
+    "name": "australian-health-policy-atlas-improved.zip",
+    "size_bytes": 22,
+    "members": 0,
+    "sha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85"
+  },
+  "prior_summary": {
+    "qualified": false,
+    "stage1": {
+      "repo": "/mnt/data/atlas_work",
+      "checks": [],
+      "qualified": false,
+      "fatal": "git repository missing"
+    }
+  },
+  "finding": "Latest claimed improved artifact cannot substantiate prior implementation/qualification claims. History restored from intact archive without fabrication.",
+  "github_lookup": "No matching repository returned by connected GitHub search",
+  "hugging_face": "Authenticated connector exposes read-repos, not dataset-write scope; no write credential in container",
+  "network": "Direct original-HTML request and container download failed; original bytes captured=0",
+  "unrecovered_prior_claims": [
+    "incremental invalidation planner",
+    "replay capsules",
+    "metamorphic generator",
+    "framework projection engine",
+    "model qualification router",
+    "structured comparison engine"
+  ]
+}

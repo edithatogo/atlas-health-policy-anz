@@ -1,0 +1,601 @@
+{
+  "clinical_governance_vertical_slice": [
+    {
+      "authority_type": "framework",
+      "capture_status": "queued_external_network",
+      "comparability": "scope-limited",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-qld-allied-health",
+      "jurisdiction": "QLD",
+      "scope": "allied-health; Queensland Health",
+      "title": "Allied Health Clinical Governance Framework in Queensland Health",
+      "url": "https://www.health.qld.gov.au/__data/assets/pdf_file/0030/143895/clingovframe.pdf"
+    },
+    {
+      "authority_type": "mandatory-policy-directive",
+      "capture_status": "queued_external_network",
+      "comparability": "systemwide",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-nsw-pd2025-032",
+      "jurisdiction": "NSW",
+      "scope": "NSW Health system",
+      "title": "Clinical Governance in NSW (PD2025_032)",
+      "url": "https://www1.health.nsw.gov.au/pds/ActivePDSDocuments/PD2025_032.pdf"
+    },
+    {
+      "authority_type": "best-practice-framework",
+      "capture_status": "queued_external_network",
+      "comparability": "systemwide-guidance",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-vic-2024",
+      "jurisdiction": "VIC",
+      "scope": "Victorian healthcare sectors",
+      "title": "Victorian Clinical Governance Framework 2024",
+      "url": "https://www.safercare.vic.gov.au/sites/default/files/2024-08/Victorian%20Clinical%20Governance%20Framework.pdf"
+    },
+    {
+      "authority_type": "framework",
+      "capture_status": "queued_external_network",
+      "comparability": "systemwide",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-sa",
+      "jurisdiction": "SA",
+      "scope": "SA Health",
+      "title": "SA Health Clinical Governance Framework",
+      "url": "https://www.sahealth.sa.gov.au/wps/wcm/connect/048ef5d2-965e-4ac1-a2c0-a9902f6cff1a/SA%2BHealth%2BClinical%2BGovernance%2BFramework.pdf?MOD=AJPERES"
+    },
+    {
+      "authority_type": "framework",
+      "capture_status": "queued_external_network",
+      "comparability": "systemwide",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-wa",
+      "jurisdiction": "WA",
+      "scope": "WA health system",
+      "title": "WA Clinical Governance Framework 2020",
+      "url": "https://www.health.wa.gov.au/-/media/Corp/Documents/Health-for/Patient-safety/PDF/Clinical-Governance-Framework-2020.pdf"
+    },
+    {
+      "authority_type": "service-plan-governance-source",
+      "capture_status": "queued_external_network",
+      "comparability": "secondary-framework-reference",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-tas-service-plan",
+      "jurisdiction": "TAS",
+      "scope": "Tasmanian Health Service",
+      "title": "Tasmanian Health Service Service Plan 2024-25",
+      "url": "https://www.health.tas.gov.au/sites/default/files/2024-07/tasmanian_health_service_-_service_plan_2024-25_0.pdf"
+    },
+    {
+      "authority_type": "system-governance-arrangements",
+      "capture_status": "queued_external_network",
+      "comparability": "systemwide",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-act",
+      "jurisdiction": "ACT",
+      "scope": "ACT health system",
+      "title": "ACT Clinical Governance Arrangements",
+      "url": "https://www.act.gov.au/__data/assets/pdf_file/0011/2799929/ACT-Clinical-Governance-Arrangements.pdf"
+    },
+    {
+      "authority_type": "service-level-framework-source",
+      "capture_status": "queued_external_network",
+      "comparability": "scope-limited",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-nt-top-end",
+      "jurisdiction": "NT",
+      "scope": "Top End Health Service",
+      "title": "Top End Health Service clinical governance source",
+      "url": "https://digitallibrary.health.nt.gov.au/bitstreams/c9f4b584-3e11-4566-9760-48c945957a15/download"
+    },
+    {
+      "authority_type": "national-model",
+      "capture_status": "queued_external_network",
+      "comparability": "national-reference",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "id": "cg-cth-2026",
+      "jurisdiction": "Cth",
+      "scope": "Australian public/private acute health services",
+      "title": "2026 National Model for Clinical Governance",
+      "url": "https://www.safetyandquality.gov.au/sites/default/files/2026-06/National-Model-for-Clinical-Governance-2026.pdf"
+    }
+  ],
+  "observation_date": "2026-09-03",
+  "release_id": "bronze-v1",
+  "schema_version": "1.0",
+  "surface_queue": [
+    {
+      "adapter": "html-index",
+      "capture_id": "bronze-v1::qld-policies-standards-root",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "QLD",
+      "priority": "normal",
+      "scope_note": "System governance entry point; links to statewide policy classes.",
+      "source_id": "qld-policies-standards-root",
+      "source_url": "https://www.health.qld.gov.au/system-governance/policies-standards"
+    },
+    {
+      "adapter": "html-table",
+      "capture_id": "bronze-v1::qld-doh-policy",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "QLD",
+      "priority": "normal",
+      "scope_note": "Department of Health policy documentation; not identical to HHS-local PPGs.",
+      "source_id": "qld-doh-policy",
+      "source_url": "https://www.health.qld.gov.au/system-governance/policies-standards/doh-policy"
+    },
+    {
+      "adapter": "html-table",
+      "capture_id": "bronze-v1::qld-hsd",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "QLD",
+      "priority": "normal",
+      "scope_note": "Mandatory directives issued to Hospital and Health Services under s47 Hospital and Health Boards Act 2011.",
+      "source_id": "qld-hsd",
+      "source_url": "https://www.health.qld.gov.au/system-governance/policies-standards/health-service-directives"
+    },
+    {
+      "adapter": "html-table",
+      "capture_id": "bronze-v1::qld-guidelines",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "QLD",
+      "priority": "normal",
+      "scope_note": "Statewide best-practice guidance that HHSs may adopt or adapt.",
+      "source_id": "qld-guidelines",
+      "source_url": "https://www.health.qld.gov.au/system-governance/policies-standards/guidelines"
+    },
+    {
+      "adapter": "html-index",
+      "capture_id": "bronze-v1::qld-mhaod-chief-psychiatrist",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "QLD",
+      "priority": "normal",
+      "scope_note": "Chief Psychiatrist policies are mandatory for persons exercising functions or powers under the Mental Health Act 2016.",
+      "source_id": "qld-mhaod-chief-psychiatrist",
+      "source_url": "https://www.health.qld.gov.au/public-health/topics/mental-health-alcohol-and-other-drugs/for-healthcare-providers/clinical-guidelines-policies-and-resources/cp-policies-forms-flowcharts-and-resources"
+    },
+    {
+      "adapter": "html-index-recursive",
+      "capture_id": "bronze-v1::qld-clinical-guidelines",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "QLD",
+      "priority": "normal",
+      "scope_note": "Distributed clinical-practice guidance surface.",
+      "source_id": "qld-clinical-guidelines",
+      "source_url": "https://www.health.qld.gov.au/clinical-practice/guidelines-procedures"
+    },
+    {
+      "adapter": "html-index",
+      "capture_id": "bronze-v1::nsw-policy-home",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "NSW",
+      "priority": "normal",
+      "scope_note": "NSW Health policy entry surface.",
+      "source_id": "nsw-policy-home",
+      "source_url": "https://www.health.nsw.gov.au/policies/pages/default.aspx"
+    },
+    {
+      "adapter": "html-index-recursive",
+      "capture_id": "bronze-v1::nsw-patient-matters",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "NSW",
+      "priority": "normal",
+      "scope_note": "Living Patient Matters Manual replacing historical chapter PDFs.",
+      "source_id": "nsw-patient-matters",
+      "source_url": "https://www.health.nsw.gov.au/policies/manuals/Pages/patient-matters-manual.aspx"
+    },
+    {
+      "adapter": "html-plus-document",
+      "capture_id": "bronze-v1::nsw-corporate-governance-compendium",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "NSW",
+      "priority": "normal",
+      "scope_note": "Governance requirements across NSW Health organisations.",
+      "source_id": "nsw-corporate-governance-compendium",
+      "source_url": "https://www.health.nsw.gov.au/policies/manuals/pages/corporate-governance-compendium.aspx"
+    },
+    {
+      "adapter": "html-index-recursive",
+      "capture_id": "bronze-v1::nsw-cec-governance-policy",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "NSW",
+      "priority": "normal",
+      "scope_note": "Clinical safety/governance implementation resources supporting NSW policy.",
+      "source_id": "nsw-cec-governance-policy",
+      "source_url": "https://cec.health.nsw.gov.au/governance-and-policy"
+    },
+    {
+      "adapter": "html-search-index",
+      "capture_id": "bronze-v1::vic-health-policies-guidelines",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "VIC",
+      "priority": "normal",
+      "scope_note": "Department policies, standards and guideline publication surface.",
+      "source_id": "vic-health-policies-guidelines",
+      "source_url": "https://www.health.vic.gov.au/publications/policies-and-guidelines"
+    },
+    {
+      "adapter": "html-paginated-index",
+      "capture_id": "bronze-v1::vic-safer-care-publications",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "VIC",
+      "priority": "normal",
+      "scope_note": "State quality and safety agency publication corpus.",
+      "source_id": "vic-safer-care-publications",
+      "source_url": "https://www.safercare.vic.gov.au/publications"
+    },
+    {
+      "adapter": "html-index",
+      "capture_id": "bronze-v1::vic-clinical-governance",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "VIC",
+      "priority": "normal",
+      "scope_note": "Victorian clinical governance framework and implementation tools.",
+      "source_id": "vic-clinical-governance",
+      "source_url": "https://www.safercare.vic.gov.au/best-practice-improvement/clinical-governance"
+    },
+    {
+      "adapter": "sa-wcm-domain-index",
+      "capture_id": "bronze-v1::sa-policy-governance",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "SA",
+      "priority": "normal",
+      "scope_note": "System-wide policies organised across 20 policy domains.",
+      "source_id": "sa-policy-governance",
+      "source_url": "https://www.sahealth.sa.gov.au/wps/wcm/connect/Public%20Content/SA%20Health%20Internet/About%20us/Governance/Policy%20governance/Policy%20governance?mr-pg=1"
+    },
+    {
+      "adapter": "html-plus-documents",
+      "capture_id": "bronze-v1::sa-policy-governance-framework",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "SA",
+      "priority": "normal",
+      "scope_note": "Defines SA Health policy types and management/governance.",
+      "source_id": "sa-policy-governance-framework",
+      "source_url": "https://www.sahealth.sa.gov.au/wps/wcm/connect/public%2Bcontent/sa%2Bhealth%2Binternet/about%2Bus/governance/policy%2Bgovernance/about%2Bpolicy%2Bgovernance/about%2Bpolicy%2Bgovernance"
+    },
+    {
+      "adapter": "wa-policy-search",
+      "capture_id": "bronze-v1::wa-policy-frameworks",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "WA",
+      "priority": "normal",
+      "scope_note": "15 binding system-manager policy frameworks with mandatory policies.",
+      "source_id": "wa-policy-frameworks",
+      "source_url": "https://www.health.wa.gov.au/About-us/Policy-frameworks"
+    },
+    {
+      "adapter": "wa-policy-search-pagination",
+      "capture_id": "bronze-v1::wa-policy-search",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "WA",
+      "priority": "normal",
+      "scope_note": "Search surface for individual mandatory policies.",
+      "source_id": "wa-policy-search",
+      "source_url": "https://www.health.wa.gov.au/About-us/Policy-frameworks/Search"
+    },
+    {
+      "adapter": "html-policy-library",
+      "capture_id": "bronze-v1::wa-wachs-policy-library",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "WA",
+      "priority": "normal",
+      "scope_note": "Local/health-service implementation layer; retain separately from statewide mandatory frameworks.",
+      "source_id": "wa-wachs-policy-library",
+      "source_url": "https://www.wacountry.health.wa.gov.au/About-us/Publications/Policies"
+    },
+    {
+      "adapter": "site-search-recursive",
+      "capture_id": "bronze-v1::tas-health-root",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "TAS",
+      "priority": "normal",
+      "scope_note": "No single public PPG register identified; discovery must traverse distributed publication surfaces.",
+      "source_id": "tas-health-root",
+      "source_url": "https://www.health.tas.gov.au/"
+    },
+    {
+      "adapter": "pdf-direct",
+      "capture_id": "bronze-v1::tas-ths-service-plan-2024-25",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "TAS",
+      "priority": "normal",
+      "scope_note": "Verified public THS system-governance source. Tasmania publishes relevant PPG material across distributed topic/document surfaces rather than a single public statewide PPG register.",
+      "source_id": "tas-ths-service-plan-2024-25",
+      "source_url": "https://www.health.tas.gov.au/sites/default/files/2024-07/tasmanian_health_service_-_service_plan_2024-25_0.pdf"
+    },
+    {
+      "adapter": "publication-search",
+      "capture_id": "bronze-v1::tas-ths-service-plans",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "TAS",
+      "priority": "normal",
+      "scope_note": "Used to discover statewide/THS governance frameworks and policy instruments.",
+      "source_id": "tas-ths-service-plans",
+      "source_url": "https://www.health.tas.gov.au/publications"
+    },
+    {
+      "adapter": "html-document-list",
+      "capture_id": "bronze-v1::act-health-policies",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "ACT",
+      "priority": "normal",
+      "scope_note": "Public ACT Health Directorate policy/document list.",
+      "source_id": "act-health-policies",
+      "source_url": "https://www.act.gov.au/open/act-health-policies"
+    },
+    {
+      "adapter": "html-index",
+      "capture_id": "bronze-v1::act-clinical-system-governance",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "ACT",
+      "priority": "normal",
+      "scope_note": "System-level clinical governance publications and structures.",
+      "source_id": "act-clinical-system-governance",
+      "source_url": "https://www.act.gov.au/directorates-and-agencies/health-and-community-services-directorate/office-of-the-chief-medical-officer"
+    },
+    {
+      "adapter": "html-index-recursive",
+      "capture_id": "bronze-v1::nt-health-professionals",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "NT",
+      "priority": "normal",
+      "scope_note": "Primary public index to distributed NT Health professional PPG resources.",
+      "source_id": "nt-health-professionals",
+      "source_url": "https://health.nt.gov.au/professionals"
+    },
+    {
+      "adapter": "repository-api-or-html",
+      "capture_id": "bronze-v1::nt-health-digital-library",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "NT",
+      "priority": "normal",
+      "scope_note": "NT Health digital library/repository; includes current and historical governance and clinical documents.",
+      "source_id": "nt-health-digital-library",
+      "source_url": "https://digitallibrary.health.nt.gov.au/"
+    },
+    {
+      "adapter": "html-plus-documents",
+      "capture_id": "bronze-v1::nt-sepsis",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "NT",
+      "priority": "normal",
+      "scope_note": "Example structured clinical topic with acute/primary, adult/paediatric guidelines and pathways.",
+      "source_id": "nt-sepsis",
+      "source_url": "https://health.nt.gov.au/professionals/sepsis-information"
+    },
+    {
+      "adapter": "html-plus-documents",
+      "capture_id": "bronze-v1::cth-national-model-clinical-governance-2026",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "Cth",
+      "priority": "normal",
+      "scope_note": "Current national clinical governance model, replacing the 2017 framework.",
+      "source_id": "cth-national-model-clinical-governance-2026",
+      "source_url": "https://www.safetyandquality.gov.au/clinical-topics/clinical-governance/2026-national-model"
+    },
+    {
+      "adapter": "html-plus-documents",
+      "capture_id": "bronze-v1::cth-nsqhs-clinical-governance-standard",
+      "capture_status": "queued_external_network",
+      "expected_outputs": [
+        "original_payload",
+        "capture_receipt",
+        "sha256",
+        "http_context"
+      ],
+      "jurisdiction": "Cth",
+      "priority": "normal",
+      "scope_note": "National accreditation standard comparator.",
+      "source_id": "cth-nsqhs-clinical-governance-standard",
+      "source_url": "https://www.safetyandquality.gov.au/national-standards/nsqhs-standards/clinical-governance-standard"
+    }
+  ]
+}

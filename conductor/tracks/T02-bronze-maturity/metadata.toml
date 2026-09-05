@@ -1,0 +1,13 @@
+id = "T02"
+title = "Bronze acquisition and maturity"
+status = "active"
+created = "2026-09-03"
+updated = "2026-09-05"
+depends_on = ["T01"]
+
+unresolved = [
+  "live original source bytes not captured in this environment",
+  "public Hugging Face staging not published",
+  "source-specific discovery qualification pending",
+  "Python 3.14 production lock and hosted workflow qualification pending",
+]

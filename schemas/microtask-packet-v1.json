@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/au-health-policy-atlas/microtask-packet-v1.schema.json",
+  "title": "Atlas Microtask Packet v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_version",
+    "task_id",
+    "skill_id",
+    "objective",
+    "open_question",
+    "allowed_inputs",
+    "evidence_refs",
+    "invariants",
+    "output_schema",
+    "stop_conditions",
+    "abstention_codes",
+    "context_budget"
+  ],
+  "properties": {
+    "packet_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "skill_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 600
+    },
+    "open_question": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 600
+    },
+    "allowed_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "span_id",
+          "sha256",
+          "text"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "span_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "context_role": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "definition",
+              "scope",
+              "exception",
+              "cross-reference",
+              "authority",
+              "temporal"
+            ]
+          }
+        }
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    },
+    "output_schema": {
+      "type": "object"
+    },
+    "stop_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    },
+    "abstention_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "evidence_missing",
+          "definition_missing",
+          "scope_unclear",
+          "authority_unclear",
+          "temporal_mismatch",
+          "exception_reference_missing",
+          "cross_reference_needed",
+          "ambiguous_modality",
+          "conflicting_evidence",
+          "unsupported_task",
+          "context_budget_exceeded"
+        ]
+      }
+    },
+    "context_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instruction_tokens",
+        "evidence_tokens",
+        "output_tokens"
+      ],
+      "properties": {
+        "instruction_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 900
+        },
+        "evidence_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6000
+        },
+        "output_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        }
+      }
+    },
+    "prompt_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "model_route": {
+      "type": "string",
+      "enum": [
+        "deterministic_rule",
+        "lexical_or_structural_model",
+        "tiny_local_model",
+        "small_local_model",
+        "independent_model_triangulation",
+        "larger_model_fallback"
+      ]
+    }
+  }
+}

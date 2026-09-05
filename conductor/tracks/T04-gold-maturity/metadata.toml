@@ -1,0 +1,8 @@
+id = "T04"
+title = "Gold assertions and concept maturity"
+status = "planned"
+created = "2026-09-03"
+updated = "2026-09-03"
+depends_on = ["T03"]
+
+unresolved = []

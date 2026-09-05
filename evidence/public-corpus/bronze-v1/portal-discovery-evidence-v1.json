@@ -1,0 +1,81 @@
+{
+  "limitations": [
+    "This is a portal-discovery snapshot, not a complete cross-jurisdiction document inventory. It exists to reduce the work required of the first networked Bronze capture."
+  ],
+  "observation_date": "2026-09-03",
+  "observations": [
+    {
+      "capture_implication": "enumerate rows; public links capture-target; QHEPS/login-required rows out-of-scope-public-v1",
+      "denominator_status": "table-visible; exact public-vs-login denominator to be computed by networked capture adapter",
+      "jurisdiction": "QLD",
+      "observation": "A large filterable table of guideline/attachment records is publicly enumerated; several rows point to QHEPS and explicitly require Queensland Health login.",
+      "portal_url": "https://www.health.qld.gov.au/system-governance/policies-standards/guidelines",
+      "source_id": "qld-guidelines"
+    },
+    {
+      "capture_implication": "capture HSD and all public supporting records as distinct objects with parent/child lineage",
+      "denominator_status": "table-visible; networked adapter will compute exact row/object denominator",
+      "jurisdiction": "QLD",
+      "observation": "The current table exposes HSDs plus supporting guidelines, standards, protocols and registers, with all-HHS applicability recorded for the visible rows.",
+      "portal_url": "https://www.health.qld.gov.au/system-governance/policies-standards/health-service-directives",
+      "source_id": "qld-hsd"
+    },
+    {
+      "capture_implication": "create policy-framework parent plus 20 current mandatory-policy child targets; follow related standards/supporting documents",
+      "declared_or_observed_count": 20,
+      "jurisdiction": "WA",
+      "observation": "Clinical Governance, Safety and Quality currently lists 20 mandatory policy requirements under the framework.",
+      "portal_url": "https://www.health.wa.gov.au/About-us/Policy-frameworks/Clinical-Governance-Safety-and-Quality",
+      "source_id": "wa-policy-frameworks"
+    },
+    {
+      "capture_implication": "paginate the full result set, retain type/topic/date metadata, then capture each public linked artefact",
+      "declared_or_observed_count": 213,
+      "jurisdiction": "VIC",
+      "observation": "The publication portal reports 213 results and exposes publication type/topic/clinical topic filters.",
+      "portal_url": "https://www.safercare.vic.gov.au/publications",
+      "source_id": "vic-safer-care-publications"
+    },
+    {
+      "capture_implication": "crawl manual sections and linked current PDS records; retain policy number, document class, amendment/date and section lineage",
+      "denominator_status": "section-level living manual; exact current linked-document denominator to be computed by the networked Bronze adapter",
+      "jurisdiction": "NSW",
+      "observation": "The Patient Matters Manual is a living online consolidation of NSW Health policy directives, guidelines and information bulletins relating to patient care; legacy PDF chapter content has moved into the online manual.",
+      "portal_url": "https://www.health.nsw.gov.au/policies/manuals/Pages/patient-matters-manual.aspx",
+      "source_id": "nsw-patient-matters"
+    },
+    {
+      "capture_implication": "enumerate every domain and search route, then capture each policy/guideline as a distinct object with domain and mandatory/advisory class preserved",
+      "count_semantics": "policy_domains_not_documents",
+      "declared_or_observed_count": 20,
+      "jurisdiction": "SA",
+      "observation": "SA Health organises system-wide policies and guidelines into 20 Policy Domains and exposes A-Z, search and most-recent discovery routes; policies in each domain are mandatory.",
+      "portal_url": "https://www.sahealth.sa.gov.au/wps/wcm/connect/Public%20Content/SA%20Health%20Internet/About%20us/Governance/Policy%20governance/Policy%20governance?mr-pg=1",
+      "source_id": "sa-policy-governance"
+    },
+    {
+      "capture_implication": "capture each linked record and classify document type/scope rather than treating every listed item as a policy",
+      "count_semantics": "visible_linked_records_in_current_page_snapshot",
+      "declared_or_observed_count": 100,
+      "jurisdiction": "ACT",
+      "observation": "The ACT Health Directorate transparency page directly enumerates 100 linked policy-related records in the current page snapshot, spanning policies, procedures, guidelines, frameworks, strategies and plans.",
+      "portal_url": "https://www.act.gov.au/open/act-health-policies",
+      "source_id": "act-health-policies"
+    },
+    {
+      "capture_implication": "harvest public metadata and files, then apply document-class/scope filters while preserving repository identifiers and supplied checksums",
+      "denominator_status": "repository is broader than PPGs; policy/guideline/protocol denominator requires classifier plus metadata filtering",
+      "jurisdiction": "NT",
+      "observation": "NT Health uses a distributed digital-library corpus containing typed publication records and controlled clinical documents, including guidelines/protocols with document-owner, approval, version and jurisdiction metadata.",
+      "portal_url": "https://digitallibrary.health.nt.gov.au/",
+      "source_id": "nt-digital-library"
+    }
+  ],
+  "rules": {
+    "authenticated_staff_links_disposition": "out-of-scope-public-v1",
+    "portal_total_is_not_capture_completion": true,
+    "public_v1_requires_unauthenticated_access": true
+  },
+  "schema_version": "1.0",
+  "status": "partial-document-discovery-evidence"
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/au-health-policy-atlas/source-registry-v1.schema.json",
+  "title": "Source Registry v1",
+  "type": "object",
+  "required": ["schema_version", "observation_date", "sources"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "observation_date": {"type": "string"},
+    "sources": {"type": "array", "minItems": 8}
+  }
+}

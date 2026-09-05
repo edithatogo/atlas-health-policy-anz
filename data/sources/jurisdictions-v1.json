@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "observation_date": "2026-09-03",
+  "scope_note": "Seed registry of official statewide/state-system public policy surfaces. It is a starting census, not a claim of complete document capture.",
+  "sources": [
+    {
+      "source_id": "qld-health-policies-standards",
+      "jurisdiction": "QLD",
+      "authority": "official",
+      "publisher": "Queensland Health",
+      "surface_type": "policy-portal",
+      "url": "https://www.health.qld.gov.au/system-governance/policies-standards",
+      "document_classes": ["policy", "standard", "guideline", "health-service-directive", "clinical-guideline"]
+    },
+    {
+      "source_id": "nsw-health-pds",
+      "jurisdiction": "NSW",
+      "authority": "official",
+      "publisher": "NSW Health",
+      "surface_type": "policy-distribution-system",
+      "url": "https://www.health.nsw.gov.au/policies/pages/default.aspx",
+      "document_classes": ["policy-directive", "guideline", "information-bulletin", "manual"]
+    },
+    {
+      "source_id": "vic-health-policy-funding-guidelines",
+      "jurisdiction": "VIC",
+      "authority": "official",
+      "publisher": "Victorian Department of Health",
+      "surface_type": "system-policy-portal",
+      "url": "https://www.health.vic.gov.au/policy-and-funding-guidelines-for-health-services",
+      "document_classes": ["policy-guide", "funding-rule", "standard", "requirement"]
+    },
+    {
+      "source_id": "sa-health-policy-governance",
+      "jurisdiction": "SA",
+      "authority": "official",
+      "publisher": "SA Health",
+      "surface_type": "policy-portal",
+      "url": "https://www.sahealth.sa.gov.au/wps/wcm/connect/Public%20Content/SA%20Health%20Internet/About%20us/Governance/Policy%20governance/Policy%20governance",
+      "document_classes": ["policy", "mandatory-instruction", "guideline", "standard"]
+    },
+    {
+      "source_id": "wa-health-policy-frameworks",
+      "jurisdiction": "WA",
+      "authority": "official",
+      "publisher": "WA Department of Health",
+      "surface_type": "policy-framework-portal",
+      "url": "https://www.health.wa.gov.au/About-us/Policy-frameworks",
+      "document_classes": ["policy-framework", "mandatory-policy", "guideline"]
+    },
+    {
+      "source_id": "tas-health-public-documents",
+      "jurisdiction": "TAS",
+      "authority": "official",
+      "publisher": "Tasmanian Department of Health",
+      "surface_type": "distributed-publication-surface",
+      "url": "https://www.health.tas.gov.au/",
+      "document_classes": ["policy", "procedure", "guideline", "framework"]
+    },
+    {
+      "source_id": "act-health-policies",
+      "jurisdiction": "ACT",
+      "authority": "official",
+      "publisher": "ACT Health Directorate",
+      "surface_type": "policy-portal",
+      "url": "https://www.act.gov.au/open/act-health-policies",
+      "document_classes": ["policy", "procedure", "guideline", "framework", "model-of-care"]
+    },
+    {
+      "source_id": "nt-health-public-professional-resources",
+      "jurisdiction": "NT",
+      "authority": "official",
+      "publisher": "NT Health",
+      "surface_type": "distributed-publication-surface",
+      "url": "https://health.nt.gov.au/professionals",
+      "document_classes": ["policy", "procedure", "guideline", "clinical-guideline", "framework"]
+    }
+  ]
+}

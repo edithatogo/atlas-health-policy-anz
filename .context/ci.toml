@@ -1,0 +1,47 @@
+schema_version = 1
+policy = "public-repo-free-tier-first-pinned-actions"
+python = "3.14.6"
+uv = "0.11.29"
+runner = "ubuntu-24.04"
+
+[principles]
+pin_actions_by_commit = true
+persist_checkout_credentials = false
+least_privilege_permissions = true
+concurrency_cancellation = true
+locked_dependency_sync = true
+reusable_workflows_preferred = true
+heavy_tests_change_scoped = true
+public_standard_runners_preferred = true
+release_artifacts_attested = true
+
+[quality]
+overall_coverage_floor = 95
+critical_logic_line_branch_floor = 100
+required_test_classes = [
+  "unit",
+  "integration",
+  "e2e",
+  "smoke",
+  "property",
+  "metamorphic",
+  "contract",
+  "edge",
+  "mutation",
+]
+
+[security]
+required = ["dependency-review", "pip-audit", "cyclonedx-sbom", "zizmor", "actionlint", "gitleaks", "codeql"]
+
+[dependency_updates]
+provider = "renovate"
+shared_config = "github>edithatogo/renovate-config"
+minimum_release_age_days = 7
+automerge = false
+pin_github_action_digests = true
+
+[publication]
+github_is_control_plane = true
+hugging_face_is_public_data_plane = true
+attest_release_packages = true
+verify_hf_remote_revision = true

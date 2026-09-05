@@ -1,0 +1,36 @@
+schema_version = 1
+
+[spacy]
+optional = true
+minimum_version = "3.8.16"
+python_target = "3.14"
+exact_offsets_required = true
+rule_only_is_independent_method = false
+statistical_model_requires_manifest = true
+statistical_model_requires_task_benchmark = true
+missing_spacy_fallback = "deterministic-rules"
+
+[graph]
+authoritative = false
+rebuildable_from_medallion = true
+canonical_layers = ["bronze", "silver", "gold", "platinum"]
+max_default_hops = 2
+path_receipts_required = true
+exact_evidence_segments_required = true
+graph_proximity_can_promote_claim = false
+graph_inference_can_create_canonical_edge = false
+
+[graphrag]
+seed_order = ["deterministic-concept", "lexical", "semantic-qualified"]
+semantic_seed_optional = true
+retrieval_only = true
+candidate_only = true
+model_summary_not_evidence = true
+no_community_summary_required_for_core = true
+
+[local]
+network_default = "deny"
+spacy_optional = true
+graph_optional = true
+private_graph_stays_local = true
+private_nlp_features_stay_local = true

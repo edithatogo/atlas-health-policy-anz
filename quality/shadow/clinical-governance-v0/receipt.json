@@ -1,0 +1,24 @@
+{
+  "allowed_use": [
+    "test transformation contracts",
+    "exercise GraphRAG",
+    "design framework mappings",
+    "generate benchmark candidates"
+  ],
+  "forbidden_claims": [
+    "Bronze/Silver/Gold/Platinum release maturity",
+    "policy compliance",
+    "systemwide ranking where scopes differ",
+    "absence from not_determined"
+  ],
+  "gold_concept_assertion_count": 48,
+  "graph_edge_count": 96,
+  "graph_node_count": 63,
+  "hard_blocker": "Bronze original payloads unavailable in current environment",
+  "not_a_medallion_release": true,
+  "platinum_row_count": 9,
+  "schema_version": "0.1-shadow",
+  "silver_segment_count": 9,
+  "source_count": 9,
+  "status": "qualified_for_pipeline_exercise_only"
+}

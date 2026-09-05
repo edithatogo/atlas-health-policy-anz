@@ -1,0 +1,20 @@
+{
+  "post_upload_checks": [
+    "immutable_revision_recorded",
+    "remote_bytes_match_sha256",
+    "dataset_card_present",
+    "manifest_schema_valid",
+    "viewer_or_file_listing_accessible"
+  ],
+  "required_files": [
+    "README.md",
+    "manifest.json",
+    "objects/**",
+    "receipts/**",
+    "source-registry.json"
+  ],
+  "schema_version": "1.0",
+  "status": "candidate_contract_only",
+  "target_repo": "edithatogo/au-health-policy-atlas-bronze",
+  "visibility": "public"
+}

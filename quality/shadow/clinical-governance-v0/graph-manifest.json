@@ -1,0 +1,9 @@
+{
+  "authoritative": false,
+  "edge_count": 96,
+  "edges_sha256": "a165417cb88ee655166463499f882ce58d479e6d8f7db1945f880ddc493e7b1f",
+  "node_count": 63,
+  "nodes_sha256": "14d98b3075fc3737936c78bdff3b8c16b34ccdeeef43c077fc3fecaaa6cada16",
+  "not_a_medallion_release": true,
+  "schema_version": "0.1-shadow"
+}

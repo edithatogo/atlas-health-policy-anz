@@ -1,0 +1,100 @@
+schema_version = 1
+owner = "edithatogo"
+policy = "reuse-before-build"
+
+[reuse_discovery]
+schema_version = 1
+freshness_seconds = 86400
+required_surfaces = ["local_clones", "github", "hugging_face", "source_registry"]
+snapshot_path = "quality/reuse-discovery/"
+
+[[github]]
+id = "archive-govt-nz"
+repository = "edithatogo/archive-govt-nz"
+authority = "evidence-first-preservation-provenance-and-medallion-patterns"
+disposition = "adopt-pattern"
+local_boundary = "ingestion/provenance/medallion"
+
+[[github]]
+id = "global-medicines-atlas"
+repository = "edithatogo/global-medicines-atlas"
+authority = "comparative-evidence-bitemporal-validity-and-atlas-patterns"
+disposition = "adopt-pattern"
+local_boundary = "comparison/validity/uncertainty"
+
+[[github]]
+id = "sourceright"
+snapshot = "c5fa583431390eee1bf5eae04dc47b01c50d4a1e"
+qualification = "identity-observed-native-execution-not-run"
+repository = "edithatogo/sourceright"
+authority = "source-provenance-source-quality-and-evidence-integrity"
+disposition = "dependency"
+local_boundary = "quality/source-integrity"
+
+[[github]]
+id = "citeweft"
+snapshot = "b087e12730eaac427bc804bf6aaa04aa0f17c572"
+qualification = "identity-observed-native-execution-not-run"
+repository = "edithatogo/citeweft"
+authority = "citation-extraction-linkage-and-integrity"
+disposition = "dependency"
+local_boundary = "quality/citation-integrity"
+
+[[github]]
+id = "authentext"
+snapshot = "ca39b86eb604a6fe4cfa9a0918638195af82c1af"
+qualification = "identity-observed-native-execution-not-run"
+repository = "edithatogo/authentext"
+authority = "humanization-readability-and-style-quality"
+disposition = "dependency"
+local_boundary = "quality/authentext"
+
+[[github]]
+id = "rcagent"
+repository = "edithatogo/rcagent"
+snapshot = "af5777bdefa2cb0052ee80c1c5fac9ed972568a4"
+authority = "portable-skill-method-selection-stop-rules-and-local-client-boundary"
+disposition = "adopt-pattern"
+local_boundary = "skills/local-sensitive-execution"
+
+[[hugging_face]]
+id = "corpus-social-media-government-nz"
+repository = "edithatogo/corpus-social-media-government-nz"
+authority = "public-government-corpus-publication-and-provenance-pattern"
+disposition = "adopt-pattern"
+publication_gate = "technical-integrity-and-remote-verification"
+
+[[hugging_face]]
+id = "global-medicines-atlas-catalogue"
+repository = "edithatogo/global-medicines-atlas-catalogue"
+authority = "github-actions-as-durable-publisher-and-hf-as-archive-boundary"
+disposition = "adopt-pattern"
+publication_gate = "governed-public-no-credential-artifacts"
+
+[[hugging_face]]
+id = "au-health-policy-atlas-bronze"
+repository = "edithatogo/au-health-policy-atlas-bronze"
+authority = "planned-public-bronze-source-evidence-dataset"
+disposition = "planned-create"
+publication_gate = "bronze-maturity-plus-remote-verification"
+
+[[hugging_face]]
+id = "au-health-policy-atlas-silver"
+repository = "edithatogo/au-health-policy-atlas-silver"
+authority = "planned-public-silver-structured-document-dataset"
+disposition = "planned-create"
+publication_gate = "silver-maturity-plus-lineage-plus-remote-verification"
+
+[[hugging_face]]
+id = "au-health-policy-atlas-gold"
+repository = "edithatogo/au-health-policy-atlas-gold"
+authority = "planned-public-gold-policy-assertion-dataset"
+disposition = "planned-create"
+publication_gate = "gold-maturity-plus-benchmark-plus-remote-verification"
+
+[[hugging_face]]
+id = "au-health-policy-atlas-platinum"
+repository = "edithatogo/au-health-policy-atlas-platinum"
+authority = "planned-public-platinum-comparative-dataset"
+disposition = "planned-create"
+publication_gate = "platinum-maturity-plus-replay-plus-remote-verification"

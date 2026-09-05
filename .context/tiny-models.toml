@@ -1,0 +1,78 @@
+schema_version = 1
+policy = "compiled-microtasks-program-owned-state"
+default_execution = "deterministic-first"
+
+[principles]
+model_never_owns_workflow_state = true
+model_never_selects_unbounded_methods = true
+single_open_question_per_call = true
+minimum_context = true
+source_spans_required_for_factual_outputs = true
+schema_constrained_output = true
+programmatic_verification_after_every_call = true
+retry_with_more_context_before_larger_model = true
+larger_model_is_fallback_not_default = true
+no_hidden_memory_dependency = true
+checkpoint_every_work_item = true
+
+[packet]
+format = "json"
+max_instruction_tokens = 900
+max_evidence_tokens_default = 2400
+max_evidence_tokens_hard = 6000
+max_output_tokens_default = 500
+required_fields = [
+  "task_id",
+  "skill_id",
+  "objective",
+  "open_question",
+  "allowed_inputs",
+  "evidence_refs",
+  "invariants",
+  "output_schema",
+  "stop_conditions",
+  "abstention_codes",
+]
+
+[state]
+owner = "orchestrator"
+format = "json"
+required_fields = ["release_id", "work_item_id", "stage", "status", "attempt", "input_hashes"]
+terminal_states = ["verified", "supported", "provisional", "abstained", "failed"]
+
+[routing]
+order = [
+  "deterministic_rule",
+  "lexical_or_structural_model",
+  "tiny_local_model",
+  "small_local_model",
+  "independent_model_triangulation",
+  "larger_model_fallback",
+]
+benchmark_before_promotion = true
+route_by_task_class_not_brand = true
+
+[constrained_generation]
+required = true
+preferred = ["native-json-schema", "llama.cpp-json-schema", "xgrammar"]
+forbid_freeform_canonical_fact_generation = true
+
+[retry]
+max_same_packet_attempts = 1
+max_context_expansions = 2
+max_model_tier_escalations = 2
+retry_order = ["repair_input", "expand_local_context", "alternate_method", "escalate_model"]
+
+[verification]
+require_exact_span_check = true
+require_enum_and_type_check = true
+require_source_hash_check = true
+require_scope_authority_time_gate_for_comparison = true
+require_reason_code = true
+
+[offline]
+supported = true
+network_default = "deny"
+public_baseline_may_be_prepinned = true
+private_input_upload = "forbidden-by-default"
+trace_export = "local-by-default"

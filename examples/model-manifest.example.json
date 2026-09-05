@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "model_id": "example-local-model",
+  "source_repository": "owner/model",
+  "revision": "PINNED_COMMIT_OR_TAG",
+  "artifact": "model.gguf",
+  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "runtime": "llama.cpp",
+  "task_classes": ["modality-classification"],
+  "benchmark_receipts": ["build/benchmarks/modality-v1.json"]
+}
