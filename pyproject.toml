@@ -23,6 +23,12 @@ test = [
   "packaging>=26,<27",
   "pytest>=9.1,<10",
   "pytest-cov>=7.1,<8",
+  "coverage[toml]>=7.10.6,<8",
+  "pytest-mock>=3.15.1,<4",
+  "pytest-socket>=0.8.1,<1",
+  "pytest-subprocess>=1.6,<2",
+  "pytest-httpserver>=1.1.5,<2",
+  "inline-snapshot>=0.35.4,<0.36",
   "pytest-timeout>=2.4,<3",
   "pytest-xdist>=3.8,<4",
 ]
@@ -35,10 +41,15 @@ test-goblin = [
   "pytest-randomly>=4,<5",
   "pytest-testmon>=2.2,<3",
 ]
+test-performance = [
+  { include-group = "test-goblin" },
+  "pytest-benchmark>=5.3,<6",
+]
 typing = [
-  "basedpyright>=1.36,<2",
-  "ruff>=0.16,<0.17",
+  "basedpyright>=1.39.9,<2",
+  "ruff>=0.16.1,<0.17",
   "ty>=0.0.18,<1",
+  "types-jsonschema>=4.25,<5",
 ]
 profiling = ["scalene>=2.3,<3"]
 security = [
@@ -50,6 +61,7 @@ publication = ["huggingface_hub>=0.28,<2"]
 dev = [
   { include-group = "test-goblin" },
   { include-group = "typing" },
+  { include-group = "test-performance" },
   { include-group = "profiling" },
   { include-group = "security" },
 ]
@@ -61,6 +73,7 @@ default-groups = ["test-goblin", "typing"]
 [tool.uv.dependency-groups]
 test = { requires-python = ">=3.14,<3.15" }
 test-goblin = { requires-python = ">=3.14,<3.15" }
+test-performance = { requires-python = ">=3.14,<3.15" }
 typing = { requires-python = ">=3.14,<3.15" }
 profiling = { requires-python = ">=3.14,<3.15" }
 security = { requires-python = ">=3.14,<3.15" }
@@ -68,10 +81,12 @@ publication = { requires-python = ">=3.14,<3.15" }
 dev = { requires-python = ">=3.14,<3.15" }
 
 [tool.pytest.ini_options]
-addopts = ["--strict-config", "--strict-markers", "-ra"]
+addopts = ["--disable-plugin-autoload", "-ra"]
+strict = true
+filterwarnings = ["error"]
+junit_family = "xunit2"
 minversion = "9.1"
 testpaths = ["tests"]
-xfail_strict = true
 markers = [
   "unit: isolated deterministic logic",
   "integration: component and adapter boundaries",
@@ -83,15 +98,23 @@ markers = [
   "simulation: deterministic state-machine/event tests",
   "edge: malformed and failure-mode cases",
   "model: live model qualification only",
+  "benchmark: bounded CPU performance measurement, not clinical validation",
+  "quality: quality-toolchain contracts",
 ]
 timeout = 30
 
 [tool.coverage.run]
 branch = true
 source = ["australian_health_policy_atlas"]
+relative_files = true
+patch = ["subprocess"]
+
+[tool.coverage.paths]
+atlas = ["src/australian_health_policy_atlas", "*.pyz/australian_health_policy_atlas", "*/*.pyz/australian_health_policy_atlas", "*/src/australian_health_policy_atlas"]
 
 [tool.coverage.report]
 fail_under = 95
+precision = 2
 show_missing = true
 skip_covered = false
 
@@ -99,12 +122,33 @@ skip_covered = false
 include = ["src", "scripts", "tests"]
 pythonVersion = "3.14"
 typeCheckingMode = "strict"
-reportMissingTypeStubs = "warning"
+failOnWarnings = true
+reportMissingTypeStubs = "error"
+reportAny = "error"
+reportExplicitAny = "error"
+reportIgnoreCommentWithoutRule = "error"
+reportUnnecessaryTypeIgnoreComment = "error"
+reportUnreachable = "error"
+enableTypeIgnoreComments = false
 
 [tool.ty.environment]
 python-version = "3.14"
 
+[tool.ty.src]
+include = ["src", "scripts", "tests"]
+
+[tool.ty.rules]
+all = "error"
+
+[tool.ty.terminal]
+error-on-warning = true
+
+[tool.ty.analysis]
+respect-type-ignore-comments = false
+
 [tool.ruff]
+unsafe-fixes = false
+force-exclude = true
 target-version = "py314"
 line-length = 88
 src = ["src", "scripts", "tests"]
@@ -115,9 +159,32 @@ select = ["ALL"]
 ignore = ["COM812", "CPY001", "D203", "D213"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["ANN", "D", "PLR2004", "S101"]
+"tests/**/*.py" = ["D", "PLR2004", "S101"]
 "scripts/**/*.py" = ["T201"]
 
 [tool.ruff.format]
 docstring-code-format = true
 line-ending = "lf"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.ruff.lint.pylint]
+max-args = 6
+max-branches = 10
+max-returns = 6
+max-statements = 50
+
+[tool.pytest-gremlins]
+paths = ["src/australian_health_policy_atlas/state_machine.py", "src/australian_health_policy_atlas/verification.py"]
+operators = ["comparison", "boundary", "boolean", "arithmetic", "return"]
+workers = 2
+cache = false
+report = ["console", "json"]
+max_pardons = 0
+
+[tool.mutmut]
+source_paths = ["src/australian_health_policy_atlas/state_machine.py"]
+pytest_add_cli_args_test_selection = ["tests/unit/test_state_machine.py"]
+mutate_only_covered_lines = true
+use_git_change_detection = false

@@ -1,5 +1,5 @@
 schema_version = 1
-repository = "local/australian-health-policy-atlas"
+repository = "edithatogo/atlas-health-policy-anz"
 maintainer_model = "single-accountable-maintainer"
 python = "3.14"
 context_policy = "deterministic-load-order"
@@ -29,6 +29,10 @@ required_context = [
   "agents/catalog.md",
   "skills/catalog.md",
   "workflows/catalog.md",
+  "conductor/anz-scope-20260905.md",
+  "conductor/strict-quality-20260905.md",
+  "conductor/strict-quality-results-20260905.md",
+  "quality/README.md",
 ]
 
 required_manifests = [
@@ -42,8 +46,12 @@ required_manifests = [
   ".context/ci.toml",
   "conductor/registry.toml",
   "pyproject.toml",
+  "uv.lock",
   ".python-version",
   "quality/tool-versions.json",
+  "quality/resolved-test-tools.json",
+  "quality/normalization-result.json",
+  "quality/hosted-strict-checkpoint.json",
   "renovate.json",
   "schemas/microtask-packet-v1.json",
   "schemas/work-item-state-v1.json",
@@ -56,36 +64,21 @@ required_manifests = [
   "schemas/model-manifest-v1.json",
   "data/sources/jurisdictions-v1.json",
   "data/sources/crawl-policies-v1.json",
+  "data/sources/authorities-anz-v1.csv",
+  "data/sources/authority-coverage-v1.json",
+  "data/sources/frameworks-anz-v1.json",
+  "schemas/authority-v1.json",
   "examples/model-manifest.example.json",
   "skills/policy-gap-analysis/SKILL.md",
 ]
 
 required_harness_profiles = [
-  "context",
-  "contract",
-  "property",
-  "smoke",
-  "integration",
-  "unit",
-  "conductor-reconciliation",
-  "dependencies",
-  "source-integrity",
-  "bronze-fixity",
-  "parsing-parity",
-  "lineage",
-  "comparison-benchmark",
-  "model-manifests",
-  "citation-integrity",
-  "authentext",
-  "reconstruction",
-  "publication-verification",
-  "routine",
-  "strict",
-  "tiny-model-contract",
-  "microtask-packet",
-  "offline-local",
-  "supply-chain",
-  "security",
+  "context", "contract", "property", "smoke", "integration", "unit",
+  "conductor-reconciliation", "dependencies", "source-integrity", "bronze-fixity",
+  "parsing-parity", "lineage", "comparison-benchmark", "model-manifests",
+  "citation-integrity", "authentext", "reconstruction", "publication-verification",
+  "routine", "strict", "tiny-model-contract", "microtask-packet", "offline-local",
+  "supply-chain", "security",
 ]
 
 human_gates = [

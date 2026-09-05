@@ -10,8 +10,9 @@ when its exact model manifest and benchmark are recorded.
 from __future__ import annotations
 
 import importlib.util
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
-from typing import Any, Iterable
+from typing import Any
 
 
 @dataclass(frozen=True, slots=True)
@@ -69,8 +70,18 @@ _DEFAULT_PATTERNS: tuple[dict[str, Any], ...] = (
     {"label": "MODALITY", "pattern": [{"LOWER": "shall"}]},
     {"label": "MODALITY", "pattern": [{"LOWER": "should"}]},
     {"label": "MODALITY", "pattern": [{"LOWER": "may"}]},
+    {"label": "JURISDICTION", "pattern": "New Zealand"},
+    {"label": "JURISDICTION", "pattern": "Aotearoa"},
+    {"label": "FRAMEWORK", "pattern": "Ngā Paerewa"},
+    {"label": "FRAMEWORK", "pattern": "Nga Paerewa"},
+    {"label": "FRAMEWORK", "pattern": "NZS 8134:2021"},
+    {"label": "FRAMEWORK", "pattern": "Te Tiriti o Waitangi"},
+    {"label": "FRAMEWORK", "pattern": "Health Information Privacy Code"},
     {"label": "FRAMEWORK", "pattern": "NSQHS"},
-    {"label": "FRAMEWORK", "pattern": "National Safety and Quality Health Service Standards"},
+    {
+        "label": "FRAMEWORK",
+        "pattern": "National Safety and Quality Health Service Standards",
+    },
     {"label": "JURISDICTION", "pattern": "Queensland"},
     {"label": "JURISDICTION", "pattern": "New South Wales"},
     {"label": "JURISDICTION", "pattern": "Victoria"},
@@ -147,14 +158,18 @@ def analyse_with_spacy(
 
     ruler_name = "atlas_entity_ruler"
     if ruler_name not in nlp.pipe_names:
-        ruler = nlp.add_pipe("entity_ruler", name=ruler_name, config={"overwrite_ents": False})
+        ruler = nlp.add_pipe(
+            "entity_ruler", name=ruler_name, config={"overwrite_ents": False}
+        )
         patterns: list[dict[str, Any]] = list(_DEFAULT_PATTERNS)
         patterns.extend(_phrase_patterns("POLICY_CONCEPT", concept_phrases))
         patterns.extend(_phrase_patterns("POLICY_ROLE", role_phrases))
         ruler.add_patterns(patterns)
 
     doc = nlp(text)
-    sentences = tuple(NlpSentence(sent.text, sent.start_char, sent.end_char) for sent in doc.sents)
+    sentences = tuple(
+        NlpSentence(sent.text, sent.start_char, sent.end_char) for sent in doc.sents
+    )
     spans = tuple(
         NlpSpan(
             ent.label_,

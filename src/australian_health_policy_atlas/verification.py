@@ -45,9 +45,13 @@ def verify_output_minimal(schema: dict[str, Any], output: Any) -> None:
             expected_type = child.get("type")
             if expected_type == "string" and not isinstance(value, str):
                 raise VerificationError(f"{key} must be a string")
-            if expected_type == "integer" and (not isinstance(value, int) or isinstance(value, bool)):
+            if expected_type == "integer" and (
+                not isinstance(value, int) or isinstance(value, bool)
+            ):
                 raise VerificationError(f"{key} must be an integer")
-            if expected_type == "number" and (not isinstance(value, (int, float)) or isinstance(value, bool)):
+            if expected_type == "number" and (
+                not isinstance(value, (int, float)) or isinstance(value, bool)
+            ):
                 raise VerificationError(f"{key} must be numeric")
 
 

@@ -4,16 +4,15 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
-from typing import Sequence
+from collections.abc import Sequence
 
 from .bronze import ingest_local_file, write_manifest
 from .gold import classify_modality
 from .graph import load_graph
 from .graphrag import retrieve_graph_context
 from .institutional import run_institutional_gap_analysis
-from .nlp import analyse_with_spacy
 from .local_runner import prepare_local_document
+from .nlp import analyse_with_spacy
 from .offline_bundle import build_bundle, verify_bundle
 from .source_registry import load_registry
 
@@ -52,7 +51,9 @@ def build_parser() -> argparse.ArgumentParser:
     local.add_argument("document")
     local.add_argument("--source-id", required=True)
     local.add_argument("--output-dir", required=True)
-    local.add_argument("--spacy", action="store_true", help="emit optional spaCy NLP features")
+    local.add_argument(
+        "--spacy", action="store_true", help="emit optional spaCy NLP features"
+    )
     local.add_argument(
         "--spacy-model",
         default=None,
@@ -131,13 +132,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.command == "classify-modality":
         result = classify_modality(args.text)
-        _print_json(
-            {
-                "modality": result.modality,
-                "deterministic": result.deterministic,
-                "reason_code": result.reason_code,
-            }
-        )
+        _print_json({
+            "modality": result.modality,
+            "deterministic": result.deterministic,
+            "reason_code": result.reason_code,
+        })
         return 0
     if args.command == "prepare-local":
         receipt = prepare_local_document(
@@ -160,7 +159,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         _print_json(receipt)
         return 0
     if args.command == "nlp-analyse":
-        _print_json(analyse_with_spacy(args.text, model_name=args.spacy_model).as_dict())
+        _print_json(
+            analyse_with_spacy(args.text, model_name=args.spacy_model).as_dict()
+        )
         return 0
     if args.command == "graph-query":
         graph = load_graph(args.graph_dir)

@@ -7,7 +7,6 @@ from dataclasses import dataclass
 
 from .domain import EvidenceState
 
-
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
 
 
@@ -63,7 +62,19 @@ def baseline_relationship(
         return "not_determined", EvidenceState.NOT_DETERMINED, ("evidence_missing",)
     similarity = jaccard_similarity(left_text, right_text)
     if similarity < threshold:
-        return "not_determined", EvidenceState.NOT_DETERMINED, ("lexical_nonmatch_is_not_semantic_non_equivalence",)
+        return (
+            "not_determined",
+            EvidenceState.NOT_DETERMINED,
+            ("lexical_nonmatch_is_not_semantic_non_equivalence",),
+        )
     if left_modality and right_modality and left_modality != right_modality:
-        return "material_difference", EvidenceState.SUPPORTED_NEEDS_VERIFICATION, ("modality_mismatch", "lexical_context_not_qualified")
-    return "candidate_equivalent", EvidenceState.SUPPORTED_NEEDS_VERIFICATION, ("lexical_candidate_only",)
+        return (
+            "material_difference",
+            EvidenceState.SUPPORTED_NEEDS_VERIFICATION,
+            ("modality_mismatch", "lexical_context_not_qualified"),
+        )
+    return (
+        "candidate_equivalent",
+        EvidenceState.SUPPORTED_NEEDS_VERIFICATION,
+        ("lexical_candidate_only",),
+    )

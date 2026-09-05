@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Build the deterministic portable Atlas application, excluding caches."""
-from pathlib import Path
+
 import argparse
 import json
+from pathlib import Path
+
 from australian_health_policy_atlas.distribution import build_zipapp
 
 

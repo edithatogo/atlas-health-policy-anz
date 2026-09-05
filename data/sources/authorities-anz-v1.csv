@@ -1,0 +1,213 @@
+body_id,name,countries,jurisdiction,role,url,groups,topics
+act-hrc,ACT Human Rights Commission,AU,ACT,rights_oversight,https://hrc.act.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+act-legislation,ACT official legislation publisher,AU,ACT,legislation_publisher,https://www.legislation.act.gov.au/,legislation,law;regulations;valid-time
+anz-acem,Australasian College for Emergency Medicine,AU;NZ,ANZ,professional_standard_setter,https://acem.org.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-acsep,Australasian College of Sport and Exercise Physicians,AU;NZ,ANZ,professional_standard_setter,https://www.acsep.org.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-anzca,Australian and New Zealand College of Anaesthetists,AU;NZ,ANZ,professional_standard_setter,https://www.anzca.edu.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-ccea,Council on Chiropractic Education Australasia,AU;NZ,ANZ,education_accreditor,https://www.ccea.com.au/,au-external-accreditors,education;credentials;accreditation
+anz-cicm,College of Intensive Care Medicine of Australia and New Zealand,AU;NZ,ANZ,professional_standard_setter,https://www.cicm.org.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-fsanz,Food Standards Australia New Zealand,AU;NZ,ANZ,standard_setter,https://www.foodstandards.gov.au/,national-standards,standards;governance;safety
+anz-global-mark,Global-Mark Pty Limited,AU;NZ,ANZ,service_accreditor,https://www.global-mark.com.au/,au-ahssqa-agencies;nz-designated-auditors,service-quality;accreditation
+anz-jasanz,Joint Accreditation System of Australia and New Zealand,AU;NZ,ANZ,accreditation_body,https://www.jasanz.org/,national-standards,standards;governance;safety
+anz-ocanz,Optometry Council of Australia and New Zealand,AU;NZ,ANZ,education_accreditor,https://www.ocanz.org/,au-external-accreditors,education;credentials;accreditation
+anz-racds,Royal Australasian College of Dental Surgeons,AU;NZ,ANZ,professional_standard_setter,https://racds.org/,au-specialist-colleges,professional-standards;education;credentials
+anz-racma,Royal Australasian College of Medical Administrators,AU;NZ,ANZ,professional_standard_setter,https://racma.edu.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-racp,Royal Australasian College of Physicians,AU;NZ,ANZ,professional_standard_setter,https://www.racp.edu.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-racs,Royal Australasian College of Surgeons,AU;NZ,ANZ,professional_standard_setter,https://www.surgeons.org/,au-specialist-colleges,professional-standards;education;credentials
+anz-ranzco,Royal Australian and New Zealand College of Ophthalmologists,AU;NZ,ANZ,professional_standard_setter,https://ranzco.edu/,au-specialist-colleges,professional-standards;education;credentials
+anz-ranzcog,Royal Australian and New Zealand College of Obstetricians and Gynaecologists,AU;NZ,ANZ,professional_standard_setter,https://ranzcog.edu.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-ranzcp,Royal Australian and New Zealand College of Psychiatrists,AU;NZ,ANZ,professional_standard_setter,https://www.ranzcp.org/,au-specialist-colleges,professional-standards;education;credentials
+anz-ranzcr,Royal Australian and New Zealand College of Radiologists,AU;NZ,ANZ,professional_standard_setter,https://www.ranzcr.com/,au-specialist-colleges,professional-standards;education;credentials
+anz-rcpa,Royal College of Pathologists of Australasia,AU;NZ,ANZ,professional_standard_setter,https://www.rcpa.edu.au/,au-specialist-colleges,professional-standards;education;credentials
+anz-resuscitation,Australian and New Zealand Committee on Resuscitation,AU;NZ,ANZ,standard_setter,https://www.anzcor.org/,national-standards,standards;governance;safety
+au-aasw,Australian Association of Social Workers,AU,Cth,professional_standard_setter,https://www.aasw.asn.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-achs,Australian Council on Healthcare Standards,AU,Cth,service_accreditor,https://www.achs.org.au/,au-ahssqa-agencies,service-quality;accreditation
+au-acipc,Australasian College for Infection Prevention and Control,AU,Cth,professional_standard_setter,https://www.acipc.org.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-acm,Australian College of Midwives,AU,Cth,professional_standard_setter,https://www.midwives.org.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-acn,Australian College of Nursing,AU,Cth,professional_standard_setter,https://www.acn.edu.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-acrrm,Australian College of Rural and Remote Medicine,AU,Cth,professional_standard_setter,https://www.acrrm.org.au/,au-specialist-colleges,professional-standards;education;credentials
+au-acsqhc,Australian Commission on Safety and Quality in Health Care,AU,Cth,standard_setter,https://www.safetyandquality.gov.au/,national-standards,standards;governance;safety
+au-act-health,ACT Health Directorate,AU,ACT,policy_issuer,https://www.health.act.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-act-whs,WorkSafe ACT,AU,ACT,sector_regulator,https://www.worksafe.act.gov.au/,au-whs,occupational-health;workplace-safety
+au-adc,Australian Dental Council,AU,Cth,education_accreditor,https://www.adc.org.au/,au-external-accreditors,education;credentials;accreditation
+au-adpha,Advanced Pharmacy Australia,AU,Cth,professional_standard_setter,https://www.adpha.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-agedcare-commission,Aged Care Quality and Safety Commission,AU,Cth,sector_regulator,https://www.agedcarequality.gov.au/,sector-regulators,regulation;service-safety
+au-agpal,Australian General Practice Accreditation Limited,AU,Cth,service_accreditor,https://www.agpal.com.au/,additional-accreditors,accreditation;diagnostics
+au-ahpra,Australian Health Practitioner Regulation Agency,AU,Cth,sector_regulator,https://www.ahpra.gov.au/,sector-regulators,regulation;service-safety
+au-amc,Australian Medical Council,AU,Cth,education_accreditor,https://www.amc.org.au/,au-external-accreditors,education;credentials;accreditation
+au-anmac,Australian Nursing and Midwifery Accreditation Council,AU,Cth,education_accreditor,https://www.anmac.org.au/,au-external-accreditors,education;credentials;accreditation
+au-anzics,Australian and New Zealand Intensive Care Society,AU;NZ,ANZ,professional_standard_setter,https://www.anzics.org/,additional-professional-bodies,clinical-guidance;professional-standards
+au-aoac,Australasian Osteopathic Accreditation Council,AU,Cth,education_accreditor,https://osteopathiccouncil.org.au/,au-external-accreditors,education;credentials;accreditation
+au-apac,Australian Psychology Accreditation Council,AU,Cth,education_accreditor,https://www.psychologycouncil.org.au/,au-external-accreditors,education;credentials;accreditation
+au-apc,Australian Pharmacy Council,AU,Cth,education_accreditor,https://www.pharmacycouncil.org.au/,au-external-accreditors,education;credentials;accreditation
+au-arpansa,Australian Radiation Protection and Nuclear Safety Agency,AU,Cth,sector_regulator,https://www.arpansa.gov.au/,sector-regulators,regulation;service-safety
+au-assured,Assured Auditing,AU,Cth,service_accreditor,https://assuredauditing.com.au/,au-ahssqa-agencies,service-quality;accreditation
+au-atsi-accreditation,Aboriginal and Torres Strait Islander Health Practice Accreditation Committee,AU,Cth,accreditation_committee,https://www.atsihealthpracticeboard.gov.au/,au-accreditation-committees,education;credentials;accreditation
+au-atsi-board,Aboriginal and Torres Strait Islander Health Practice Board of Australia,AU,Cth,professional_regulator,https://www.atsihealthpracticeboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-audiology,Audiology Australia,AU,Cth,professional_standard_setter,https://audiology.asn.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-chinese-accreditation,Chinese Medicine Accreditation Committee,AU,Cth,accreditation_committee,https://www.chinesemedicineboard.gov.au/,au-accreditation-committees,education;credentials;accreditation
+au-chinese-board,Chinese Medicine Board of Australia,AU,Cth,professional_regulator,https://www.chinesemedicineboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-chiropractic-board,Chiropractic Board of Australia,AU,Cth,professional_regulator,https://www.chiropracticboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-cpg,Certification Partner Global,AU,Cth,service_accreditor,https://www.cpg-global.net/,au-ahssqa-agencies,service-quality;accreditation
+au-cth-whs,Comcare,AU,Cth,sector_regulator,https://www.comcare.gov.au/,au-whs,occupational-health;workplace-safety
+au-dental-board,Dental Board of Australia,AU,Cth,professional_regulator,https://www.dentalboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-dermatologists,Australasian College of Dermatologists,AU,Cth,professional_standard_setter,https://www.dermcoll.edu.au/,au-specialist-colleges,professional-standards;education;credentials
+au-dietitians,Dietitians Australia,AU,Cth,professional_standard_setter,https://dietitiansaustralia.org.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-digital-health,Australian Digital Health Agency,AU,Cth,standard_setter,https://www.digitalhealth.gov.au/,national-standards,standards;governance;safety
+au-essa,Exercise and Sports Science Australia,AU,Cth,professional_standard_setter,https://www.essa.org.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-hdaa,HDAA Australia,AU,Cth,service_accreditor,https://www.hdaau.com.au/,au-ahssqa-agencies,service-quality;accreditation
+au-health-department,Australian Government health department,AU,Cth,policy_issuer,https://www.health.gov.au/,national-policy,funding;policy;health-technology-assessment
+au-hgsa,Human Genetics Society of Australasia,AU;NZ,ANZ,professional_standard_setter,https://www.hgsa.org.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-human-rights,Australian Human Rights Commission,AU,Cth,rights_oversight,https://humanrights.gov.au/,rights-privacy,rights;privacy;complaints
+au-ihacpa,Independent Health and Aged Care Pricing Authority,AU,Cth,funding_authority,https://www.ihacpa.gov.au/,national-policy,funding;policy;health-technology-assessment
+au-ihca,Institute for Healthy Communities Australia,AU,Cth,service_accreditor,https://www.ihca.com.au/,au-ahssqa-agencies,service-quality;accreditation
+au-medical-board,Medical Board of Australia,AU,Cth,professional_regulator,https://www.medicalboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-msac,Medical Services Advisory Committee,AU,Cth,advisory_committee,https://www.msac.gov.au/,national-policy,funding;policy;health-technology-assessment
+au-nata,National Association of Testing Authorities Australia,AU,Cth,service_accreditor,https://nata.com.au/,additional-accreditors,accreditation;diagnostics
+au-nba,National Blood Authority,AU,Cth,standard_setter,https://www.blood.gov.au/,national-standards,standards;governance;safety
+au-ndis-commission,NDIS Quality and Safeguards Commission,AU,Cth,sector_regulator,https://www.ndiscommission.gov.au/,sector-regulators,regulation;service-safety
+au-nhmrc,National Health and Medical Research Council,AU,Cth,standard_setter,https://www.nhmrc.gov.au/,national-standards,standards;governance;safety
+au-nhpo,National Health Practitioner Ombudsman and Privacy Commissioner,AU,Cth,rights_oversight,https://www.nhpo.gov.au/,rights-privacy,rights;privacy;complaints
+au-nm-accreditation,Nursing and Midwifery Accreditation Committee,AU,Cth,accreditation_committee,https://www.nursingmidwiferyboard.gov.au/,au-accreditation-committees,education;credentials;accreditation
+au-nsw-health,NSW Health,AU,NSW,policy_issuer,https://www.health.nsw.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-nsw-whs,SafeWork NSW,AU,NSW,sector_regulator,https://www.safework.nsw.gov.au/,au-whs,occupational-health;workplace-safety
+au-nt-health,NT Health,AU,NT,policy_issuer,https://health.nt.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-nt-whs,NT WorkSafe,AU,NT,sector_regulator,https://worksafe.nt.gov.au/,au-whs,occupational-health;workplace-safety
+au-nursing-midwifery-board,Nursing and Midwifery Board of Australia,AU,Cth,professional_regulator,https://www.nursingmidwiferyboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-oaic,Office of the Australian Information Commissioner,AU,Cth,rights_oversight,https://www.oaic.gov.au/,rights-privacy,rights;privacy;complaints
+au-ogtr,Office of the Gene Technology Regulator,AU,Cth,sector_regulator,https://www.ogtr.gov.au/,sector-regulators,regulation;service-safety
+au-ombudsman,Commonwealth Ombudsman,AU,Cth,rights_oversight,https://www.ombudsman.gov.au/,rights-privacy,rights;privacy;complaints
+au-optometry-board,Optometry Board of Australia,AU,Cth,professional_regulator,https://www.optometryboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-osteopathy-board,Osteopathy Board of Australia,AU,Cth,professional_regulator,https://www.osteopathyboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-ot-board,Occupational Therapy Board of Australia,AU,Cth,professional_regulator,https://www.occupationaltherapyboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-otc,Occupational Therapy Council of Australia Ltd,AU,Cth,education_accreditor,https://www.otcouncil.com.au/,au-external-accreditors,education;credentials;accreditation
+au-paramedicine-accreditation,Paramedicine Accreditation Committee,AU,Cth,accreditation_committee,https://www.paramedicineboard.gov.au/,au-accreditation-committees,education;credentials;accreditation
+au-paramedicine-board,Paramedicine Board of Australia,AU,Cth,professional_regulator,https://www.paramedicineboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-pbac,Pharmaceutical Benefits Advisory Committee,AU,Cth,advisory_committee,https://www.pbs.gov.au/,national-policy,funding;policy;health-technology-assessment
+au-pharmacy-board,Pharmacy Board of Australia,AU,Cth,professional_regulator,https://www.pharmacyboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-physio-accreditation,Australian Physiotherapy Council,AU,Cth,education_accreditor,https://physiocouncil.com.au/,au-external-accreditors,education;credentials;accreditation
+au-physiotherapy-board,Physiotherapy Board of Australia,AU,Cth,professional_regulator,https://www.physiotherapyboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-podiatry-accreditation,Podiatry Accreditation Committee,AU,Cth,accreditation_committee,https://www.podiatryboard.gov.au/,au-accreditation-committees,education;credentials;accreditation
+au-podiatry-board,Podiatry Board of Australia,AU,Cth,professional_regulator,https://www.podiatryboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-psa,Pharmaceutical Society of Australia,AU,Cth,professional_standard_setter,https://www.psa.org.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-psychology-board,Psychology Board of Australia,AU,Cth,professional_regulator,https://www.psychologyboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-qip,Quality Innovation Performance,AU,Cth,service_accreditor,https://www.qip.com.au/,au-ahssqa-agencies,service-quality;accreditation
+au-qld-health,Queensland Health,AU,QLD,policy_issuer,https://www.health.qld.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-qld-whs,Workplace Health and Safety Queensland,AU,QLD,sector_regulator,https://www.worksafe.qld.gov.au/,au-whs,occupational-health;workplace-safety
+au-qpa,Quality Practice Accreditation,AU,Cth,service_accreditor,https://www.qpa.health/,au-ahssqa-agencies,service-quality;accreditation
+au-racgp,Royal Australian College of General Practitioners,AU,Cth,professional_standard_setter,https://www.racgp.org.au/,au-specialist-colleges,professional-standards;education;credentials
+au-radiation-accreditation,Medical Radiation Practice Accreditation Committee,AU,Cth,accreditation_committee,https://www.medicalradiationpracticeboard.gov.au/,au-accreditation-committees,education;credentials;accreditation
+au-radiation-practice-board,Medical Radiation Practice Board of Australia,AU,Cth,professional_regulator,https://www.medicalradiationpracticeboard.gov.au/,au-national-boards,registration;scope;professional-conduct;cultural-safety
+au-sa-health,SA Health,AU,SA,policy_issuer,https://www.sahealth.sa.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-sa-whs,SafeWork SA,AU,SA,sector_regulator,https://www.safework.sa.gov.au/,au-whs,occupational-health;workplace-safety
+au-speech,Speech Pathology Australia,AU,Cth,professional_standard_setter,https://www.speechpathologyaustralia.org.au/,additional-professional-bodies,clinical-guidance;professional-standards
+au-standards,Standards Australia,AU,Cth,standard_setter,https://www.standards.org.au/,national-standards,standards;governance;safety
+au-swa,Safe Work Australia,AU,Cth,standard_setter,https://www.safeworkaustralia.gov.au/,national-standards,standards;governance;safety
+au-tas-health,Tasmanian Department of Health,AU,TAS,policy_issuer,https://www.health.tas.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-tas-whs,WorkSafe Tasmania,AU,TAS,sector_regulator,https://www.worksafe.tas.gov.au/,au-whs,occupational-health;workplace-safety
+au-tga,Therapeutic Goods Administration,AU,Cth,sector_regulator,https://www.tga.gov.au/,sector-regulators,regulation;service-safety
+au-vic-health,Victorian Department of Health,AU,VIC,policy_issuer,https://www.health.vic.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-vic-whs,WorkSafe Victoria,AU,VIC,sector_regulator,https://www.worksafe.vic.gov.au/,au-whs,occupational-health;workplace-safety
+au-wa-health,WA Department of Health,AU,WA,policy_issuer,https://www.health.wa.gov.au/,au-health-departments,policy;private-facilities;medicines-poisons;public-health;mental-health;radiation
+au-wa-whs,WorkSafe WA,AU,WA,sector_regulator,https://www.worksafe.wa.gov.au/,au-whs,occupational-health;workplace-safety
+cth-legislation,Cth official legislation publisher,AU,Cth,legislation_publisher,https://www.legislation.gov.au/,legislation,law;regulations;valid-time
+nsw-atsi-council,Aboriginal and Torres Strait Islander Health Practice Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-chinese-council,Chinese Medicine Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-chiropractic-council,Chiropractic Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-dental-council,Dental Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-epa,NSW Environment Protection Authority,AU,NSW,sector_regulator,https://www.epa.nsw.gov.au/,additional-state-regulators,radiation
+nsw-hccc,NSW Health Care Complaints Commission,AU,NSW,rights_oversight,https://www.hccc.nsw.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+nsw-hpca,Health Professional Councils Authority NSW,AU,NSW,sector_regulator,https://www.hpca.nsw.gov.au/,additional-state-regulators,professional-regulation
+nsw-ipc,Information and Privacy Commission NSW,AU,NSW,sector_regulator,https://www.ipc.nsw.gov.au/,additional-state-regulators,privacy;information-rights
+nsw-legislation,NSW official legislation publisher,AU,NSW,legislation_publisher,https://legislation.nsw.gov.au/,legislation,law;regulations;valid-time
+nsw-medical-council,Medical Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-nursing-midwifery-council,Nursing and Midwifery Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-optometry-council,Optometry Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-osteopathy-council,Osteopathy Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-ot-council,Occupational Therapy Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-paramedicine-council,Paramedicine Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-pharmacy-council,Pharmacy Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-physiotherapy-council,Physiotherapy Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-podiatry-council,Podiatry Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-psychology-council,Psychology Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nsw-radiation-practice-council,Medical Radiation Practice Council of New South Wales,AU,NSW,professional_regulator,https://www.hpca.nsw.gov.au/councils,nsw-professional-councils,complaints;professional-conduct;scope
+nt-hcscc,NT Health and Community Services Complaints Commission,AU,NT,rights_oversight,https://hcscc.nt.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+nt-info,Information Commissioner NT,AU,NT,sector_regulator,https://infocomm.nt.gov.au/,additional-state-regulators,privacy;information-rights
+nt-legislation,NT official legislation publisher,AU,NT,legislation_publisher,https://legislation.nt.gov.au/,legislation,law;regulations;valid-time
+nz-acart,Advisory Committee on Assisted Reproductive Technology,NZ,NZ,advisory_committee,https://acart.health.govt.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-acc,Accident Compensation Corporation,NZ,NZ,funding_authority,https://www.acc.co.nz/,nz-national-policy,policy;service-quality;equity;funding
+nz-audiology,New Zealand Audiological Society,NZ,NZ,professional_standard_setter,https://audiology.org.nz/,additional-professional-bodies,clinical-guidance;professional-standards
+nz-blood,New Zealand Blood and Organ Service (NZ Blood Service),NZ,NZ,policy_issuer,https://www.nzblood.co.nz/,nz-national-policy,policy;service-quality;equity;funding
+nz-bsi,BSI Group New Zealand Ltd (previously HDANZ Ltd),NZ,NZ,service_accreditor,https://www.bsigroup.com/en-nz/,nz-designated-auditors,service-quality;accreditation
+nz-cancer,Te Aho o Te Kahu - Cancer Control Agency,NZ,NZ,policy_issuer,https://teaho.govt.nz/,nz-national-policy,policy;service-quality;equity;funding
+nz-chinese-council,Chinese Medicine Council of New Zealand,NZ,NZ,professional_regulator,https://www.chinesemedicinecouncil.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-chiropractic-board,Chiropractic Board,NZ,NZ,professional_regulator,https://www.chiropracticboard.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-college-midwives,New Zealand College of Midwives,NZ,NZ,professional_standard_setter,https://www.midwife.org.nz/,additional-professional-bodies,clinical-guidance;professional-standards
+nz-daa,The DAA Group Limited,NZ,NZ,service_accreditor,https://www.daagroup.co.nz/,nz-designated-auditors,service-quality;accreditation
+nz-dental-council,Dental Council,NZ,NZ,professional_regulator,https://www.dcnz.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-dietitians-board,Dietitians Board,NZ,NZ,professional_regulator,https://www.dietitiansboard.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-dss,Disability Support Services - Ministry of Social Development,NZ,NZ,funding_authority,https://www.disabilitysupport.govt.nz/,nz-national-policy,policy;service-quality;equity;funding
+nz-ecart,Ethics Committee on Assisted Reproductive Technology,NZ,NZ,ethics_committee,https://ecart.health.govt.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-epa,Environmental Protection Authority New Zealand,NZ,NZ,sector_regulator,https://www.epa.govt.nz/,nz-sector-regulators,regulation;licensing;safety
+nz-gazette,New Zealand Gazette,NZ,NZ,legislation_publisher,https://gazette.govt.nz/,legislation,scopes;designations;appointments;valid-time
+nz-hdc,Health and Disability Commissioner,NZ,NZ,rights_oversight,https://www.hdc.org.nz/,nz-rights,rights;complaints;mental-health;privacy
+nz-hdec,Health and Disability Ethics Committees,NZ,NZ,ethics_committee,https://ethics.health.govt.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-healthcert,HealthCERT - Ministry of Health,NZ,NZ,sector_regulator,https://www.health.govt.nz/regulation-legislation/certification-of-health-care-services,nz-sector-regulators,regulation;licensing;safety
+nz-healthnz,Health New Zealand - Te Whatu Ora,NZ,NZ,policy_issuer,https://www.healthnz.govt.nz/health-professionals/guidance-standards,nz-national-policy,policy;service-quality;equity;funding
+nz-hpdt,Health Practitioners Disciplinary Tribunal,NZ,NZ,rights_oversight,https://www.hpdt.org.nz/,nz-rights,rights;complaints;mental-health;privacy
+nz-hqsc,Health Quality and Safety Commission - Te Tāhū Hauora,NZ,NZ,standard_setter,https://www.hqsc.govt.nz/,nz-national-policy,policy;service-quality;equity;funding
+nz-hrc,Health Research Council of New Zealand,NZ,NZ,funding_authority,https://www.hrc.govt.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-human-rights,Human Rights Commission - Te Kāhui Tika Tangata,NZ,NZ,rights_oversight,https://tikatangata.org.nz/,nz-rights,rights;complaints;mental-health;privacy
+nz-ianz,International Accreditation New Zealand,NZ,NZ,accreditation_body,https://www.ianz.govt.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-legislation,NZ official legislation publisher,NZ,NZ,legislation_publisher,https://www.legislation.govt.nz/,legislation,law;regulations;valid-time
+nz-medical-council,Medical Council of New Zealand,NZ,NZ,professional_regulator,https://www.mcnz.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-medical-sciences-council,Medical Sciences Council of New Zealand,NZ,NZ,professional_regulator,https://www.mscouncil.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-medicines-control,Medicines Control - Ministry of Health,NZ,NZ,sector_regulator,https://www.health.govt.nz/regulation-legislation/medicines-control,nz-sector-regulators,regulation;licensing;safety
+nz-medsafe,Medsafe - New Zealand Medicines and Medical Devices Safety Authority,NZ,NZ,sector_regulator,https://www.medsafe.govt.nz/,nz-sector-regulators,regulation;licensing;safety
+nz-mhwc,Mental Health and Wellbeing Commission - Te Hiringa Mahara,NZ,NZ,rights_oversight,https://www.mhwc.govt.nz/,nz-rights,rights;complaints;mental-health;privacy
+nz-midwifery-council,Midwifery Council,NZ,NZ,professional_regulator,https://www.midwiferycouncil.health.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-moh,Ministry of Health - Manatū Hauora,NZ,NZ,policy_issuer,https://www.health.govt.nz/publications,nz-national-policy,policy;service-quality;equity;funding
+nz-mpi,New Zealand Food Safety - Ministry for Primary Industries,NZ,NZ,sector_regulator,https://www.mpi.govt.nz/food-safety/,nz-sector-regulators,regulation;licensing;safety
+nz-mrt-board,Medical Radiation Technologists Board,NZ,NZ,professional_regulator,https://www.mrtboard.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-neac,National Ethics Advisory Committee,NZ,NZ,advisory_committee,https://neac.health.govt.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-nurses,New Zealand Nurses Organisation,NZ,NZ,professional_standard_setter,https://www.nzno.org.nz/,additional-professional-bodies,clinical-guidance;professional-standards
+nz-nursing-council,Nursing Council,NZ,NZ,professional_regulator,https://www.nursingcouncil.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-ombudsman,Chief Ombudsman - Tari o te Kaitiaki Mana Tangata,NZ,NZ,rights_oversight,https://www.ombudsman.parliament.nz/,nz-rights,rights;complaints;mental-health;privacy
+nz-optometrists-board,Optometrists and Dispensing Opticians Board,NZ,NZ,professional_regulator,https://www.odob.health.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-osteopathic-council,Osteopathic Council,NZ,NZ,professional_regulator,https://www.osteopathiccouncil.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-ot-board,Occupational Therapy Board,NZ,NZ,professional_regulator,https://www.otboard.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-paramedic-council,Paramedic Council,NZ,NZ,professional_regulator,https://www.paramediccouncil.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-pharmac,Pharmac - Te Pātaka Whaioranga,NZ,NZ,funding_authority,https://www.pharmac.govt.nz/,nz-national-policy,policy;service-quality;equity;funding
+nz-pharmaceutical-society,Pharmaceutical Society of New Zealand,NZ,NZ,professional_standard_setter,https://www.psnz.org.nz/,additional-professional-bodies,clinical-guidance;professional-standards
+nz-pharmacy-council,Pharmacy Council,NZ,NZ,professional_regulator,https://pharmacycouncil.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-physiotherapy-board,Physiotherapy Board,NZ,NZ,professional_regulator,https://www.physioboard.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-podiatrists-board,Podiatrists Board,NZ,NZ,professional_regulator,https://podiatristsboard.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-privacy,Office of the Privacy Commissioner,NZ,NZ,rights_oversight,https://www.privacy.org.nz/,nz-rights,rights;complaints;mental-health;privacy
+nz-psychologists-board,Psychologists Board,NZ,NZ,professional_regulator,https://www.psychologistsboard.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-psychotherapists-board,Psychotherapists Board,NZ,NZ,professional_regulator,https://www.pbanz.org.nz/,nz-hpca-authorities,registration;scope;professional-conduct;cultural-safety
+nz-qha,Quality Health Authority Limited,NZ,NZ,service_accreditor,https://www.qha.nz/,nz-designated-auditors,service-quality;accreditation
+nz-radiation-safety,Office of Radiation Safety - Ministry of Health,NZ,NZ,sector_regulator,https://www.health.govt.nz/regulation-legislation/radiation,nz-sector-regulators,regulation;licensing;safety
+nz-resuscitation,New Zealand Resuscitation Council,NZ,NZ,standard_setter,https://www.nzrc.org.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-rnzcgp,Royal New Zealand College of General Practitioners,NZ,NZ,standard_setter,https://www.rnzcgp.org.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-speech,New Zealand Speech-language Therapists Association,NZ,NZ,professional_standard_setter,https://speechtherapy.org.nz/,additional-professional-bodies,clinical-guidance;professional-standards
+nz-standards,Standards New Zealand,NZ,NZ,standard_setter,https://www.standards.govt.nz/,nz-standards-ethics,standards;ethics;accreditation
+nz-swrb,Social Workers Registration Board,NZ,NZ,professional_regulator,https://swrb.govt.nz/,nz-sector-regulators,regulation;licensing;safety
+nz-whaikaha,Whaikaha - Ministry of Disabled People,NZ,NZ,policy_issuer,https://www.whaikaha.govt.nz/,nz-national-policy,policy;service-quality;equity;funding
+nz-worksafe,WorkSafe New Zealand,NZ,NZ,sector_regulator,https://www.worksafe.govt.nz/,nz-sector-regulators,regulation;licensing;safety
+qld-legislation,QLD official legislation publisher,AU,QLD,legislation_publisher,https://www.legislation.qld.gov.au/,legislation,law;regulations;valid-time
+qld-oho,Office of the Health Ombudsman Queensland,AU,QLD,rights_oversight,https://www.oho.qld.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+qld-oic,Office of the Information Commissioner Queensland,AU,QLD,sector_regulator,https://www.oic.qld.gov.au/,additional-state-regulators,privacy;information-rights
+sa-epa,Environment Protection Authority SA,AU,SA,sector_regulator,https://www.epa.sa.gov.au/,additional-state-regulators,radiation
+sa-hcscc,SA Health and Community Services Complaints Commissioner,AU,SA,rights_oversight,https://www.hcscc.sa.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+sa-legislation,SA official legislation publisher,AU,SA,legislation_publisher,https://www.legislation.sa.gov.au/,legislation,law;regulations;valid-time
+sa-privacy,Privacy Committee of South Australia,AU,SA,sector_regulator,https://www.archives.sa.gov.au/managing-information/privacy-committee,additional-state-regulators,privacy;information-rights
+tas-hcc,Health Complaints Commissioner Tasmania,AU,TAS,rights_oversight,https://www.healthcomplaints.tas.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+tas-legislation,TAS official legislation publisher,AU,TAS,legislation_publisher,https://www.legislation.tas.gov.au/,legislation,law;regulations;valid-time
+tas-ombudsman,Ombudsman Tasmania,AU,TAS,sector_regulator,https://www.ombudsman.tas.gov.au/,additional-state-regulators,privacy;information-rights
+vic-hcc,Health Complaints Commissioner Victoria,AU,VIC,rights_oversight,https://hcc.vic.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+vic-legislation,VIC official legislation publisher,AU,VIC,legislation_publisher,https://www.legislation.vic.gov.au/,legislation,law;regulations;valid-time
+vic-ovic,Office of the Victorian Information Commissioner,AU,VIC,sector_regulator,https://ovic.vic.gov.au/,additional-state-regulators,privacy;information-rights
+wa-hadsco,Health and Disability Services Complaints Office WA,AU,WA,rights_oversight,https://www.hadsco.wa.gov.au/,au-health-complaints,complaints;unregistered-practitioners;patient-rights
+wa-legislation,WA official legislation publisher,AU,WA,legislation_publisher,https://www.legislation.wa.gov.au/,legislation,law;regulations;valid-time
+wa-oic,Office of the Information Commissioner WA,AU,WA,sector_regulator,https://www.wa.gov.au/organisation/office-of-the-information-commissioner,additional-state-regulators,privacy;information-rights
+wa-radiological,Radiological Council WA,AU,WA,sector_regulator,https://www.radiologicalcouncil.wa.gov.au/,additional-state-regulators,radiation

@@ -8,8 +8,8 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from urllib.parse import urlparse
 from urllib.error import HTTPError
+from urllib.parse import urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .hashing import sha256_bytes, sha256_json
@@ -75,7 +75,9 @@ class _SourceRedirect(HTTPRedirectHandler):
 def urlopen(request: Request, *, timeout: int):
     """Restricted urllib boundary; DNS checking does not replace deployment egress rules."""
     _resolve_public(request.full_url)
-    hosts = getattr(request, "atlas_allowed_hosts", (urlparse(request.full_url).hostname,))
+    hosts = getattr(
+        request, "atlas_allowed_hosts", (urlparse(request.full_url).hostname,)
+    )
     return build_opener(_SourceRedirect(hosts)).open(request, timeout=timeout)
 
 
@@ -94,14 +96,20 @@ def capture_url(
     hosts = allowed_hosts or (urlparse(url).hostname,)
     if urlparse(url).hostname not in hosts:
         raise ValueError("requested URL outside source hosts")
-    if type(max_bytes) is not int or max_bytes <= 0 or type(retries) is not int or retries < 0 or timeout_seconds <= 0:
+    if (
+        type(max_bytes) is not int
+        or max_bytes <= 0
+        or type(retries) is not int
+        or retries < 0
+        or timeout_seconds <= 0
+    ):
         raise ValueError("invalid acquisition budget")
     last_error: Exception | None = None
     for attempt in range(retries + 1):
         try:
             request = Request(url, headers={"User-Agent": user_agent, "Accept": "*/*"})
             request.atlas_allowed_hosts = hosts
-            with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310 - URL validated as HTTPS
+            with urlopen(request, timeout=timeout_seconds) as response:
                 _validate_public_https(response.geturl())
                 if urlparse(response.geturl()).hostname not in hosts:
                     raise ValueError("final response outside source hosts")
@@ -116,7 +124,13 @@ def capture_url(
                 if sha256_bytes(target.read_bytes()) != digest:
                     raise OSError("CAS fixity verification failed")
                 headers = response.headers
-                media_type = headers.get_content_type() if hasattr(headers, "get_content_type") else headers.get("Content-Type", "application/octet-stream").split(";", 1)[0]
+                media_type = (
+                    headers.get_content_type()
+                    if hasattr(headers, "get_content_type")
+                    else headers.get("Content-Type", "application/octet-stream").split(
+                        ";", 1
+                    )[0]
+                )
                 receipt = CaptureReceipt(
                     requested_url=url,
                     final_url=response.geturl(),
@@ -136,11 +150,17 @@ def capture_url(
                     payload["receipt_sha256"] = sha256_json(payload)
                     atomic_json(path, payload)
                 return receipt
-        except Exception as exc:  # noqa: BLE001 - errors are preserved and bounded for retries
+        except Exception as exc:
+            if isinstance(exc, HTTPError):
+                exc.close()
             last_error = exc
             if isinstance(exc, ValueError):
                 raise
-            if isinstance(exc, HTTPError) and exc.code not in {408, 425, 429} and exc.code < 500:
+            if (
+                isinstance(exc, HTTPError)
+                and exc.code not in {408, 425, 429}
+                and exc.code < 500
+            ):
                 raise
             if attempt < retries:
                 time.sleep(min(2**attempt, 4))

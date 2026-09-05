@@ -6,4 +6,7 @@ def test_canonical_json_hash_is_key_order_invariant() -> None:
 
 
 def test_text_hash_is_stable() -> None:
-    assert sha256_text("abc") == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    assert (
+        sha256_text("abc")
+        == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    )

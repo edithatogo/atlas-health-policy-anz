@@ -13,7 +13,9 @@ def main() -> int:
     parser.add_argument("--bundle-id", required=True)
     parser.add_argument("files", nargs="+")
     args = parser.parse_args()
-    manifest = build_bundle(files=args.files, output_dir=args.output_dir, bundle_id=args.bundle_id)
+    manifest = build_bundle(
+        files=args.files, output_dir=args.output_dir, bundle_id=args.bundle_id
+    )
     print(json.dumps(manifest, sort_keys=True))
     return 0
 

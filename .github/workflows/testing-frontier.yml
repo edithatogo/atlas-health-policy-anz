@@ -1,0 +1,92 @@
+name: Testing Frontier
+on:
+  pull_request:
+  schedule:
+    - cron: "31 17 * * 2"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: testing-frontier-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  benchmark:
+    name: Bounded CPU benchmark
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+      - name: Install locked benchmark environment
+        run: |
+          uv python install 3.14.6
+          uv sync --python 3.14.6 --group test-performance --group publication --extra nlp --locked
+      - name: Measure, retain correctness assertions, never update expectations
+        run: uv run --no-sync python scripts/test_goblin.py benchmark
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: cpu-benchmark-receipt
+          path: build/quality/
+          if-no-files-found: warn
+          retention-days: 30
+  mutation:
+    name: Targeted mutation experiment
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+      - name: Install locked mutation environment
+        run: |
+          uv python install 3.14.6
+          uv sync --python 3.14.6 --group test-goblin --group publication --extra nlp --locked
+      - name: Mutate only designated gate and verification modules
+        run: uv run --no-sync python scripts/test_goblin.py mutation
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: targeted-mutation-receipt
+          path: |
+            build/quality/
+            gremlins-report.json
+            .gremlins/
+          if-no-files-found: warn
+          retention-days: 30
+  prerelease:
+    name: Isolated prerelease compatibility experiment
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+      - name: Resolve experimental versions in the disposable checkout only
+        run: |
+          uv python install 3.14.6
+          uv lock --prerelease allow --upgrade-package pytest --upgrade-package ruff --upgrade-package ty --upgrade-package pytest-gremlins
+          uv sync --python 3.14.6 --group dev --group publication --extra nlp --locked
+      - name: Run the same strict tests against the experimental lock
+        run: uv run --no-sync python scripts/test_goblin.py routine --seed 20260906
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: prerelease-experiment-not-a-release
+          path: |
+            uv.lock
+            build/quality/
+          if-no-files-found: warn
+          retention-days: 30

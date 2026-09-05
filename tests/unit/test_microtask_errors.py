@@ -2,7 +2,6 @@ import pytest
 
 from australian_health_policy_atlas.microtasks import EvidenceInput, compile_packet
 
-
 BASE = dict(
     task_id="t",
     skill_id="s",
@@ -17,7 +16,9 @@ BASE = dict(
 
 def test_unknown_route_rejected() -> None:
     with pytest.raises(ValueError, match="unknown model route"):
-        compile_packet(**BASE, evidence=[EvidenceInput("a", "b", "c")], model_route="bad")
+        compile_packet(
+            **BASE, evidence=[EvidenceInput("a", "b", "c")], model_route="bad"
+        )
 
 
 def test_unknown_abstention_rejected() -> None:
@@ -34,4 +35,6 @@ def test_empty_evidence_rejected() -> None:
 
 def test_budget_rejected() -> None:
     with pytest.raises(ValueError, match="budget"):
-        compile_packet(**BASE, evidence=[EvidenceInput("a", "b", "c")], evidence_tokens=6001)
+        compile_packet(
+            **BASE, evidence=[EvidenceInput("a", "b", "c")], evidence_tokens=6001
+        )

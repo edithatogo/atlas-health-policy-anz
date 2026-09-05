@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Mapping
 from dataclasses import asdict, dataclass
-from typing import Iterable, Mapping
 
 from .graph import GraphEdge, GraphNode, PolicyGraph
 from .platinum import jaccard_similarity
-
 
 _RELATION_WEIGHTS: dict[str, float] = {
     "SUPPORTS": 0.28,
@@ -142,7 +141,13 @@ def retrieve_graph_context(
             weight = _RELATION_WEIGHTS.get(relation, 0.08)
             next_score = score + weight / (hops + 2)
             step = _edge_step(node_id, edge, neighbour.node_id)
-            queue.append((neighbour.node_id, next_score, seed_score, hops + 1, path + (step,)))
+            queue.append((
+                neighbour.node_id,
+                next_score,
+                seed_score,
+                hops + 1,
+                path + (step,),
+            ))
 
     ordered = sorted(best.items(), key=lambda item: (-item[1][0], item[0]))[:top_k]
     hits = tuple(

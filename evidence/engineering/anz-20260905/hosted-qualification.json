@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "hosted-code-qualification-not-corpus-release",
+  "repository": "edithatogo/atlas-health-policy-anz",
+  "pull_request": 7,
+  "observed_on": "2026-09-05",
+  "code_head": "74ee72fb745fc43e480f3e5042274b7721d8758e",
+  "code_tree": "bcd2c36c367d367224e223c1e36d09d91dc23237",
+  "tested_pr_merge": "1c1d09e46edc1bf89da2d23908e4aca21eee79e5",
+  "base_commit": "d6d28e8dd8e1f7c8e2926a65cd867f1e3f95444c",
+  "python": "3.14.6",
+  "uv": "0.11.29",
+  "pytest": "9.1.1",
+  "dependency_mode": "committed-uv.lock; locked-sync; no-sync-execution",
+  "tests_passed": 266,
+  "tests_failed": 0,
+  "combined_statement_branch_coverage_percent": 97.48,
+  "minimum_combined_coverage_percent": 95,
+  "coverage_job": 101291715558,
+  "quality_artifact": 9967805583,
+  "quality_artifact_sha256": "2baef0eb31425dce7272eb74588aee87f5bb94506c8a1f2606d52b92053f0680",
+  "workflows": [
+    {"name": "Test-Goblin", "run_id": 33960601373, "conclusion": "success", "jobs_passed": 6},
+    {"name": "Context CI", "run_id": 33960601400, "conclusion": "success"},
+    {"name": "Dependency review", "run_id": 33960601420, "conclusion": "success"},
+    {"name": "Security and Context", "run_id": 33960601369, "conclusion": "success", "jobs_passed": 4}
+  ],
+  "executed_security_checks": ["full-history-gitleaks", "actionlint", "pedantic-zizmor", "CodeQL", "locked-pip-audit", "CycloneDX-SBOM"],
+  "registry": {
+    "bodies_or_functions": 212,
+    "independent_directory_contracts": 9,
+    "au_v1_profiles": 28,
+    "nz_v1_profiles_including_joint_bodies": 81,
+    "authority_profiles": 192,
+    "combined_anz_profiles": 220,
+    "open_world_complete": false,
+    "document_corpus_complete": false
+  },
+  "original_policy_payloads_captured_by_this_change": 0,
+  "hf_writes_by_this_change": 0,
+  "production_medallion_qualified": false,
+  "note": "This receipt records inspected hosted runs for the exact code head and PR merge above. It is not a claim of current policy corpus completeness, clinical/legal accuracy or live public dataset publication. Subsequent code changes require their own qualification. Existing Conductor tracks T00/T01/T02/T07/T08 retain their separate release gates."
+}

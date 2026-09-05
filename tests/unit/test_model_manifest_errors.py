@@ -32,18 +32,21 @@ def test_missing_fields(tmp_path: Path) -> None:
 
 
 def test_bad_schema(tmp_path: Path) -> None:
-    value = valid(); value["schema_version"] = "2.0"
+    value = valid()
+    value["schema_version"] = "2.0"
     with pytest.raises(ValueError, match="unsupported"):
         load_model_manifest(write(tmp_path, value))
 
 
 def test_bad_hash(tmp_path: Path) -> None:
-    value = valid(); value["sha256"] = "z" * 64
+    value = valid()
+    value["sha256"] = "z" * 64
     with pytest.raises(ValueError, match="sha256"):
         load_model_manifest(write(tmp_path, value))
 
 
 def test_empty_tasks(tmp_path: Path) -> None:
-    value = valid(); value["task_classes"] = []
+    value = valid()
+    value["task_classes"] = []
     with pytest.raises(ValueError, match="task class"):
         load_model_manifest(write(tmp_path, value))

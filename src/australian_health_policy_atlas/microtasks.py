@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any
 
 from .hashing import sha256_json, sha256_text
-
 
 ABSTENTION_CODES = frozenset({
     "evidence_missing",
@@ -75,7 +75,11 @@ def compile_packet(
     refs = [item.as_packet_ref() for item in evidence]
     if not refs:
         raise ValueError("at least one evidence span is required")
-    if not (1 <= instruction_tokens <= 900 and 1 <= evidence_tokens <= 6000 and 1 <= output_tokens <= 1000):
+    if not (
+        1 <= instruction_tokens <= 900
+        and 1 <= evidence_tokens <= 6000
+        and 1 <= output_tokens <= 1000
+    ):
         raise ValueError("context budget exceeds governed limits")
     packet: dict[str, Any] = {
         "packet_version": "1.0",
@@ -105,7 +109,9 @@ def render_prompt(packet: dict[str, Any]) -> str:
     """Render a compact prompt whose facts are entirely packet-local."""
     evidence_lines = []
     for ref in packet["evidence_refs"]:
-        evidence_lines.append(f"[{ref['span_id']}] ({ref.get('context_role', 'primary')}) {ref['text']}")
+        evidence_lines.append(
+            f"[{ref['span_id']}] ({ref.get('context_role', 'primary')}) {ref['text']}"
+        )
     invariants = "\n".join(f"- {item}" for item in packet["invariants"])
     abstentions = ", ".join(packet["abstention_codes"])
     return (

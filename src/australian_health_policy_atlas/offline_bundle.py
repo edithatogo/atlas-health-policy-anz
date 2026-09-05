@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 import shutil
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 from .hashing import sha256_file, sha256_json
 
@@ -36,7 +36,9 @@ def build_bundle(
         "files": sorted(records, key=lambda row: str(row["path"])),
     }
     manifest["manifest_sha256"] = sha256_json(manifest)
-    (root / "bundle-manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (root / "bundle-manifest.json").write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     return manifest
 
 

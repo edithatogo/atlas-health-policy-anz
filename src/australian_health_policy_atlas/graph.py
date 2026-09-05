@@ -7,10 +7,11 @@ and any graph can be deleted and deterministically rebuilt.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
 import json
+from collections.abc import Iterable, Mapping
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any
 
 from .bronze import BronzeObject
 from .domain import ComparisonFinding, PolicyAssertion
@@ -68,7 +69,9 @@ class PolicyGraph:
 
 
 def _source_node(source_id: str) -> GraphNode:
-    return GraphNode(f"source:{source_id}", "source", source_id, {"source_id": source_id})
+    return GraphNode(
+        f"source:{source_id}", "source", source_id, {"source_id": source_id}
+    )
 
 
 def build_policy_graph(
@@ -132,19 +135,28 @@ def build_policy_graph(
         source = _source_node(assertion.source_id)
         graph.add_node(source)
         jurisdiction_id = f"jurisdiction:{assertion.jurisdiction}"
-        graph.add_node(GraphNode(jurisdiction_id, "jurisdiction", assertion.jurisdiction, {}))
+        graph.add_node(
+            GraphNode(jurisdiction_id, "jurisdiction", assertion.jurisdiction, {})
+        )
         node_id = f"assertion:{assertion.assertion_id}"
         label = " ".join(
             filter(
                 None,
-                [assertion.actor, assertion.modality, assertion.action, assertion.object],
+                [
+                    assertion.actor,
+                    assertion.modality,
+                    assertion.action,
+                    assertion.object,
+                ],
             )
         )
         graph.add_node(GraphNode(node_id, "assertion", label, assertion.as_dict()))
         graph.add_edge(GraphEdge(source.node_id, node_id, "HAS_ASSERTION"))
         graph.add_edge(GraphEdge(node_id, jurisdiction_id, "APPLIES_IN"))
         if assertion.source_span_id in segment_ids:
-            graph.add_edge(GraphEdge(f"segment:{assertion.source_span_id}", node_id, "SUPPORTS"))
+            graph.add_edge(
+                GraphEdge(f"segment:{assertion.source_span_id}", node_id, "SUPPORTS")
+            )
 
     for assertion_id, concepts in (concept_links or {}).items():
         if assertion_id not in assertion_ids:
@@ -155,9 +167,13 @@ def build_policy_graph(
                 continue
             concept_id = f"concept:{canonical}"
             graph.add_node(
-                GraphNode(concept_id, "concept", concept.strip(), {"canonical": canonical})
+                GraphNode(
+                    concept_id, "concept", concept.strip(), {"canonical": canonical}
+                )
             )
-            graph.add_edge(GraphEdge(f"assertion:{assertion_id}", concept_id, "MENTIONS_CONCEPT"))
+            graph.add_edge(
+                GraphEdge(f"assertion:{assertion_id}", concept_id, "MENTIONS_CONCEPT")
+            )
 
     for assertion_id, frameworks in (framework_links or {}).items():
         if assertion_id not in assertion_ids:
@@ -215,7 +231,9 @@ def build_policy_graph(
     return graph
 
 
-def write_graph(graph: PolicyGraph, output_dir: str | Path, *, graph_id: str) -> dict[str, Any]:
+def write_graph(
+    graph: PolicyGraph, output_dir: str | Path, *, graph_id: str
+) -> dict[str, Any]:
     """Write deterministic JSONL graph tables and a checksum manifest."""
     root = Path(output_dir)
     root.mkdir(parents=True, exist_ok=True)
@@ -232,8 +250,12 @@ def write_graph(graph: PolicyGraph, output_dir: str | Path, *, graph_id: str) ->
                 + "\n"
             )
     with edges_path.open("w", encoding="utf-8") as handle:
-        for edge in sorted(graph.edges, key=lambda item: (item.source, item.relation, item.target)):
-            handle.write(json.dumps(edge.as_dict(), sort_keys=True, ensure_ascii=False) + "\n")
+        for edge in sorted(
+            graph.edges, key=lambda item: (item.source, item.relation, item.target)
+        ):
+            handle.write(
+                json.dumps(edge.as_dict(), sort_keys=True, ensure_ascii=False) + "\n"
+            )
     manifest: dict[str, Any] = {
         "schema_version": "1.0",
         "graph_id": graph_id,

@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import json
-from dataclasses import asdict
 from pathlib import Path
 
 from australian_health_policy_atlas.capture import capture_url
@@ -36,8 +35,12 @@ def main() -> int:
             row["source_id"] = source_id
             row["jurisdiction"] = source["jurisdiction"]
             receipts.append(row)
-        except Exception as exc:  # noqa: BLE001 - batch records exact failure and optionally continues
-            failures.append({"source_id": source_id, "error_type": type(exc).__name__, "message": str(exc)})
+        except Exception as exc:
+            failures.append({
+                "source_id": source_id,
+                "error_type": type(exc).__name__,
+                "message": str(exc),
+            })
             if not args.continue_on_error:
                 raise
     summary: dict[str, object] = {
@@ -49,8 +52,12 @@ def main() -> int:
     }
     summary["summary_sha256"] = sha256_json(summary)
     root.mkdir(parents=True, exist_ok=True)
-    (root / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"captured": len(receipts), "failed": len(failures)}, sort_keys=True))
+    (root / "summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(
+        json.dumps({"captured": len(receipts), "failed": len(failures)}, sort_keys=True)
+    )
     return 0 if not failures else 2
 
 

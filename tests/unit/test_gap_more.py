@@ -3,7 +3,17 @@ from australian_health_policy_atlas.gap import build_gap_rows
 
 
 def a(identifier: str) -> PolicyAssertion:
-    return PolicyAssertion(identifier, "QLD", "s", "sp", "nurse", "must", "act", "care", evidence_state=EvidenceState.VERIFIED)
+    return PolicyAssertion(
+        identifier,
+        "QLD",
+        "s",
+        "sp",
+        "nurse",
+        "must",
+        "act",
+        "care",
+        evidence_state=EvidenceState.VERIFIED,
+    )
 
 
 def test_no_comparator_is_reported_not_invented() -> None:

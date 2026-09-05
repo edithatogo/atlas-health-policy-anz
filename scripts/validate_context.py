@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import json
-from pathlib import Path
 import re
+import sys
 import tomllib
+from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,14 +53,18 @@ def validate_microtask(errors: list[str]) -> None:
         "larger_model_fallback",
     ]
     if config.get("routing", {}).get("order") != expected_route:
-        errors.append("tiny-model routing order drifted from deterministic-first contract")
+        errors.append(
+            "tiny-model routing order drifted from deterministic-first contract"
+        )
 
     schema = load_json(ROOT / "schemas/microtask-packet-v1.json")
     state_schema = load_json(ROOT / "schemas/work-item-state-v1.json")
     if schema.get("additionalProperties") is not False:
         errors.append("microtask schema must fail closed on additional properties")
     if state_schema.get("additionalProperties") is not False:
-        errors.append("work-item state schema must fail closed on additional properties")
+        errors.append(
+            "work-item state schema must fail closed on additional properties"
+        )
 
     example = load_json(ROOT / "examples/microtask-packet.example.json")
     required = set(schema.get("required", []))
@@ -67,7 +72,9 @@ def validate_microtask(errors: list[str]) -> None:
     if missing:
         errors.append(f"microtask example missing fields: {sorted(missing)}")
     if len(example.get("evidence_refs", [])) != 1:
-        errors.append("microtask example must demonstrate a single minimal evidence bundle")
+        errors.append(
+            "microtask example must demonstrate a single minimal evidence bundle"
+        )
     for evidence in example.get("evidence_refs", []):
         digest = evidence.get("sha256", "")
         text = evidence.get("text", "")
@@ -82,7 +89,9 @@ def validate_ci(errors: list[str]) -> None:
     tools = load_json(ROOT / "quality/tool-versions.json")
     python_version = (ROOT / ".python-version").read_text(encoding="utf-8").strip()
     if ci.get("python") != python_version or tools.get("python") != python_version:
-        errors.append("Python version drift across ci.toml/.python-version/tool-versions.json")
+        errors.append(
+            "Python version drift across ci.toml/.python-version/tool-versions.json"
+        )
     if ci.get("uv") != tools.get("uv"):
         errors.append("uv version drift across ci.toml/tool-versions.json")
 
@@ -111,15 +120,15 @@ def validate_ci(errors: list[str]) -> None:
         for match in PINNED_ACTION_RE.finditer(text):
             ref = match.group(1)
             if not SHA40_RE.fullmatch(ref):
-                errors.append(f"workflow action not pinned by commit SHA in {name}: {ref}")
+                errors.append(
+                    f"workflow action not pinned by commit SHA in {name}: {ref}"
+                )
         if "actions/checkout@" in text and "persist-credentials: false" not in text:
             errors.append(f"checkout credentials not disabled in {name}")
     if 'extends": [\n    "github>edithatogo/renovate-config"' not in (
         ROOT / "renovate.json"
     ).read_text(encoding="utf-8"):
         errors.append("Renovate must inherit edithatogo/renovate-config")
-
-
 
 
 def validate_public_corpus(errors: list[str]) -> None:
@@ -133,7 +142,9 @@ def validate_public_corpus(errors: list[str]) -> None:
     jurisdictions = {item.get("jurisdiction") for item in sources}
     expected = {"QLD", "NSW", "VIC", "SA", "WA", "TAS", "ACT", "NT"}
     if not expected.issubset(jurisdictions):
-        errors.append(f"Source Census v1 missing jurisdictions: {sorted(expected - jurisdictions)}")
+        errors.append(
+            f"Source Census v1 missing jurisdictions: {sorted(expected - jurisdictions)}"
+        )
     if "Cth" not in jurisdictions:
         errors.append("Source Census v1 missing Commonwealth comparator")
     required = {"source_id", "jurisdiction", "url", "capture_adapter", "disposition"}
@@ -158,8 +169,12 @@ def validate_public_corpus(errors: list[str]) -> None:
     readiness = ROOT / "evidence/public-corpus/bronze-v1/readiness.json"
     if readiness.exists():
         bronze = load_json(readiness)
-        if bronze.get("gate_b_passed") is not False and bronze.get("original_payloads_captured", 0) == 0:
+        if (
+            bronze.get("gate_b_passed") is not False
+            and bronze.get("original_payloads_captured", 0) == 0
+        ):
             errors.append("Bronze Gate B cannot pass with zero original payloads")
+
 
 def main() -> int:
     errors: list[str] = []
@@ -185,13 +200,17 @@ def main() -> int:
     if nlp_graph.get("graphrag", {}).get("candidate_only") is not True:
         errors.append("GraphRAG must remain candidate-only")
     pyproject = load_toml(ROOT / "pyproject.toml")
-    nlp_dependencies = pyproject.get("project", {}).get("optional-dependencies", {}).get("nlp", [])
+    nlp_dependencies = (
+        pyproject.get("project", {}).get("optional-dependencies", {}).get("nlp", [])
+    )
     if not any(item.startswith("spacy>=3.8.16") for item in nlp_dependencies):
-        errors.append("spaCy optional dependency must retain Python-3.14-capable baseline")
+        errors.append(
+            "spaCy optional dependency must retain Python-3.14-capable baseline"
+        )
 
     deps = load_toml(ROOT / ".context/dependencies.toml")
     ids = {dependency.get("id") for dependency in deps.get("dependency", [])}
-    for required in {"sourceright", "citeweft", "authentext"}:
+    for required in ("sourceright", "citeweft", "authentext"):
         if required not in ids:
             errors.append(f"missing required dependency: {required}")
 
@@ -229,16 +248,24 @@ def main() -> int:
         metadata_path = base / "metadata.toml"
         if metadata_path.exists():
             metadata = load_toml(metadata_path)
-            if metadata.get("id") != track["id"] or metadata.get("status") != track["status"]:
+            if (
+                metadata.get("id") != track["id"]
+                or metadata.get("status") != track["status"]
+            ):
                 errors.append(f"track {track['id']} metadata disagrees with registry")
         for dependency in track.get("depends_on", []):
             if dependency not in track_ids:
-                errors.append(f"track {track['id']} has unknown dependency: {dependency}")
+                errors.append(
+                    f"track {track['id']} has unknown dependency: {dependency}"
+                )
 
     sequence = [("T02", "T03"), ("T03", "T04"), ("T04", "T05")]
     started = {"active", "completed"}
     for upstream, downstream in sequence:
-        if track_status.get(downstream) in started and track_status.get(upstream) != "completed":
+        if (
+            track_status.get(downstream) in started
+            and track_status.get(upstream) != "completed"
+        ):
             errors.append(
                 f"medallion gate violation: {downstream} started before {upstream} completed"
             )
@@ -249,6 +276,20 @@ def main() -> int:
     validate_microtask(errors)
     validate_ci(errors)
     validate_public_corpus(errors)
+    try:
+        sys.path.insert(0, str(ROOT / "src"))
+        from australian_health_policy_atlas.authorities import (
+            assert_directory_coverage,
+            load_authorities,
+            load_contract,
+        )
+
+        assert_directory_coverage(
+            load_authorities(ROOT / "data/sources"),
+            load_contract(ROOT / "data/sources"),
+        )
+    except (ValueError, OSError, KeyError, TypeError) as exc:
+        errors.append(f"ANZ authority registry invalid: {exc}")
 
     if errors:
         for error in errors:

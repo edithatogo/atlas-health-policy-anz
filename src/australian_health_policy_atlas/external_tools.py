@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import json
 import subprocess
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 from .hashing import sha256_json
 
@@ -32,7 +33,7 @@ def run_json_tool(
     """Run an explicitly configured local tool; no shell, no implicit discovery."""
     if not command:
         raise ValueError("tool command must be explicit")
-    completed = subprocess.run(  # noqa: S603 - executable is explicit configuration, shell is disabled
+    completed = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - executable is explicit configuration, shell is disabled
         list(command),
         input=json.dumps(payload),
         capture_output=True,

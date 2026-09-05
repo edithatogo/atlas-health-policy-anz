@@ -10,7 +10,9 @@ from typing import Any
 from .hashing import sha256_json
 
 
-def append_trace(path: str | Path, *, event_type: str, payload: dict[str, Any], private: bool = False) -> dict[str, Any]:
+def append_trace(
+    path: str | Path, *, event_type: str, payload: dict[str, Any], private: bool = False
+) -> dict[str, Any]:
     event = {
         "schema_version": "1.0",
         "recorded_at": datetime.now(UTC).isoformat(),

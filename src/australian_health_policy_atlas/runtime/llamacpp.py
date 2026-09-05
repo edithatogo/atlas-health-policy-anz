@@ -53,9 +53,11 @@ def invoke_openai_compatible(
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310 - loopback validated above
+    with urlopen(request, timeout=timeout_seconds) as response:  # ruff: ignore[suspicious-url-open-usage] - loopback validated above
         raw = json.loads(response.read().decode("utf-8"))
     content = raw["choices"][0]["message"]["content"]
     output = json.loads(content) if isinstance(content, str) else content
     verify_model_output(packet, output)  # type: ignore[arg-type]
-    return RuntimeReceipt(endpoint=endpoint, model=model, output=output, raw_response=raw)
+    return RuntimeReceipt(
+        endpoint=endpoint, model=model, output=output, raw_response=raw
+    )

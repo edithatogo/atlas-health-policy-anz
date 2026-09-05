@@ -33,7 +33,9 @@ def main() -> int:
     receipt["receipt_sha256"] = sha256_json(receipt)
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    output.write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(receipt, sort_keys=True))
     return 0
 

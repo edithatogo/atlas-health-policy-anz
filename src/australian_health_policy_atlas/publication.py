@@ -32,7 +32,12 @@ def build_bronze_hf_candidate(
         row.pop("stored_path", None)
         rows.append(row)
     manifest_path = root / "bronze-manifest.jsonl"
-    manifest_path.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows), encoding="utf-8")
+    manifest_path.write_text(
+        "".join(
+            json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows
+        ),
+        encoding="utf-8",
+    )
     readme = root / "README.md"
     readme.write_text(
         "---\nlicense: other\npretty_name: Australian Health Policy Atlas Bronze\n---\n\n"
@@ -49,5 +54,7 @@ def build_bronze_hf_candidate(
         "readme_sha256": sha256_file(readme),
     }
     receipt["candidate_sha256"] = sha256_json(receipt)
-    (root / "publication-receipt.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (root / "publication-receipt.json").write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     return receipt
