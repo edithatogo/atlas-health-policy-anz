@@ -6,7 +6,7 @@ import argparse
 import hashlib
 import json
 import os
-import subprocess  # noqa: S404 - run only the closed-set static-analysis commands below
+import subprocess  # ruff: ignore[suspicious-subprocess-import] - closed-set commands
 import sys
 from importlib.metadata import version
 from pathlib import Path
@@ -30,6 +30,7 @@ def main() -> int:
 
     Returns:
         The check's exit code, or a nonzero execution/timeout failure code.
+
     """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("checker", choices=sorted(CHECKS))
@@ -50,7 +51,7 @@ def main() -> int:
         "baseline_suppression": False,
     }
     try:
-        completed = subprocess.run(  # noqa: S603 - closed-set argv and no shell
+        completed = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - closed-set argv, no shell
             command, capture_output=True, text=True, check=False, timeout=600
         )
         code, stdout, stderr = completed.returncode, completed.stdout, completed.stderr

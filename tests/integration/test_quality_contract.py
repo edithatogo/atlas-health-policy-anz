@@ -1,7 +1,7 @@
 """Exercise installed testing adapters, network isolation and strict configuration."""
 
 import socket
-import subprocess  # noqa: S404 - CompletedProcess fixture only; execution is mocked
+import subprocess  # ruff: ignore[suspicious-subprocess-import] - CompletedProcess fixture only
 import sys
 import tomllib
 from pathlib import Path
@@ -82,7 +82,7 @@ def test_http_contract_uses_loopback_only(httpserver: HTTPServer) -> None:
     httpserver.expect_request("/manifest").respond_with_data(b"synthetic-capture")
     response = cast(
         "HTTPResponse",
-        urlopen(httpserver.url_for("/manifest"), timeout=2),  # noqa: S310 - loopback server and pytest-socket host restriction
+        urlopen(httpserver.url_for("/manifest"), timeout=2),  # ruff: ignore[suspicious-url-open-usage] - loopback server, restricted host
     )
     with response:
         assert response.read() == b"synthetic-capture"

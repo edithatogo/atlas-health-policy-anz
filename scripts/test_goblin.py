@@ -6,7 +6,7 @@ import argparse
 import hashlib
 import json
 import os
-import subprocess  # noqa: S404 - fixed pytest executable and allowlisted profiles
+import subprocess  # ruff: ignore[suspicious-subprocess-import] - fixed pytest commands
 import sys
 from importlib import metadata
 from pathlib import Path
@@ -72,6 +72,7 @@ def plugin_arguments(
 
     Raises:
         RuntimeError: A plugin has missing or ambiguous entry-point metadata.
+
     """
     arguments: list[str] = []
     versions: dict[str, str] = {}
@@ -100,6 +101,7 @@ def main() -> int:
 
     Returns:
         The test exit code, or a nonzero execution/timeout failure code.
+
     """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("lane", choices=sorted(LANES))
@@ -159,7 +161,7 @@ def main() -> int:
     path = output / (lane + "-receipt.json")
     path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     try:
-        completed = subprocess.run(  # noqa: S603 - fixed argv, no shell
+        completed = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - fixed argv, no shell
             command, env=environment, check=False, timeout=900
         )
         code = completed.returncode

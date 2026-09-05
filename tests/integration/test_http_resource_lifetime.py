@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from email.message import Message
 from io import BytesIO
-from pathlib import Path
 from typing import TYPE_CHECKING
 from urllib.error import HTTPError
 
@@ -14,6 +13,8 @@ from australian_health_policy_atlas.capture import capture_url
 from australian_health_policy_atlas.crawl import CrawlPolicy, run_crawl
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from pytest_mock import MockerFixture
 
 
