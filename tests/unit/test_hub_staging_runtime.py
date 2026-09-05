@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-from test_crawl_runtime import fetcher, policy
 
 from australian_health_policy_atlas.crawl import run_crawl
 from australian_health_policy_atlas.hub_staging import (
@@ -18,6 +17,7 @@ from australian_health_policy_atlas.integrity import (
     read_json,
     sealed,
 )
+from tests.unit.test_crawl_runtime import fetcher, policy
 
 
 class MemoryHub:

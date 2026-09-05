@@ -1,10 +1,10 @@
 from dataclasses import replace
 
 import pytest
-from test_crawl_runtime import fetcher, policy
 
 from australian_health_policy_atlas.crawl import run_crawl, validate_state
 from australian_health_policy_atlas.integrity import read_json, sealed
+from tests.unit.test_crawl_runtime import fetcher, policy
 
 
 def state(tmp_path):

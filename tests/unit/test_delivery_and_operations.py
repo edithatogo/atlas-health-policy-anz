@@ -5,14 +5,14 @@ import zipfile
 from pathlib import Path
 
 import pytest
-from test_crawl_runtime import fetcher, policy
-from test_hub_staging_runtime import MemoryHub
 
 from australian_health_policy_atlas import operations
 from australian_health_policy_atlas.distribution import build_zipapp
 from australian_health_policy_atlas.hashing import sha256_file
 from australian_health_policy_atlas.hub_staging import index_path
 from australian_health_policy_atlas.integrity import atomic_json, read_json
+from tests.unit.test_crawl_runtime import fetcher, policy
+from tests.unit.test_hub_staging_runtime import MemoryHub
 
 REPO = Path(__file__).resolve().parents[2]
 

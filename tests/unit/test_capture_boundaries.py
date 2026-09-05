@@ -3,9 +3,9 @@ from urllib.error import HTTPError
 from urllib.request import Request
 
 import pytest
-from test_capture import FakeResponse
 
 from australian_health_policy_atlas import capture
+from tests.unit.test_capture import FakeResponse
 
 
 @pytest.mark.parametrize(

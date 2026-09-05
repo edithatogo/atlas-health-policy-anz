@@ -1,8 +1,6 @@
 from dataclasses import replace
 
 import pytest
-from test_crawl_runtime import policy
-from test_hub_staging_runtime import MemoryHub, stage
 
 from australian_health_policy_atlas.hashing import sha256_bytes
 from australian_health_policy_atlas.hub_staging import (
@@ -20,6 +18,8 @@ from australian_health_policy_atlas.integrity import (
     read_json,
     sealed,
 )
+from tests.unit.test_crawl_runtime import policy
+from tests.unit.test_hub_staging_runtime import MemoryHub, stage
 
 
 @pytest.mark.parametrize("mutation", ["kind", "duplicates", "identity", "unreferenced"])
