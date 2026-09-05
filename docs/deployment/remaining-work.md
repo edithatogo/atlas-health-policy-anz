@@ -1,30 +1,57 @@
-# Remaining Atlas deployment work
+# Atlas deployment: completed integration and remaining data-product work
 
-Canonical repository: `edithatogo/atlas-health-policy-anz`.
+Updated 6 September 2026 (Australia/Brisbane). Canonical repository:
+`edithatogo/atlas-health-policy-anz`.
 
-## Observed baseline
+## GitHub integration: completed at the named code revision
 
-On 2026-09-05, `main` at `60a44d4e0edead7a51c47dd819997b86f1f99bd9` contained import transports, GitHub workflows and `DEPLOYMENT.md`, but not the application source, tests or Conductor context. The earlier import pull requests were merged; merging their transport files did not restore the application. The latest observed main-branch Context CI and Test-Goblin runs failed.
+- [x] Restore the recovered application and retain both Git histories (PR #4).
+- [x] Correct test-environment dependency selection (PR #5).
+- [x] Resolve and commit a real dependency lock; execute dependency and security
+  audits rather than skipping them (PR #6 and subsequent locked runs).
+- [x] Integrate NZ/ANZ source/authority collections and expanded strict testing
+  (PR #7).
+- [x] Resolve Ruff, formatting, basedpyright and ty diagnostics without weakening
+  configuration, lock or acceptance thresholds (PR #8).
+- [x] Verify all four ordinary post-merge workflows on
+  `f3ecbc3c40f6f1f6e458b04ec6bae7a6420cfa3c`.
+- [x] Download and hash-check the matching quality artifact; reconcile test counts,
+  runtime, coverage and source identity with the actual main-branch receipt.
 
-The intact delivery archive remains available with SHA-256 `fa1045fe6aafa0e4b84c9227c1be9dfc54c49241c8ea1250386c2e2e892c4542`, size 889683 bytes and 845 members. It contains source commit `9cb1e709b8380dd71d35f22f866a02187119a3e2`, tree `a7211fdde23bafc254a10c52e755448b98665551`, and 252 tracked files.
+The code import and software-quality repairs are no longer pending. The earlier
+transport corruption, missing dependencies and lint/type failures are preserved
+in Git history and dated receipts, not erased or reclassified as successes.
+The evidence is `quality/github-integration-main-20260906.json`.
 
-A fresh `git fast-export --all` and XZ preset-9 compression reproduce the transport's existing whole-payload SHA-256 `04ff28fd3fd6e24e1229d1892576ba0719a0ff2f343b6da5d27bf5e07894f792`. The first 29 encoded chunks match their remote Git blob identities. Chunks 030 and 031, the per-part manifest hashes and the uncompressed stream hash require correction from the verified archive, not relaxation of integrity checks.
+## Remaining finite milestones: not closed by software CI
 
-## This pull request: import recovery
+1. **T00/T07 native dependencies.** Execute and qualify the pinned SourceRight,
+   CiteWeft and Authentext integrations. Resolved identities and adapter contracts
+   are not a native end-to-end execution result. Overall track states remain
+   unchanged by this documentation closeout.
+2. **T02 public HF deployment.** Verify scoped write access through repository
+   secrets and independently verify public dataset creation, immutable revisions,
+   anonymous downloads and object hashes. Do not publish secret values in chat,
+   logs, source or PR text. This closeout does not inspect or provision secrets.
+3. **T02 source acquisition.** Execute the selected `au-v1`, `nz-v1` or `anz-v1`
+   configuration; qualify source adapters, document inventories, cross-host
+   stores, pagination and failure dispositions. Configured profiles, directory
+   counts and exhausted budgets are not document-level completeness.
+4. **T02 Bronze v1 closure.** Complete the typed final release manifest,
+   original-byte/provenance verification, explicit scope and coverage accounting,
+   public remote verification and clean reconstruction. Source staging and
+   software fixtures cannot satisfy this gate.
+5. **T03 Silver v1.** Qualify parsing against captured originals, including offsets,
+   reading order, tables, references and extraction-loss accounting; publish and
+   verify the completed derivative release.
+6. **T04/T05/T06/T08 Gold and Platinum.** Establish real extraction/comparison
+   benchmarks, independent-method evidence and separate framework projections;
+   preserve A0-A4 states, uncertainty and provenance before sequential release
+   promotion. Software-quality improvements do not certify policy interpretation.
 
-- Repair the two damaged chunks and regenerate the manifest from the verified archive.
-- Validate every chunk, the compressed payload, the bounded decompressed stream, the reconstructed commit, the complete source tree and all 252 tracked files.
-- Preserve both existing repository history and recovered source history in a non-rewriting import on this PR branch.
-- Refuse any attempt to push directly to `main`, force-push, or change workflows from the recovery job.
-- Record a machine-readable import receipt; do not confuse import verification with production qualification.
-- Re-run application/context checks on the fully restored branch and retain any failures honestly.
-
-## Subsequent finite milestones (not claimed complete)
-
-1. Qualify hosted CI and the committed Python/dependency contracts; generate a genuine dependency lock in a networked environment. Do not weaken versions or gates merely to make bootstrap checks green.
-2. Configure a scoped Hugging Face write credential through repository secrets, never in code, PR text or chat. Verify public dataset creation and exact-revision anonymous downloads. Read-only connector access is not write permission.
-3. Execute and qualify the Australian source adapters. A 28-surface inventory or an exhausted bounded crawl is not an exhaustive document census.
-4. Close public Bronze v1 only with verified original bytes, capture receipts, declared scope/dispositions and remote fixity verification. Never promote fixtures or shadow material.
-5. Progress sequentially through qualified Silver v1, Gold v1 and Platinum v1, retaining parsing, extraction and comparison benchmark gates, uncertainty and provenance.
-
-These are acceptance criteria for the existing work, not new Conductor tracks. Australia remains the first corpus; the ANZ repository name does not imply New Zealand coverage. No Hugging Face write, corpus acquisition or production medallion promotion is implied by this PR.
+The future institutional/programmatic engine and living-update experiments remain
+in existing tracks and roadmap entries. No new Conductor tracks or approval gates
+are created. AU v1 remains a frozen initial inventory; NZ is now integrated in the
+software and selected source collections, while production NZ corpus coverage is
+not claimed. No live capture, HF write, mutation/prerelease experiment or medallion
+promotion was executed as part of this GitHub closeout.

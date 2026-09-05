@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "observed-post-merge-github-integration",
+  "repository": "edithatogo/atlas-health-policy-anz",
+  "observed_date": "2026-09-06",
+  "observation_timezone": "Australia/Brisbane",
+  "tracks": ["T00", "T06", "T07"],
+  "work_package": "github-import-anz-strict-quality-integration",
+  "work_package_status": "closed_at_named_code_revision",
+  "whole_tracks_closed": false,
+  "qualified_commit": "f3ecbc3c40f6f1f6e458b04ec6bae7a6420cfa3c",
+  "qualified_tree": "8e784a9183b93df26f9d5cc0f638af089772f908",
+  "merged_pr": 8,
+  "merged_pr_head": "a25440943850ba0a7553a0487403c508afb1c011",
+  "workflows": [
+    {"name": "Context CI", "run_id": 33970758018, "event": "push", "status": "completed", "conclusion": "success"},
+    {"name": "Strict Python Quality", "run_id": 33970758019, "event": "push", "status": "completed", "conclusion": "success"},
+    {"name": "Test-Goblin", "run_id": 33970758030, "event": "push", "status": "completed", "conclusion": "success"},
+    {"name": "Security and Context", "run_id": 33970758051, "event": "push", "status": "completed", "conclusion": "success"}
+  ],
+  "job_inspection": {
+    "strict_checkers": ["ruff", "format", "basedpyright", "ty"],
+    "test_jobs": ["unit", "integration", "smoke", "property", "contract", "parallel", "coverage-benchmark-package"],
+    "security_steps_executed": ["gitleaks-full-history", "actionlint", "zizmor", "codeql", "locked-pip-audit", "cyclonedx-sbom"]
+  },
+  "quality_artifact": {
+    "id": 9970844996,
+    "name": "atlas-quality-receipts",
+    "run_id": 33970758030,
+    "bytes": 165397,
+    "sha256": "502e257ae5c78fdf4676038cf30bfcea73835691ab7a499b52d6b96011948e7c",
+    "downloaded_and_digest_verified": true,
+    "source_identity_verified": true,
+    "junit_path": "build/quality/coverage.xml",
+    "receipt_path": "build/quality/coverage-receipt.json",
+    "coverage_path": "coverage.json",
+    "package_build_outputs": ["australian_health_policy_atlas-0.1.0-py3-none-any.whl", "australian_health_policy_atlas-0.1.0.tar.gz"]
+  },
+  "runtime": {"python": "3.14.6", "host_compatibility_override": false},
+  "dependency_lock_sha256": "8d19325b11a134540c41566bd37a8b36dabba1b729d05e072f18ae3503219d60",
+  "junit": {"tests": 348, "failures": 0, "errors": 0, "skipped": 0},
+  "coverage": {
+    "covered_statements": 2663,
+    "statements": 2712,
+    "covered_branches": 657,
+    "branches": 700,
+    "combined_percent": 97.30363423212192,
+    "statement_percent": 98.19321533923303,
+    "branch_percent": 93.85714285714286,
+    "minimum_combined_percent": 95,
+    "threshold_changed": false
+  },
+  "modality_benchmark": {"total": 5, "correct": 5, "abstentions": 1, "clinical_semantic_qualification": false},
+  "repository_snapshot_before_closeout_pr": {"open_pull_requests": 0, "open_issues": 0},
+  "closeout_scope": {
+    "source_code_changes": false,
+    "workflow_changes": false,
+    "strict_configuration_changes": false,
+    "dependency_lock_changes": false,
+    "track_state_changes": false,
+    "hf_writes": 0,
+    "credential_provisioning": false,
+    "original_policy_captures": 0,
+    "medallion_promotion": false,
+    "scheduled_mutation_or_prerelease_runs": false
+  },
+  "qualification_boundary": "Pins the observed post-merge code revision and actual runs. It does not self-qualify the later documentation commit, close whole Conductor tracks, certify policy semantics, or establish external dataset/credential state."
+}
