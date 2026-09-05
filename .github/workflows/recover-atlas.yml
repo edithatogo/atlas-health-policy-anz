@@ -1,0 +1,85 @@
+name: Verify recovered Atlas import
+on:
+  push:
+    branches: [import/recovered-atlas-20260905]
+    paths: [.atlas-import/manifest.json]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: recover-atlas-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Verify the complete transport and reproduce original Git identity
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, lzma, pathlib, subprocess, tempfile
+          root = pathlib.Path('.atlas-import')
+          manifest = json.loads((root / 'manifest.json').read_text())
+          assert manifest['source_commit'] == '9cb1e709b8380dd71d35f22f866a02187119a3e2'
+          assert manifest['compressed_sha256'] == '04ff28fd3fd6e24e1229d1892576ba0719a0ff2f343b6da5d27bf5e07894f792'
+          parts = []
+          for entry in manifest['parts']:
+              path = root / 'parts' / entry['name']
+              assert path.parent == root / 'parts'
+              data = path.read_bytes()
+              assert len(data) == entry['bytes'], path
+              assert hashlib.sha256(data).hexdigest() == entry['sha256'], path
+              parts.append(data.strip())
+          assert sorted(p.name for p in (root / 'parts').iterdir()) == sorted(e['name'] for e in manifest['parts'])
+          compressed = base64.b64decode(b''.join(parts), validate=True)
+          assert len(compressed) == manifest['compressed_bytes']
+          assert hashlib.sha256(compressed).hexdigest() == manifest['compressed_sha256']
+          decoder = lzma.LZMADecompressor(memlimit=128 * 1024 * 1024)
+          stream = decoder.decompress(compressed, max_length=10 * 1024 * 1024)
+          assert decoder.eof and not decoder.unused_data
+          assert len(stream) == manifest['stream_bytes']
+          assert hashlib.sha256(stream).hexdigest() == manifest['stream_sha256']
+          repo = pathlib.Path(tempfile.mkdtemp(prefix='atlas-recovered-'))
+          subprocess.run(['git', 'init', '--quiet', str(repo)], check=True)
+          subprocess.run(['git', '-C', str(repo), 'fast-import', '--quiet'], input=stream, check=True)
+          commit = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', 'refs/heads/main'], text=True).strip()
+          assert commit == manifest['source_commit'], commit
+          subprocess.run(['git', '-C', str(repo), 'fsck', '--full'], check=True)
+          subprocess.run(['git', '-C', str(repo), 'checkout', '--quiet', 'main'], check=True)
+          assert len(subprocess.check_output(['git', '-C', str(repo), 'ls-files', '-z']).split(b'\0')) - 1 == 252
+          pathlib.Path('recovered-path.txt').write_text(str(repo))
+          pathlib.Path('import-verification.json').write_text(json.dumps({'verified': True, 'source_commit': commit, 'tracked_files': 252, 'source_history_reproduced': True, 'source_payloads_captured': 0, 'hf_writes': 0}, indent=2) + '\n')
+          PY
+      - name: Publish the recovered source branch without force or changing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, pathlib, subprocess, urllib.request
+          repo = pathlib.Path('recovered-path.txt').read_text().strip()
+          token = os.environ['GH_TOKEN']
+          auth = base64.b64encode(('x-access-token:' + token).encode()).decode()
+          print('::add-mask::' + auth, flush=True)
+          env = dict(os.environ, GIT_TERMINAL_PROMPT='0', GIT_CONFIG_COUNT='1', GIT_CONFIG_KEY_0='http.https://github.com/.extraheader', GIT_CONFIG_VALUE_0='AUTHORIZATION: basic ' + auth)
+          url = 'https://github.com/' + os.environ['GH_REPO'] + '.git'
+          result = subprocess.run(['git', '-C', repo, 'push', url, 'refs/heads/main:refs/heads/recovered/source-9cb1e70'], env=env)
+          receipt = json.loads(pathlib.Path('import-verification.json').read_text())
+          receipt['source_branch_published'] = result.returncode == 0
+          receipt['push_returncode'] = result.returncode
+          pathlib.Path('import-verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          if result.returncode:
+              raise SystemExit('Recovered bytes verified, but source branch push was rejected; see receipt. Main was not changed.')
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: recovered-atlas-import-verification
+          path: import-verification.json
+          if-no-files-found: error
+          retention-days: 30
