@@ -1,5 +1,4 @@
 name: Security and Context
-
 on:
   pull_request:
   push:
@@ -7,16 +6,14 @@ on:
   schedule:
     - cron: "17 16 * * 1"
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: security-context-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   leak-detection:
+    name: Scan complete Git history for secrets
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -33,7 +30,19 @@ jobs:
           curl --fail --location --silent --show-error --output "$GITLEAKS_ASSET" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${GITLEAKS_ASSET}"
           echo "${GITLEAKS_SHA256}  ${GITLEAKS_ASSET}" | sha256sum --check
           tar --extract --gzip --file "$GITLEAKS_ASSET" gitleaks
-      - run: mkdir -p build && ./gitleaks git --redact --no-banner --report-format json --report-path build/gitleaks.json .
+      - name: Scan without suppressing findings
+        run: mkdir -p build && ./gitleaks git --redact --no-banner --report-format json --report-path build/gitleaks.json .
+      - name: Report finding coordinates only, never secret values
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('build/gitleaks.json')
+          if path.is_file():
+              for finding in json.loads(path.read_text()):
+                  print(json.dumps({k: finding.get(k) for k in ('RuleID', 'File', 'StartLine', 'EndLine', 'Commit', 'Fingerprint')}, sort_keys=True))
+          PY
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
@@ -41,8 +50,8 @@ jobs:
           path: build/gitleaks.json
           if-no-files-found: warn
           retention-days: 30
-
   workflow-security:
+    name: Lint and audit workflow security
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -66,8 +75,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: uvx --from zizmor==1.13.0 zizmor --pedantic .github
-
   supply-chain:
+    name: Audit resolved dependencies and generate SBOM
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -78,40 +87,39 @@ jobs:
         with:
           version: "0.11.29"
           enable-cache: true
-      - name: Detect dependency-lock state
-        id: lock
-        shell: bash
+      - name: Require and check committed dependency lock
         run: |
-          if [[ -f uv.lock ]]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; fi
-      - name: Audit locked dependency environment
-        if: steps.lock.outputs.present == 'true'
-        run: |
+          test -f uv.lock
           uv python install 3.14.6
-          uv sync --python 3.14.6 --group security --locked
-          uv run --group security pip-audit
-          mkdir -p build
-          uv run --group security cyclonedx-py environment --output-file build/sbom.cdx.json
-      - name: Record foundation bootstrap state
-        if: steps.lock.outputs.present != 'true'
+          uv lock --check
+      - name: Install complete audited environment
+        run: uv sync --python 3.14.6 --all-groups --all-extras --locked
+      - name: Export hashed lock requirements
         run: |
           mkdir -p build
-          printf '%s\n' '{"status":"not-applicable-yet","reason":"no-qualified-production-dependency-lock"}' > build/supply-chain-bootstrap.json
+          uv export --locked --all-groups --all-extras --no-emit-project --format requirements-txt --output-file build/audit-requirements.txt
+      - name: Audit the lock, not an empty bootstrap environment
+        run: uv run --no-sync pip-audit --require-hashes --no-deps --disable-pip -r build/audit-requirements.txt --format json --output build/pip-audit.json
+      - name: Generate SBOM even when the vulnerability audit fails
+        if: success() || failure()
+        run: uv run --no-sync cyclonedx-py environment --output-file build/sbom.cdx.json
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
           name: supply-chain-receipt
           path: |
             build/sbom.cdx.json
-            build/supply-chain-bootstrap.json
-          if-no-files-found: error
+            build/pip-audit.json
+            build/audit-requirements.txt
+          if-no-files-found: warn
           retention-days: 30
-
   codeql:
+    name: CodeQL security analysis
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
       contents: read
-      security-events: write
+      security-events: write # Upload CodeQL SARIF to this repository's code-scanning service.
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
