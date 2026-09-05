@@ -18,4 +18,12 @@ Read `docs/IMPLEMENTATION_STATUS.md`, `evidence/engineering/recovery-20260905/`,
 
 ## Current ANZ expansion
 
-Read [ANZ source and authority checkpoint](anz-scope-20260905.md) last. It supersedes older NZ-future-only roadmap wording and records the current source registration, coverage denominators, execution interfaces and CI evidence boundaries. No additional Conductor tracks are introduced.
+Read [ANZ source and authority checkpoint](anz-scope-20260905.md). It supersedes older NZ-future-only roadmap wording and records the current source registration, coverage denominators, execution interfaces and CI evidence boundaries. No additional Conductor tracks are introduced.
+
+## Current strict-quality work
+
+Read [strict testing and static-analysis checkpoint](strict-quality-20260905.md) last. Existing T00/T06/T07 govern this work. The previous ANZ qualification does not cover the newly enforced Ruff/basedpyright/ty gates or new pytest profiles.
+
+The strict-toolchain lock was resolved and installed on hosted Python 3.14.6 in run `33961762760`, with immutable source commit `6a3e5abb71a3b63bd17bb90aeb175edc7e57d2f3`. See `quality/resolved-test-tools.json` and `uv.lock` at commit `6449a3b7b70820f6bb79907581785546b7618041` for exact selected versions and hashes. Resolution is not test qualification; inspect the actual new-head workflow receipts.
+
+Use `uv run --no-sync python scripts/test_goblin.py routine` after synchronizing the declared locked test environment. Direct unconfigured pytest calls no longer autoload arbitrary installed plugins. Canonical qualification uses the complete coverage profile; changed-test selection is never a release gate.
