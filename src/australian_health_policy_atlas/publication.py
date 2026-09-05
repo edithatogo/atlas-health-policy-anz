@@ -2,31 +2,47 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+
 import json
 import shutil
 from pathlib import Path
-from typing import Any
 
 from .hashing import sha256_file, sha256_json
+from .records import records, string
 
 
 def build_bronze_hf_candidate(
-    bronze_manifest: dict[str, Any],
+    bronze_manifest: Mapping[str, object],
     *,
     output_dir: str | Path,
     dataset_id: str,
-) -> dict[str, Any]:
+) -> dict[str, object]:
+    """Build a local Bronze candidate without asserting remote publication.
+
+    Returns:
+        Candidate inventory and local integrity checks, not an upload receipt.
+
+    Raises:
+        OSError: Source I/O or content-addressed byte verification fails.
+
+    """
     root = Path(output_dir)
     data_root = root / "data" / "objects"
     data_root.mkdir(parents=True, exist_ok=True)
-    rows: list[dict[str, Any]] = []
-    for record in bronze_manifest.get("objects", []):
-        source = Path(record["stored_path"])
-        target = data_root / record["sha256"]
+    rows: list[dict[str, object]] = []
+    for record in records(bronze_manifest.get("objects", [])):
+        source = Path(string(record["stored_path"]))
+        target = data_root / string(record["sha256"])
         if not target.exists():
             shutil.copyfile(source, target)
         if sha256_file(target) != record["sha256"]:
-            raise OSError("publication candidate fixity failure")
+            message = "publication candidate fixity failure"
+            raise OSError(message)
         row = dict(record)
         row["dataset_path"] = str(target.relative_to(root))
         row.pop("stored_path", None)
@@ -40,13 +56,17 @@ def build_bronze_hf_candidate(
     )
     readme = root / "README.md"
     readme.write_text(
-        "---\nlicense: other\npretty_name: Australian Health Policy Atlas Bronze\n---\n\n"
+        "---\nlicense: other\n"
+        "pretty_name: Australian Health Policy Atlas Bronze\n---\n\n"
         "# Australian Health Policy Atlas — Bronze\n\n"
-        f"Dataset target: `{dataset_id}`. This candidate contains immutable captured source objects plus provenance metadata. "
-        "The dataset card does not claim corpus completeness beyond the pinned release manifest.\n",
+        f"Dataset target: `{dataset_id}`. "
+        "This candidate contains immutable captured source objects "
+        "plus provenance metadata. "
+        "The dataset card does not claim corpus completeness "
+        "beyond the pinned release manifest.\n",
         encoding="utf-8",
     )
-    receipt = {
+    receipt: dict[str, object] = {
         "schema_version": "1.0",
         "dataset_id": dataset_id,
         "record_count": len(rows),

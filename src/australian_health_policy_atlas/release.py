@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+
 from .confidence import compose_confidence
 from .domain import (
     ConfidenceSignals,
@@ -18,11 +24,17 @@ def qualify_release(
     *,
     release_id: str,
     layer: MedallionLayer,
-    input_manifest: dict[str, object],
-    output_manifest: dict[str, object],
+    input_manifest: Mapping[str, object],
+    output_manifest: Mapping[str, object],
     acceptance_results: dict[str, bool],
     closed_layers: set[MedallionLayer],
 ) -> ReleaseReceipt:
+    """Bind a release decision to non-compensatory upstream and acceptance checks.
+
+    Returns:
+        The release receipt recording qualification or its unmet acceptance reasons.
+
+    """
     gate = promotion_gate(
         layer, closed_layers=closed_layers, acceptance_results=acceptance_results
     )

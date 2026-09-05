@@ -1,17 +1,35 @@
+from dataclasses import replace
+from typing import TypedDict, Unpack
+
 from australian_health_policy_atlas.confidence import compose_confidence
 from australian_health_policy_atlas.domain import ConfidenceSignals, EvidenceState
 
 
-def base(**updates: object) -> ConfidenceSignals:
-    values: dict[str, object] = {
-        "provenance_ok": True,
-        "exact_span_ok": True,
-        "scope_ok": True,
-        "authority_ok": True,
-        "temporal_ok": True,
-    }
-    values.update(updates)
-    return ConfidenceSignals(**values)  # type: ignore[arg-type]
+class SignalChanges(TypedDict, total=False):
+    provenance_ok: bool
+    exact_span_ok: bool
+    scope_ok: bool
+    authority_ok: bool
+    temporal_ok: bool
+    deterministic_evidence: bool
+    independent_methods_agree: int
+    independent_methods_total: int
+    benchmark_passed: bool
+    coverage: float | None
+    conflicting_evidence: bool
+
+
+def base(**updates: Unpack[SignalChanges]) -> ConfidenceSignals:
+    return replace(
+        ConfidenceSignals(
+            provenance_ok=True,
+            exact_span_ok=True,
+            scope_ok=True,
+            authority_ok=True,
+            temporal_ok=True,
+        ),
+        **updates,
+    )
 
 
 def test_hard_gate_failure_abstains() -> None:

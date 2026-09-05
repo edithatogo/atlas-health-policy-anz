@@ -1,19 +1,16 @@
 from __future__ import annotations
 
-import importlib.util
 import pathlib
-import subprocess
+import subprocess  # ruff: ignore[suspicious-subprocess-import] - Bounded argv-only maintenance; no policy text is executed.
 import zipfile
 from pathlib import Path
 
 import pytest
+from scripts import build_delivery as module
+
+from australian_health_policy_atlas.records import integer
 
 ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location(
-    "atlas_delivery", ROOT / "scripts/build_delivery.py"
-)
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
 
 
 def test_empty_archive_and_wrong_project_cannot_be_delivered(
@@ -36,9 +33,12 @@ def test_delivery_rejects_dirty_tree_and_reopens_valid_git(
     repo = tmp_path / "repo"
     repo.mkdir()
 
-    def git(*args) -> None:
-        subprocess.run(
-            ["git", "-C", str(repo), *args], check=True, capture_output=True, timeout=10
+    def git(*args: str) -> None:
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - Trusted executable and fixed argv; shell remains disabled.
+            [module.git_executable(), "-C", str(repo), *args],
+            check=True,
+            capture_output=True,
+            timeout=10,
         )
 
     git("init", "-b", "main")
@@ -63,7 +63,7 @@ def test_delivery_rejects_dirty_tree_and_reopens_valid_git(
     git("commit", "-m", "fixture change")
     result = module.build(repo, tmp_path / "out")
     assert result["verified"]
-    assert result["archive_members"] > 10
+    assert integer(result["archive_members"]) > 10
     assert result["portable_rebuild_identical"]
     assert not result["hosted_ci_verified"]
     with pytest.raises(ValueError, match="commit mismatch"):

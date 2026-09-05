@@ -1,3 +1,5 @@
+import pytest
+
 from australian_health_policy_atlas.benchmark import evaluate_classifier
 
 
@@ -9,5 +11,5 @@ def test_benchmark_counts_abstention_and_error() -> None:
         ],
         lambda text: "x" if text == "a" else None,
     )
-    assert metrics.accuracy == 1.0
+    assert metrics.accuracy == pytest.approx(1.0)
     assert metrics.abstentions == 1

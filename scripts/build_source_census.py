@@ -12,11 +12,24 @@ from australian_health_policy_atlas.hashing import sha256_json
 from australian_health_policy_atlas.source_registry import load_registry
 
 
+class Arguments(argparse.Namespace):
+    """Typed values produced by this command's explicit argparse contract."""
+
+    registry: str
+    output: str
+
+
 def main() -> int:
+    """Build the frozen source-census work queue and completion evidence.
+
+    Returns:
+        Zero on success; a nonzero process status on a blocked or failed operation.
+
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--registry", default="data/sources/jurisdictions-v1.json")
     parser.add_argument("--output", default="build/census/source-census-v1.json")
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=Arguments())
     registry = load_registry(args.registry)
     counts: dict[str, int] = {}
     for item in registry["sources"]:

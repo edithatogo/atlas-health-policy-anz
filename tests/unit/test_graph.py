@@ -1,4 +1,12 @@
-from pathlib import Path
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from australian_health_policy_atlas.bronze import ingest_local_file
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 import pytest
 
@@ -38,7 +46,10 @@ def _assertion(
 def test_policy_graph_build_write_load_and_graphrag(tmp_path: Path) -> None:
     segments = normalize_text(
         "src",
-        "Registered nurses must escalate deteriorating patients.\nConsumers may escalate care.",
+        (
+            "Registered nurses must escalate deteriorating "
+            "patients.\nConsumers may escalate care."
+        ),
     )
     left = _assertion("a1", segments[0].segment_id, "QLD")
     right = _assertion("a2", segments[0].segment_id, "NSW")
@@ -97,7 +108,6 @@ def test_graphrag_external_seed_and_no_hits() -> None:
 def test_graph_projects_bronze_frameworks_and_skips_invalid_links(
     tmp_path: Path,
 ) -> None:
-    from australian_health_policy_atlas.bronze import ingest_local_file
 
     source_file = tmp_path / "policy.txt"
     source_file.write_text("Nurses must escalate care.", encoding="utf-8")

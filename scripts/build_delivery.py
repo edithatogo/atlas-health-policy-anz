@@ -10,7 +10,8 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
-import subprocess
+import stat
+import subprocess  # ruff: ignore[suspicious-subprocess-import] - Bounded argv-only maintenance; no policy text is executed.
 import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -31,26 +32,73 @@ REQUIRED = {
 }
 
 
+class Arguments(argparse.Namespace):
+    """Typed values produced by this command's explicit argparse contract."""
+
+    repo: Path
+    output_dir: Path
+
+
+def git_executable() -> str:
+    """Resolve Git for the repository-maintenance commands.
+
+    Returns:
+        The executable path found in the process environment.
+
+    Raises:
+        FileNotFoundError: Git is not installed on the runner.
+
+    """
+    executable = shutil.which("git")
+    if executable is None:
+        message = "Git executable is required for repository delivery"
+        raise FileNotFoundError(message)
+    return executable
+
+
 def git(repo: Path, *args: str) -> str:
-    result = subprocess.run(
-        ["git", "-C", str(repo), *args],
+    """Run a bounded Git command without a shell and return its captured output.
+
+    Returns:
+        Captured standard output with trailing whitespace removed.
+
+    Raises:
+        ValueError: The supplied data violates the function's documented validation
+        contract.
+
+    """
+    result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - Trusted executable and fixed argv; shell remains disabled.
+        [git_executable(), "-C", str(repo), *args],
         check=False,
         capture_output=True,
         text=True,
         timeout=60,
     )
     if result.returncode:
-        raise ValueError(f"Git command failed ({args[0]}): {result.stderr.strip()}")
+        message = f"Git command failed ({args[0]}): {result.stderr.strip()}"
+        raise ValueError(message)
     return result.stdout.strip()
 
 
 def verify_archive(path: Path, expected_commit: str) -> dict[str, object]:
+    """Reopen a delivery archive and verify its inventory, Git identity and cleanliness.
+
+    Returns:
+        Verified commit, archive inventory size, byte length and SHA-256.
+
+    Raises:
+        ValueError: The supplied data violates the function's documented validation
+        contract.
+
+    """
     with zipfile.ZipFile(path) as archive:
         names = archive.namelist()
         if not names or len(set(names)) != len(names):
-            raise ValueError("empty or duplicate-member repository archive")
+            message = "empty or duplicate-member repository archive"
+            raise ValueError(message)
         if not {f"{PREFIX}/{name}" for name in REQUIRED} <= set(names):
-            raise ValueError("incomplete repository archive")
+            message = "incomplete repository archive"
+            raise ValueError(message)
         for info in archive.infolist():
             part = PurePosixPath(info.filename)
             if (
@@ -58,20 +106,24 @@ def verify_archive(path: Path, expected_commit: str) -> dict[str, object]:
                 or ".." in part.parts
                 or "\\" in info.filename
                 or part.parts[0] != PREFIX
-                or ((info.external_attr >> 16) & 0o170000) == 0o120000
+                or stat.S_ISLNK(info.external_attr >> 16)
             ):
-                raise ValueError("unsafe archive member")
+                message = "unsafe archive member"
+                raise ValueError(message)
         if archive.testzip() is not None:
-            raise ValueError("archive CRC failure")
+            message = "archive CRC failure"
+            raise ValueError(message)
         with tempfile.TemporaryDirectory(prefix="atlas-delivery-verify-") as temp:
             archive.extractall(temp)
             repo = Path(temp) / PREFIX
             observed = git(repo, "rev-parse", "HEAD")
             if observed != expected_commit:
-                raise ValueError("archive commit mismatch")
+                message = "archive commit mismatch"
+                raise ValueError(message)
             git(repo, "fsck", "--full")
             if git(repo, "status", "--porcelain"):
-                raise ValueError("archived working tree is not clean")
+                message = "archived working tree is not clean"
+                raise ValueError(message)
     return {
         "verified": True,
         "commit": observed,
@@ -82,17 +134,29 @@ def verify_archive(path: Path, expected_commit: str) -> dict[str, object]:
 
 
 def build(repo: Path, output: Path) -> dict[str, object]:
+    """Build and independently reverify delivery artifacts from a clean Git tree.
+
+    Returns:
+        Artifact verification receipts; no clinical or hosted-CI qualification is
+        inferred.
+
+    Raises:
+        ValueError: The supplied data violates the function's documented validation
+        contract.
+
+    """
     if git(repo, "status", "--porcelain"):
-        raise ValueError("commit or resolve all working-tree changes before packaging")
+        message = "commit or resolve all working-tree changes before packaging"
+        raise ValueError(message)
     commit = git(repo, "rev-parse", "HEAD")
     git(repo, "fsck", "--full")
     output.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="atlas-build-") as temp:
         root = Path(temp)
         clone = root / PREFIX
-        result = subprocess.run(
+        result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - Trusted executable and fixed argv; shell remains disabled.
             [
-                "git",
+                git_executable(),
                 "clone",
                 "--quiet",
                 "--no-hardlinks",
@@ -105,7 +169,8 @@ def build(repo: Path, output: Path) -> dict[str, object]:
             timeout=60,
         )
         if result.returncode:
-            raise ValueError("clean delivery clone failed")
+            message = "clean delivery clone failed"
+            raise ValueError(message)
         git(clone, "remote", "remove", "origin")
         archive_path = root / "atlas-repository.zip"
         with zipfile.ZipFile(
@@ -113,9 +178,10 @@ def build(repo: Path, output: Path) -> dict[str, object]:
         ) as archive:
             for path in sorted(clone.rglob("*")):
                 if path.is_symlink():
-                    raise ValueError(
+                    message = (
                         "repository symlinks require an explicit packaging contract"
                     )
+                    raise ValueError(message)
                 if path.is_file():
                     archive.write(
                         path, f"{PREFIX}/{path.relative_to(clone).as_posix()}"
@@ -126,7 +192,8 @@ def build(repo: Path, output: Path) -> dict[str, object]:
         repeated = root / "atlas-repeat.pyz"
         build_zipapp(clone, repeated)
         if sha256_file(portable) != sha256_file(repeated):
-            raise ValueError("portable build is not deterministic")
+            message = "portable build is not deterministic"
+            raise ValueError(message)
         # All checks completed before copying a deliverable to its final filename.
         final_archive = output / "australian-health-policy-atlas-recovered.zip"
         final_portable = output / "au-health-policy-atlas-recovered.pyz"
@@ -149,12 +216,18 @@ def build(repo: Path, output: Path) -> dict[str, object]:
 
 
 def main() -> int:
+    """Build and reverify repository and portable delivery artifacts.
+
+    Returns:
+        Zero on success; a nonzero process status on a blocked or failed operation.
+
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--repo", type=Path, default=Path(__file__).resolve().parents[1]
     )
     parser.add_argument("--output-dir", type=Path, required=True)
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=Arguments())
     print(json.dumps(build(args.repo, args.output_dir), sort_keys=True))
     return 0
 

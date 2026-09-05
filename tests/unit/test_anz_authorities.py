@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-import json
 import pathlib
-import subprocess
+import subprocess  # ruff: ignore[suspicious-subprocess-import] - Bounded argv-only maintenance; no policy text is executed.
 import sys
 from copy import deepcopy
 from pathlib import Path
@@ -18,6 +17,15 @@ from australian_health_policy_atlas.integrity import verify_seal
 from australian_health_policy_atlas.nlp import analyse_with_spacy
 from australian_health_policy_atlas.operations import load_collection
 from australian_health_policy_atlas.operations import main as operations_main
+from australian_health_policy_atlas.records import (
+    array,
+    decode_json,
+    integer,
+    record,
+    records,
+    string,
+    strings,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = ROOT / "data/sources"
@@ -37,9 +45,13 @@ def test_independent_closed_directory_denominators() -> None:
         "au-ahssqa-agencies": 8,
         "nz-designated-auditors": 4,
     }
-    for row in report["groups"]:
+    for row in records(report["groups"]):
         if row["group_id"] in expected:
-            assert row["registered"] == row["denominator"] == expected[row["group_id"]]
+            assert (
+                row["registered"]
+                == row["denominator"]
+                == expected[string(row["group_id"])]
+            )
             assert row["status"] == "matched_directory_snapshot"
         else:
             assert row["status"] == "open_scope"
@@ -47,7 +59,7 @@ def test_independent_closed_directory_denominators() -> None:
         assert row["document_corpus_complete"] is False
     assert report["gate_b_passed"] is False
     assert report["open_world_complete"] is False
-    assert report["registered_bodies"] >= 212
+    assert integer(report["registered_bodies"]) >= 212
 
 
 def test_missing_and_substituted_members_cannot_hide_behind_counts() -> None:
@@ -57,7 +69,9 @@ def test_missing_and_substituted_members_cannot_hide_behind_counts() -> None:
     )
     report = a.coverage_report(rows, a.load_contract())
     item = next(
-        row for row in report["groups"] if row["group_id"] == "nz-hpca-authorities"
+        row
+        for row in records(report["groups"])
+        if row["group_id"] == "nz-hpca-authorities"
     )
     assert item["missing"] == ["nz-dental-council"]
     assert item["unexpected"] == ["nz-invented-council"]
@@ -67,7 +81,7 @@ def test_missing_and_substituted_members_cannot_hide_behind_counts() -> None:
 
 
 @pytest.mark.parametrize(
-    "field,value",
+    ("field", "value"),
     [
         ("body_id", "../escape"),
         ("body_id", "UPPER"),
@@ -91,20 +105,24 @@ def test_missing_and_substituted_members_cannot_hide_behind_counts() -> None:
         ("topics", []),
     ],
 )
-def test_invalid_body_fields(field, value) -> None:
-    row = deepcopy(
+def test_invalid_body_fields(field: str, value: object) -> None:
+    row = dict(
         next(x for x in a.load_authorities() if x["body_id"] == "au-medical-board")
     )
     row[field] = value
-    with pytest.raises(ValueError):
+    expected_error = TypeError if value is None else ValueError
+    with pytest.raises(
+        expected_error,
+        match=r"identity|scope|jurisdiction|grouping|topics|HTTPS|host|string",
+    ):
         a.validate_authorities([row])
 
 
 def test_empty_and_duplicate_bodies() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="registry cannot be empty"):
         a.validate_authorities([])
     row = a.load_authorities()[0]
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="duplicate body"):
         a.validate_authorities([row, row])
 
 
@@ -124,32 +142,58 @@ def test_empty_and_duplicate_bodies() -> None:
         "bad-url",
     ],
 )
-def test_invalid_coverage_contract(mutation) -> None:
+def test_invalid_coverage_contract(mutation: str) -> None:
     c = deepcopy(a.load_contract())
     rows = a.load_authorities()
-    if mutation == "schema-bool":
-        c["schema_version"] = True
-    elif mutation == "universal-claim":
-        c["open_world_complete"] = True
-    elif mutation == "duplicate-group":
-        c["groups"].append(c["groups"][0])
-    elif mutation == "unknown-group":
-        rows[0]["groups"] = ["undeclared"]
-    elif mutation == "bad-universe":
-        c["groups"][0]["universe"] = "invented"
-    elif mutation == "corpus-claim":
-        c["groups"][0]["document_corpus_complete"] = True
-    elif mutation == "empty-closed":
-        c["groups"][0]["required_members"] = []
-    elif mutation == "duplicate-member":
-        c["groups"][0]["required_members"] *= 2
-    elif mutation == "missing-date":
-        c["groups"][0]["observed_on"] = None
-    elif mutation == "bad-date":
-        c["groups"][0]["observed_on"] = "not-a-date"
-    elif mutation == "bad-url":
-        c["groups"][0]["evidence_url"] = "http://example.org/"
-    with pytest.raises(ValueError):
+    group = records(c["groups"])[0]
+    mutations = {
+        "schema-bool": (
+            lambda: c.update(schema_version=True),
+            "invalid authority coverage",
+        ),
+        "universal-claim": (
+            lambda: c.update(open_world_complete=True),
+            "invalid authority coverage",
+        ),
+        "duplicate-group": (
+            lambda: array(c["groups"]).append(group),
+            "duplicate or invalid group",
+        ),
+        "unknown-group": (
+            lambda: rows[0].update(groups=["undeclared"]),
+            "undeclared coverage group",
+        ),
+        "bad-universe": (lambda: group.update(universe="invented"), "invalid universe"),
+        "corpus-claim": (
+            lambda: group.update(document_corpus_complete=True),
+            "unsupported corpus claim",
+        ),
+        "empty-closed": (
+            lambda: group.update(required_members=[]),
+            "closed directory requires",
+        ),
+        "duplicate-member": (
+            lambda: group.update(
+                required_members=strings(group["required_members"]) * 2
+            ),
+            "invalid independent membership",
+        ),
+        "missing-date": (
+            lambda: group.update(observed_on=None),
+            "closed directory requires",
+        ),
+        "bad-date": (
+            lambda: group.update(observed_on="not-a-date"),
+            "Invalid isoformat string",
+        ),
+        "bad-url": (
+            lambda: group.update(evidence_url="http://example.org/"),
+            "HTTPS source boundary",
+        ),
+    }
+    apply_mutation, expected_message = mutations[mutation]
+    apply_mutation()
+    with pytest.raises(ValueError, match=expected_message):
         a.coverage_report(rows, c)
 
 
@@ -165,9 +209,9 @@ def test_expanded_collection_preserves_frozen_au_v1() -> None:
     assert len(full) == len({p.source_id for p in full})
     assert any(p.source_id == "authority-nz-healthnz" for p in nz)
     assert len(load_collection("authorities-v1")) + len(au) == len(full)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="unknown acquisition collection"):
         load_collection("unknown")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="authority or NZ collection"):
         a.acquisition_sources("au-v1")
 
 
@@ -181,7 +225,8 @@ def test_shared_portal_deduplicates_capture_not_bodies() -> None:
     assert councils[0]["bindingness"] == "not_inferred"
     assert all(s["capture_status"] == "configured_unqualified" for s in sources)
     assert (
-        a.load_contract()["federation"]["preservation"] == "edithatogo/archive-govt-nz"
+        record(a.load_contract()["federation"])["preservation"]
+        == "edithatogo/archive-govt-nz"
     )
 
 
@@ -204,7 +249,7 @@ def test_new_country_values_but_no_legacy_dhb_jurisdictions() -> None:
         CrawlPolicy(
             "test", j, "https://example.org/", ("example.org",), "2026-09-05"
         ).validate()
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="invalid jurisdiction"):
         CrawlPolicy(
             "test",
             "Auckland-DHB",
@@ -229,22 +274,31 @@ def test_cli_and_portable_data(
     tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     assert a.main([]) == 0
-    assert json.loads(capsys.readouterr().out)["registered_bodies"] == 212
+    assert record(decode_json(capsys.readouterr().out))["registered_bodies"] == 212
     assert a.main(["--sources", "nz-v1"]) == 0
-    assert json.loads(capsys.readouterr().out)
+    assert array(decode_json(capsys.readouterr().out))
     assert a.main(["--graph"]) == 0
     assert (
-        json.loads(capsys.readouterr().out)["kind"] == "authority-catalogue-projection"
+        record(decode_json(capsys.readouterr().out))["kind"]
+        == "authority-catalogue-projection"
     )
     assert operations_main(["--collection", "nz-v1", "--matrix"]) == 0
-    assert "authority-nz-medsafe" in json.loads(capsys.readouterr().out)["source_id"]
+    assert "authority-nz-medsafe" in strings(
+        record(decode_json(capsys.readouterr().out))["source_id"]
+    )
     app = tmp_path / "atlas.pyz"
     build_zipapp(ROOT, app)
-    result = subprocess.run(
+    result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] - Trusted executable and fixed argv; shell remains disabled.
         [
             sys.executable,
             "-c",
-            "import sys;sys.path.insert(0,sys.argv[1]);from australian_health_policy_atlas.authorities import load_authorities,load_contract,assert_directory_coverage;assert_directory_coverage(load_authorities(),load_contract());print(len(load_authorities()))",
+            (
+                "import sys;sys.path.insert(0,sys.argv[1]);from "
+                "australian_health_policy_atlas.authorities import "
+                "load_authorities,load_contract,assert_directory_co"
+                "verage;assert_directory_coverage(load_authorities("
+                "),load_contract());print(len(load_authorities()))"
+            ),
             str(app),
         ],
         cwd=tmp_path,
@@ -258,14 +312,14 @@ def test_cli_and_portable_data(
 def test_bad_csv_and_symlink(tmp_path: pathlib.Path) -> None:
     p = tmp_path / "authorities-anz-v1.csv"
     p.write_text("wrong,columns\n")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="columns must match"):
         a.load_authorities(tmp_path)
     p.write_text(",".join(a.FIELDS) + "\n" + ",".join(["x"] * 7) + "\n")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="missing or extra"):
         a.load_authorities(tmp_path)
     p.unlink()
     p.symlink_to(SOURCES / "authorities-anz-v1.csv")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="symlink forbidden"):
         a.load_authorities(tmp_path)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="basename required"):
         a.source_bytes("../escape", tmp_path)

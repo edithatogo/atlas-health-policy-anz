@@ -6,14 +6,18 @@ This module cannot mark Bronze published or enable downstream medallion work.
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from dataclasses import asdict, dataclass
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import urldefrag, urlsplit
 
-from .capture import CaptureReceipt, capture_url
+from .capture import CapturePort, CaptureReceipt, capture_url
 from .discovery import discover_links
 from .hashing import sha256_file, sha256_json
 from .integrity import (
@@ -24,11 +28,17 @@ from .integrity import (
     sealed,
     verify_seal,
 )
+from .records import integer, record, records, string, strings
 from .source_registry import JURISDICTIONS
+
+SERVER_ERROR_START = 500
+FIRST_VISIBLE_ASCII = 33
 
 
 @dataclass(frozen=True)
 class CrawlPolicy:
+    """Immutable source scope and finite resource budgets."""
+
     source_id: str
     jurisdiction: str
     seed_url: str
@@ -41,17 +51,72 @@ class CrawlPolicy:
     max_bytes: int = 32 * 1024 * 1024
     policy_version: str = "bounded-html-v1"
 
+    @classmethod
+    def from_record(cls, value: Mapping[str, object]) -> CrawlPolicy:
+        """Validate serialized policy fields rather than unpacking untyped JSON.
+
+        Returns:
+            The result described above, retaining the declared return-type contract.
+
+        """
+        result = cls(
+            source_id=string(value["source_id"]),
+            jurisdiction=string(value["jurisdiction"]),
+            seed_url=string(value["seed_url"]),
+            allowed_hosts=tuple(strings(value["allowed_hosts"])),
+            cutoff=string(value["cutoff"]),
+            max_depth=integer(value.get("max_depth", 2)),
+            max_targets=integer(value.get("max_targets", 250)),
+            max_links_per_page=integer(value.get("max_links_per_page", 100)),
+            max_attempts=integer(value.get("max_attempts", 3)),
+            max_bytes=integer(value.get("max_bytes", 32 * 1024 * 1024)),
+            policy_version=string(value.get("policy_version", "bounded-html-v1")),
+        )
+        result.validate()
+        return result
+
+    def as_dict(self) -> dict[str, object]:
+        """Serialize explicit fields without discarding their type contracts.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "source_id": self.source_id,
+            "jurisdiction": self.jurisdiction,
+            "seed_url": self.seed_url,
+            "allowed_hosts": self.allowed_hosts,
+            "cutoff": self.cutoff,
+            "max_depth": self.max_depth,
+            "max_targets": self.max_targets,
+            "max_links_per_page": self.max_links_per_page,
+            "max_attempts": self.max_attempts,
+            "max_bytes": self.max_bytes,
+            "policy_version": self.policy_version,
+        }
+
     def validate(self) -> None:
+        """Reject invalid source identities, host boundaries and capture budgets.
+
+        Raises:
+            ValueError: The supplied data violates the function's documented
+            validation contract.
+
+        """
         if not IDENTIFIER.fullmatch(self.source_id):
-            raise ValueError("invalid source identity")
+            message = "invalid source identity"
+            raise ValueError(message)
         if self.jurisdiction not in JURISDICTIONS:
-            raise ValueError("invalid jurisdiction")
+            message = "invalid jurisdiction"
+            raise ValueError(message)
         if (
             not self.cutoff
             or not self.allowed_hosts
             or any(h != h.lower() or not h or "/" in h for h in self.allowed_hosts)
         ):
-            raise ValueError("explicit cutoff and lowercase allowed hosts required")
+            message = "explicit cutoff and lowercase allowed hosts required"
+            raise ValueError(message)
         for n in (
             self.max_targets,
             self.max_links_per_page,
@@ -59,27 +124,35 @@ class CrawlPolicy:
             self.max_bytes,
         ):
             if type(n) is not int or n <= 0:
-                raise ValueError("budgets must be positive integers")
+                message = "budgets must be positive integers"
+                raise ValueError(message)
         if type(self.max_depth) is not int or self.max_depth < 0:
-            raise ValueError("invalid max_depth")
+            message = "invalid max_depth"
+            raise ValueError(message)
         check_url(self.seed_url, self.allowed_hosts)
 
 
 def check_url(url: str, hosts: tuple[str, ...]) -> None:
+    """Enforce the configured HTTPS host, port and location boundaries.
+
+    Raises:
+        ValueError: Source scope, identity or resource-budget validation fails.
+
+    """
     parts = urlsplit(url)
+    invalid_authority = parts.hostname not in hosts or parts.username or parts.password
+    invalid_location = parts.fragment or any(ord(c) < FIRST_VISIBLE_ASCII for c in url)
     if (
         parts.scheme != "https"
-        or parts.hostname not in hosts
-        or parts.username
-        or parts.password
-        or parts.port not in (None, 443)
-        or parts.fragment
-        or any(ord(c) < 33 for c in url)
+        or invalid_authority
+        or parts.port not in {None, 443}
+        or invalid_location
     ):
-        raise ValueError("URL outside explicit HTTPS source boundary")
+        message = "URL outside explicit HTTPS source boundary"
+        raise ValueError(message)
 
 
-def _new_target(url: str, depth: int, parent: str | None) -> dict[str, Any]:
+def _new_target(url: str, depth: int, parent: str | None) -> dict[str, object]:
     return {
         "url": url,
         "depth": depth,
@@ -89,76 +162,115 @@ def _new_target(url: str, depth: int, parent: str | None) -> dict[str, Any]:
     }
 
 
-def _fresh(policy: CrawlPolicy) -> dict[str, Any]:
+def _fresh(policy: CrawlPolicy) -> dict[str, object]:
     return {
         "schema_version": "1.0",
         "kind": "source-crawl-state",
-        "policy": asdict(policy),
-        "policy_sha256": sha256_json(asdict(policy)),
+        "policy": policy.as_dict(),
+        "policy_sha256": sha256_json(policy.as_dict()),
         "targets": [_new_target(policy.seed_url, 0, None)],
         "boundaries": [],
         "generation": 0,
     }
 
 
-def validate_state(state: dict[str, Any], policy: CrawlPolicy, root: Path) -> None:
+def _validate_lineage(
+    target: Mapping[str, object],
+    targets: list[dict[str, object]],
+    policy: CrawlPolicy,
+) -> None:
+    depth = integer(target["depth"])
+    attempts = integer(target["attempts"])
+    if not 0 <= depth <= policy.max_depth or not 0 <= attempts <= policy.max_attempts:
+        message = "invalid target budget state"
+        raise ValueError(message)
+    if depth == 0:
+        if target["url"] != policy.seed_url or target["parent"] is not None:
+            message = "invalid root target"
+            raise ValueError(message)
+    else:
+        parents = [item for item in targets if item["url"] == target["parent"]]
+        if len(parents) != 1 or integer(parents[0]["depth"]) + 1 != depth:
+            message = "invalid parent/depth lineage"
+            raise ValueError(message)
+
+
+def _validate_receipt(
+    target: Mapping[str, object], policy: CrawlPolicy, root: Path
+) -> None:
+    receipt = record(target["receipt"])
+    if receipt["requested_url"] != target["url"]:
+        message = "receipt target mismatch"
+        raise ValueError(message)
+    check_url(string(receipt["final_url"]), policy.allowed_hosts)
+    obj = safe_path(root, string(receipt["object_path"]))
+    if (
+        obj.stat().st_size != receipt["size_bytes"]
+        or sha256_file(obj) != receipt["sha256"]
+    ):
+        message = "captured object fixity mismatch"
+        raise ValueError(message)
+
+
+DISPOSITIONS = (
+    "queued",
+    "retryable",
+    "captured",
+    "unavailable",
+    "restricted",
+    "oversized",
+    "failed",
+)
+
+
+def validate_state(
+    state: Mapping[str, object], policy: CrawlPolicy, root: Path
+) -> None:
+    """Verify state identity, lineage, budgets and captured-byte fixity.
+
+    Raises:
+        ValueError: The supplied data violates the function's documented validation
+        contract.
+
+    """
     verify_seal(state)
     if state.get("kind") != "source-crawl-state" or state.get(
         "policy_sha256"
-    ) != sha256_json(asdict(policy)):
-        raise ValueError("crawl policy changed; start a new release scope")
+    ) != sha256_json(policy.as_dict()):
+        message = "crawl policy changed; start a new release scope"
+        raise ValueError(message)
     if sha256_json(state.get("policy")) != state["policy_sha256"]:
-        raise ValueError("policy identity mismatch")
-    targets = state.get("targets", [])
+        message = "policy identity mismatch"
+        raise ValueError(message)
+    targets = records(state.get("targets", []))
     if not targets or len(targets) > policy.max_targets:
-        raise ValueError("invalid target cardinality")
+        message = "invalid target cardinality"
+        raise ValueError(message)
     seen: set[str] = set()
     for target in targets:
-        url = target["url"]
+        url = string(target["url"])
         check_url(url, policy.allowed_hosts)
         if url in seen:
-            raise ValueError("duplicate target")
-        if (
-            type(target["depth"]) is not int
-            or not 0 <= target["depth"] <= policy.max_depth
-            or type(target["attempts"]) is not int
-            or not 0 <= target["attempts"] <= policy.max_attempts
-        ):
-            raise ValueError("invalid target budget state")
-        if target["depth"] == 0:
-            if url != policy.seed_url or target["parent"] is not None:
-                raise ValueError("invalid root target")
-        else:
-            parents = [t for t in targets if t["url"] == target["parent"]]
-            if len(parents) != 1 or parents[0]["depth"] + 1 != target["depth"]:
-                raise ValueError("invalid parent/depth lineage")
+            message = "duplicate target"
+            raise ValueError(message)
+        _validate_lineage(target, targets, policy)
         seen.add(url)
-        if target["status"] not in {
-            "queued",
-            "retryable",
-            "captured",
-            "unavailable",
-            "restricted",
-            "oversized",
-            "failed",
-        }:
-            raise ValueError("unknown target disposition")
+        if target["status"] not in DISPOSITIONS:
+            message = "unknown target disposition"
+            raise ValueError(message)
         if target["status"] == "captured":
-            receipt = target["receipt"]
-            if receipt["requested_url"] != url:
-                raise ValueError("receipt target mismatch")
-            check_url(receipt["final_url"], policy.allowed_hosts)
-            obj = safe_path(root, receipt["object_path"])
-            if (
-                obj.stat().st_size != receipt["size_bytes"]
-                or sha256_file(obj) != receipt["sha256"]
-            ):
-                raise ValueError("captured object fixity mismatch")
+            _validate_receipt(target, policy, root)
 
 
-def crawl_readiness(state: dict[str, Any]) -> dict[str, Any]:
+def crawl_readiness(state: Mapping[str, object]) -> dict[str, object]:
+    """Summarise the declared crawl frontier without inferring statewide completeness.
+
+    Returns:
+        Counts, boundaries and readiness of the configured crawl scope only.
+
+    """
     counts = {
-        key: sum(t["status"] == key for t in state["targets"])
+        key: sum(t["status"] == key for t in records(state["targets"]))
         for key in (
             "queued",
             "retryable",
@@ -184,16 +296,154 @@ def crawl_readiness(state: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _store_capture(
+    receipt: CaptureReceipt,
+    target: dict[str, object],
+    policy: CrawlPolicy,
+    root: Path,
+) -> Path:
+    if receipt.requested_url != target["url"]:
+        message = "capture returned a different target"
+        raise ValueError(message)
+    check_url(receipt.final_url, policy.allowed_hosts)
+    path = Path(receipt.stored_path)
+    if not path.resolve().is_relative_to(root.resolve()):
+        message = "capture escaped workspace"
+        raise ValueError(message)
+    if path.stat().st_size != receipt.size_bytes or sha256_file(path) != receipt.sha256:
+        message = "capture fixity mismatch"
+        raise ValueError(message)
+    row = receipt.as_dict()
+    row.pop("stored_path")
+    row["object_path"] = path.relative_to(root).as_posix()
+    target.update(status="captured", receipt=row)
+    target.pop("error", None)
+    return path
+
+
+def _boundary_reason(
+    url: str,
+    policy: CrawlPolicy,
+    depth: int,
+    offset: int,
+    target_count: int,
+) -> str | None:
+    try:
+        check_url(url, policy.allowed_hosts)
+    except ValueError:
+        return "external_or_disallowed_candidate"
+    if depth >= policy.max_depth:
+        return "depth_limit"
+    if offset >= policy.max_links_per_page:
+        return "link_limit"
+    if target_count >= policy.max_targets:
+        return "target_limit"
+    return None
+
+
+def _discover_children(
+    path: Path,
+    receipt: CaptureReceipt,
+    target: dict[str, object],
+    policy: CrawlPolicy,
+    state: dict[str, object],
+) -> None:
+    if receipt.media_type not in {"text/html", "application/xhtml+xml"}:
+        return
+    html = path.read_bytes().decode("utf-8", errors="replace")
+    targets = records(state["targets"])
+    boundaries = records(state["boundaries"])
+    state["targets"], state["boundaries"] = targets, boundaries
+    known = {string(item["url"]) for item in targets}
+    links = discover_links(html, base_url=receipt.final_url, same_host_only=False)
+    candidates = [
+        link
+        for link in links
+        if link.likely_document
+        or "page=" in link.url
+        or "next" in link.anchor_text.lower()
+    ]
+    for offset, link in enumerate(candidates):
+        url = urldefrag(link.url)[0]
+        if url in known:
+            continue
+        reason = _boundary_reason(
+            url, policy, integer(target["depth"]), offset, len(targets)
+        )
+        if reason:
+            boundary = {"parent": target["url"], "url": url, "reason": reason}
+            if boundary not in boundaries:
+                boundaries.append(boundary)
+        else:
+            targets.append(
+                _new_target(url, integer(target["depth"]) + 1, string(target["url"]))
+            )
+            known.add(url)
+
+
+def _http_status(code: int, retry: str) -> str:
+    if code in {404, 410}:
+        return "unavailable"
+    if code in {401, 403}:
+        return "restricted"
+    if code in {408, 425, 429} or code >= SERVER_ERROR_START:
+        return retry
+    return "failed"
+
+
+def _capture_target(
+    target: dict[str, object],
+    policy: CrawlPolicy,
+    root: Path,
+    state: dict[str, object],
+    fetch: CapturePort,
+) -> None:
+    attempts = integer(target["attempts"]) + 1
+    target["attempts"] = attempts
+    retry = "retryable" if attempts < policy.max_attempts else "failed"
+    try:
+        receipt = fetch(
+            string(target["url"]),
+            cas_root=root / "cas",
+            max_bytes=policy.max_bytes,
+            retries=0,
+            allowed_hosts=policy.allowed_hosts,
+        )
+        path = _store_capture(receipt, target, policy, root)
+        _discover_children(path, receipt, target, policy, state)
+    except HTTPError as exc:
+        exc.close()
+        target["status"] = _http_status(exc.code, retry)
+        target["error"] = {"type": "HTTPError", "status": exc.code}
+    except (URLError, TimeoutError, OSError) as exc:
+        target["status"] = retry
+        target["error"] = {"type": type(exc).__name__}
+    except (TypeError, ValueError) as exc:
+        target["status"] = "oversized" if "max_bytes" in str(exc) else "failed"
+        target["error"] = {"type": type(exc).__name__, "reason": str(exc)}
+
+
 def run_crawl(
     policy: CrawlPolicy,
     root: Path,
     *,
     request_budget: int = 20,
-    fetch: Callable[..., CaptureReceipt] = capture_url,
-) -> dict[str, Any]:
+    fetch: CapturePort = capture_url,
+) -> dict[str, object]:
+    """Advance a finite crawl and persist each capture or explicit failure.
+
+    Returns:
+        The result described above, retaining the declared return-type contract.
+
+    Raises:
+        ValueError: The supplied data violates the function's documented validation
+        contract.
+
+    """
     policy.validate()
     if type(request_budget) is not int or request_budget <= 0:
-        raise ValueError("positive invocation request budget required")
+        message = "positive invocation request budget required"
+        raise ValueError(message)
     root.mkdir(parents=True, exist_ok=True)
     state_path = root / "state.json"
     state = (
@@ -204,106 +454,16 @@ def run_crawl(
     validate_state(state, policy, root)
     requests = 0
     index = 0
-    while index < len(state["targets"]) and requests < request_budget:
-        target = state["targets"][index]
+    while index < len(records(state["targets"])) and requests < request_budget:
+        target = records(state["targets"])[index]
         index += 1
         if target["status"] not in {"queued", "retryable"}:
             continue
         requests += 1
-        target["attempts"] += 1
-        try:
-            receipt = fetch(
-                target["url"],
-                cas_root=root / "cas",
-                max_bytes=policy.max_bytes,
-                retries=0,
-                allowed_hosts=policy.allowed_hosts,
-            )
-            if receipt.requested_url != target["url"]:
-                raise ValueError("capture returned a different target")
-            check_url(receipt.final_url, policy.allowed_hosts)
-            path = Path(receipt.stored_path)
-            if not path.resolve().is_relative_to(root.resolve()):
-                raise ValueError("capture escaped workspace")
-            if (
-                path.stat().st_size != receipt.size_bytes
-                or sha256_file(path) != receipt.sha256
-            ):
-                raise ValueError("capture fixity mismatch")
-            row = receipt.as_dict()
-            row.pop("stored_path")
-            row["object_path"] = path.relative_to(root).as_posix()
-            target.update(status="captured", receipt=row)
-            target.pop("error", None)
-            if receipt.media_type in {"text/html", "application/xhtml+xml"}:
-                html = path.read_bytes().decode("utf-8", errors="replace")
-                known = {t["url"] for t in state["targets"]}
-                links = discover_links(
-                    html, base_url=receipt.final_url, same_host_only=False
-                )
-                candidates = [
-                    l
-                    for l in links
-                    if l.likely_document
-                    or "page=" in l.url
-                    or "next" in l.anchor_text.lower()
-                ]
-                # Persist explicit exclusions and budget boundaries instead of silently truncating.
-                for offset, link in enumerate(candidates):
-                    url = urldefrag(link.url)[0]
-                    if url in known:
-                        continue
-                    reason = None
-                    try:
-                        check_url(url, policy.allowed_hosts)
-                    except ValueError:
-                        reason = "external_or_disallowed_candidate"
-                    if reason is None and target["depth"] >= policy.max_depth:
-                        reason = "depth_limit"
-                    if reason is None and offset >= policy.max_links_per_page:
-                        reason = "link_limit"
-                    if reason is None and len(state["targets"]) >= policy.max_targets:
-                        reason = "target_limit"
-                    if reason:
-                        boundary = {
-                            "parent": target["url"],
-                            "url": url,
-                            "reason": reason,
-                        }
-                        if boundary not in state["boundaries"]:
-                            state["boundaries"].append(boundary)
-                        continue
-                    state["targets"].append(
-                        _new_target(url, target["depth"] + 1, target["url"])
-                    )
-                    known.add(url)
-        except HTTPError as exc:
-            exc.close()
-            if exc.code in {404, 410}:
-                target["status"] = "unavailable"
-            elif exc.code in {401, 403}:
-                target["status"] = "restricted"
-            elif exc.code in {408, 425, 429} or exc.code >= 500:
-                target["status"] = (
-                    "retryable"
-                    if target["attempts"] < policy.max_attempts
-                    else "failed"
-                )
-            else:
-                target["status"] = "failed"
-            target["error"] = {"type": "HTTPError", "status": exc.code}
-        except (URLError, TimeoutError, OSError) as exc:
-            target["status"] = (
-                "retryable" if target["attempts"] < policy.max_attempts else "failed"
-            )
-            target["error"] = {"type": type(exc).__name__}
-        except ValueError as exc:
-            target["status"] = "oversized" if "max_bytes" in str(exc) else "failed"
-            target["error"] = {"type": type(exc).__name__, "reason": str(exc)}
-        state["generation"] += 1
+        _capture_target(target, policy, root, state, fetch)
+        state["generation"] = integer(state["generation"]) + 1
         state = sealed(state)
         atomic_json(state_path, state)
-    # Also persist a first-run empty progress checkpoint if all records were terminal.
     atomic_json(state_path, state)
     validate_state(state, policy, root)
     return sealed({

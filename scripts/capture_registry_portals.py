@@ -12,12 +12,26 @@ from australian_health_policy_atlas.hashing import sha256_json
 from australian_health_policy_atlas.source_registry import load_registry
 
 
+class Arguments(argparse.Namespace):
+    """Typed values produced by this command's explicit argparse contract."""
+
+    registry: str
+    output_dir: str
+    continue_on_error: bool
+
+
 def main() -> int:
+    """Capture the selected registry source portals with bounded requests.
+
+    Returns:
+        Zero on success; a nonzero process status on a blocked or failed operation.
+
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--registry", default="data/sources/jurisdictions-v1.json")
     parser.add_argument("--output-dir", default="build/portal-capture")
     parser.add_argument("--continue-on-error", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=Arguments())
     registry = load_registry(args.registry)
     root = Path(args.output_dir)
     cas = root / "cas"

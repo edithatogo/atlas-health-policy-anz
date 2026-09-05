@@ -1,7 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
 import json
-from pathlib import Path
 
 from australian_health_policy_atlas.institutional import run_institutional_gap_analysis
+from australian_health_policy_atlas.records import decode_json, record
 
 
 def test_institutional_runner_is_local_and_reproducible(tmp_path: Path) -> None:
@@ -36,7 +43,7 @@ def test_institutional_runner_is_local_and_reproducible(tmp_path: Path) -> None:
     )
     assert receipt["network_used"] is False
     rows = [
-        json.loads(line)
+        record(decode_json(line))
         for line in (tmp_path / "out" / "gap-matrix.jsonl").read_text().splitlines()
     ]
     assert rows[0]["relationship"] == "material_difference"

@@ -1,3 +1,5 @@
+import pytest
+
 from australian_health_policy_atlas.domain import EvidenceState
 from australian_health_policy_atlas.platinum import (
     baseline_relationship,
@@ -7,8 +9,8 @@ from australian_health_policy_atlas.platinum import (
 
 
 def test_empty_similarity_cases() -> None:
-    assert jaccard_similarity("", "") == 1.0
-    assert jaccard_similarity("a", "") == 0.0
+    assert jaccard_similarity("", "") == pytest.approx(1.0)
+    assert jaccard_similarity("a", "") == pytest.approx(0.0)
 
 
 def test_candidate_equivalent_and_not_equivalent() -> None:

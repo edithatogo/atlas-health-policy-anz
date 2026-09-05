@@ -1,4 +1,10 @@
-from pathlib import Path
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
 
 from australian_health_policy_atlas.bronze import ingest_local_file, write_manifest
 from australian_health_policy_atlas.hashing import sha256_file

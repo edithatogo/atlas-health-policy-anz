@@ -9,14 +9,23 @@ when its exact model manifest and benchmark are recorded.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+
 import importlib.util
-from collections.abc import Iterable
-from dataclasses import asdict, dataclass
-from typing import Any
+from dataclasses import dataclass
+
+if TYPE_CHECKING:
+    from spacy.pipeline.entityruler import PatternType
 
 
 @dataclass(frozen=True, slots=True)
 class NlpSpan:
+    """An NLP feature with exact character offsets and method identity."""
+
     label: str
     text: str
     start_char: int
@@ -24,21 +33,47 @@ class NlpSpan:
     method: str
 
     def as_dict(self) -> dict[str, object]:
-        return asdict(self)
+        """Return the record without losing its declared field types.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "label": self.label,
+            "text": self.text,
+            "start_char": self.start_char,
+            "end_char": self.end_char,
+            "method": self.method,
+        }
 
 
 @dataclass(frozen=True, slots=True)
 class NlpSentence:
+    """Sentence text with offsets into the unchanged input string."""
+
     text: str
     start_char: int
     end_char: int
 
     def as_dict(self) -> dict[str, object]:
-        return asdict(self)
+        """Return the record without losing its declared field types.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
+        return {
+            "text": self.text,
+            "start_char": self.start_char,
+            "end_char": self.end_char,
+        }
 
 
 @dataclass(frozen=True, slots=True)
 class NlpAnalysis:
+    """Optional NLP projection with availability and independence diagnostics."""
+
     engine: str
     model: str
     available: bool
@@ -50,6 +85,12 @@ class NlpAnalysis:
     reason_codes: tuple[str, ...]
 
     def as_dict(self) -> dict[str, object]:
+        """Serialize the declared fields without losing evidence or provenance metadata.
+
+        Returns:
+            A dictionary containing this record's declared fields.
+
+        """
         return {
             "engine": self.engine,
             "model": self.model,
@@ -63,7 +104,7 @@ class NlpAnalysis:
         }
 
 
-_DEFAULT_PATTERNS: tuple[dict[str, Any], ...] = (
+_DEFAULT_PATTERNS: tuple[PatternType, ...] = (
     {"label": "MODALITY", "pattern": [{"LOWER": "must"}, {"LOWER": "not"}]},
     {"label": "MODALITY", "pattern": [{"LOWER": "must"}]},
     {"label": "MODALITY", "pattern": [{"LOWER": "shall"}, {"LOWER": "not"}]},
@@ -94,11 +135,22 @@ _DEFAULT_PATTERNS: tuple[dict[str, Any], ...] = (
 
 
 def spacy_available() -> bool:
-    """Return whether spaCy is importable without importing it eagerly."""
+    """Return whether spaCy is importable without importing it eagerly.
+
+    Returns:
+        The result described above, retaining the declared return-type contract.
+
+    """
     return importlib.util.find_spec("spacy") is not None
 
 
-def _phrase_patterns(label: str, phrases: Iterable[str]) -> list[dict[str, str]]:
+def phrase_patterns(label: str, phrases: Iterable[str]) -> list[PatternType]:
+    """Build exact role, jurisdiction, framework and concept phrase patterns.
+
+    Returns:
+        spaCy entity-ruler patterns, not independent statistical evidence.
+
+    """
     return [{"label": label, "pattern": phrase} for phrase in phrases if phrase.strip()]
 
 
@@ -117,6 +169,14 @@ def analyse_with_spacy(
     A loaded statistical pipeline is marked as potentially independent, but it
     still requires benchmark qualification before confidence composition may
     count it as such.
+
+    Returns:
+        Exact-offset features and the availability and independence assessment.
+
+    Raises:
+        ValueError: The supplied data violates the function's documented validation
+        contract.
+
     """
     if not spacy_available():
         return NlpAnalysis(
@@ -131,7 +191,8 @@ def analyse_with_spacy(
             reason_codes=("spacy_not_installed",),
         )
 
-    import spacy  # type: ignore[import-not-found]
+    import spacy  # ruff: ignore[import-outside-top-level] - Optional backend; core import must remain dependency-free.
+    from spacy.pipeline import EntityRuler  # ruff: ignore[import-outside-top-level] - Optional backend; core import must remain dependency-free.
 
     statistical = model_name is not None
     try:
@@ -161,9 +222,12 @@ def analyse_with_spacy(
         ruler = nlp.add_pipe(
             "entity_ruler", name=ruler_name, config={"overwrite_ents": False}
         )
-        patterns: list[dict[str, Any]] = list(_DEFAULT_PATTERNS)
-        patterns.extend(_phrase_patterns("POLICY_CONCEPT", concept_phrases))
-        patterns.extend(_phrase_patterns("POLICY_ROLE", role_phrases))
+        patterns: list[PatternType] = list(_DEFAULT_PATTERNS)
+        patterns.extend(phrase_patterns("POLICY_CONCEPT", concept_phrases))
+        patterns.extend(phrase_patterns("POLICY_ROLE", role_phrases))
+        if not isinstance(ruler, EntityRuler):
+            message = "spaCy entity_ruler returned an unexpected component"
+            raise ValueError(message)
         ruler.add_patterns(patterns)
 
     doc = nlp(text)
@@ -176,7 +240,8 @@ def analyse_with_spacy(
             ent.text,
             ent.start_char,
             ent.end_char,
-            f"spacy:{model_name or 'blank-en'}:{'statistical' if statistical else 'ruler'}",
+            f"spacy:{model_name or 'blank-en'}:"
+            f"{'statistical' if statistical else 'ruler'}",
         )
         for ent in doc.ents
     )

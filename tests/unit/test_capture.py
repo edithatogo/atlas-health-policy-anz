@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from email.message import Message
 from pathlib import Path
+from typing import Self
 
 import pytest
 
 from australian_health_policy_atlas import capture
+from tests.support import ignoring_arguments
 
 
 class FakeResponse:
@@ -23,7 +25,7 @@ class FakeResponse:
         self.headers["ETag"] = '"x"'
         self.headers["Last-Modified"] = "Mon, 01 Jan 2026 00:00:00 GMT"
 
-    def __enter__(self) -> FakeResponse:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *args: object) -> None:
@@ -39,7 +41,7 @@ class FakeResponse:
 def test_capture_url_writes_cas_and_receipt(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setattr(capture, "urlopen", lambda *_args, **_kwargs: FakeResponse())
+    monkeypatch.setattr(capture, "urlopen", ignoring_arguments(FakeResponse))
     receipt = capture.capture_url(
         "https://health.test/policy",
         cas_root=tmp_path / "cas",
@@ -63,7 +65,7 @@ def test_capture_rejects_oversized_payload(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(
-        capture, "urlopen", lambda *_args, **_kwargs: FakeResponse(b"abcd")
+        capture, "urlopen", ignoring_arguments(lambda: FakeResponse(b"abcd"))
     )
     with pytest.raises(ValueError, match="max_bytes"):
         capture.capture_url(
@@ -83,7 +85,7 @@ def test_capture_retries_then_succeeds(
         return value
 
     monkeypatch.setattr(capture, "urlopen", fake)
-    monkeypatch.setattr(capture.time, "sleep", lambda _seconds: None)
+    monkeypatch.setattr(capture.time, "sleep", ignoring_arguments(lambda: None))
     receipt = capture.capture_url("https://health.test/x", cas_root=tmp_path, retries=1)
     assert receipt.size_bytes == 3
 
@@ -94,7 +96,7 @@ def test_capture_raises_last_error(
     monkeypatch.setattr(
         capture,
         "urlopen",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(OSError("dead")),
+        ignoring_arguments(lambda: (_ for _ in ()).throw(OSError("dead"))),
     )
     with pytest.raises(OSError, match="dead"):
         capture.capture_url("https://health.test/x", cas_root=tmp_path, retries=0)

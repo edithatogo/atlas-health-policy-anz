@@ -16,6 +16,8 @@ ROUTE_ORDER = (
 
 @dataclass(frozen=True, slots=True)
 class RouteQualification:
+    """Availability and benchmark eligibility of one task-specific method."""
+
     route: str
     task_classes: frozenset[str]
     benchmark_passed: bool
@@ -23,6 +25,16 @@ class RouteQualification:
 
 
 def choose_route(task_class: str, qualifications: list[RouteQualification]) -> str:
+    """Select the earliest available, benchmark-qualified route for the requested task.
+
+    Returns:
+        The eligible route name; no model quality is inferred from size.
+
+    Raises:
+        LookupError: No available benchmark-qualified route supports the requested
+        task.
+
+    """
     by_route = {item.route: item for item in qualifications}
     for route in ROUTE_ORDER:
         item = by_route.get(route)
@@ -33,4 +45,5 @@ def choose_route(task_class: str, qualifications: list[RouteQualification]) -> s
             and task_class in item.task_classes
         ):
             return route
-    raise LookupError(f"no qualified route for task class {task_class}")
+    message = f"no qualified route for task class {task_class}"
+    raise LookupError(message)

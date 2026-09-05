@@ -1,7 +1,12 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pathlib
+
+
 import math
-import pathlib
 
 import pytest
 
@@ -31,27 +36,30 @@ def test_atomic_sealed_roundtrip(tmp_path: pathlib.Path) -> None:
 @pytest.mark.parametrize(
     "data", [b'{"a":1,"a":2}', b"[]", b'{"x":NaN}', b'{"x":Infinity}']
 )
-def test_strict_json(data) -> None:
-    with pytest.raises(ValueError):
+def test_strict_json(data: bytes) -> None:
+    with pytest.raises(
+        ValueError,
+        match=r"duplicate JSON key|JSON object required|non-finite JSON constant",
+    ):
         read_json(data)
 
 
 @pytest.mark.parametrize(
     "path", ["../x", "/x", "a/../../x", "C:/x", "a\\x", "", "a//x"]
 )
-def test_unsafe_paths(tmp_path: pathlib.Path, path) -> None:
-    with pytest.raises(ValueError):
+def test_unsafe_paths(tmp_path: pathlib.Path, path: str) -> None:
+    with pytest.raises(ValueError, match="unsafe relative path"):
         safe_path(tmp_path, path)
 
 
 def test_symlink_path(tmp_path: pathlib.Path) -> None:
     (tmp_path / "link").symlink_to(tmp_path / "target")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="symlinks"):
         safe_path(tmp_path, "link/file")
 
 
 def test_nonfinite_canonical_json() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Out of range float values"):
         canonical_json_bytes({"invalid": math.nan})
 
 
@@ -59,7 +67,7 @@ def test_nonfinite_canonical_json() -> None:
     "acceptance",
     [{}, {"fixity": "false"}, {"fixity": 1}, {"fixity": []}, {"fixity": None}],
 )
-def test_empty_and_non_boolean_acceptance_blocked(acceptance) -> None:
+def test_empty_and_non_boolean_acceptance_blocked(acceptance: dict[str, bool]) -> None:
     assert not promotion_gate(
         MedallionLayer.CENSUS, closed_layers=set(), acceptance_results=acceptance
     ).permitted

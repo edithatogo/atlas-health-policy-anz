@@ -2,12 +2,19 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+
 import json
 import shutil
-from collections.abc import Iterable
 from pathlib import Path
 
 from .hashing import sha256_file, sha256_json
+from .records import decode_json, record, string
+from .records import records as object_records
 
 
 def build_bundle(
@@ -16,6 +23,12 @@ def build_bundle(
     output_dir: str | Path,
     bundle_id: str,
 ) -> dict[str, object]:
+    """Package declared local files with content hashes for offline comparison.
+
+    Returns:
+        The payload inventory and its hashes, written to the bundle directory.
+
+    """
     root = Path(output_dir)
     root.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, object]] = []
@@ -43,16 +56,24 @@ def build_bundle(
 
 
 def verify_bundle(root: str | Path) -> tuple[bool, tuple[str, ...]]:
+    """Recalculate offline bundle hashes and report any missing or altered payloads.
+
+    Returns:
+        Whether every payload verifies, and the individual failure reasons.
+
+    """
     base = Path(root)
-    manifest = json.loads((base / "bundle-manifest.json").read_text(encoding="utf-8"))
+    manifest = record(
+        decode_json((base / "bundle-manifest.json").read_text(encoding="utf-8"))
+    )
     failures: list[str] = []
     expected_manifest_sha = manifest.pop("manifest_sha256")
     if sha256_json(manifest) != expected_manifest_sha:
         failures.append("manifest_identity_mismatch")
-    for record in manifest["files"]:
-        path = base / record["path"]
+    for item in object_records(manifest["files"]):
+        path = base / string(item["path"])
         if not path.exists():
-            failures.append(f"missing:{record['path']}")
-        elif sha256_file(path) != record["sha256"]:
-            failures.append(f"sha256_mismatch:{record['path']}")
+            failures.append(f"missing:{item['path']}")
+        elif sha256_file(path) != item["sha256"]:
+            failures.append(f"sha256_mismatch:{item['path']}")
     return (not failures, tuple(failures))

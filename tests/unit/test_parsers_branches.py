@@ -1,12 +1,19 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+
 import sys
 import types
-from pathlib import Path
+from dataclasses import dataclass
 
 import pytest
 
 from australian_health_policy_atlas.parsers import parse_file
+from tests.support import ignoring_arguments
 
 
 def test_parse_text_html_and_unsupported(tmp_path: Path) -> None:
@@ -31,14 +38,15 @@ def test_pdf_fallback_to_fake_pypdf(
     fake = types.ModuleType("pypdf")
 
     class Page:
-        def extract_text(self) -> str:
+        @staticmethod
+        def extract_text() -> str:
             return "Nurse must act."
 
     class Reader:
         def __init__(self, _path: str) -> None:
             self.pages = [Page()]
 
-    fake.PdfReader = Reader  # type: ignore[attr-defined]
+    monkeypatch.setattr(fake, "PdfReader", Reader, raising=False)
     monkeypatch.setitem(sys.modules, "pypdf", fake)
     result = parse_file(pdf, source_id="p")
     assert result.parser_id == "pypdf-v1"
@@ -50,14 +58,14 @@ def test_docx_fake_module(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
     path.write_bytes(b"fake")
     fake = types.ModuleType("docx")
 
+    @dataclass
     class Paragraph:
-        def __init__(self, text: str) -> None:
-            self.text = text
+        text: str
 
     class Doc:
-        paragraphs = [Paragraph("Nurse should act.")]
+        paragraphs = (Paragraph("Nurse should act."),)
 
-    fake.Document = lambda _path: Doc()  # type: ignore[attr-defined]
+    monkeypatch.setattr(fake, "Document", ignoring_arguments(Doc), raising=False)
     monkeypatch.setitem(sys.modules, "docx", fake)
     result = parse_file(path, source_id="d")
     assert result.parser_id == "python-docx-v1"

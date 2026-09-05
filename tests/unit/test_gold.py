@@ -1,7 +1,7 @@
-import json
 from pathlib import Path
 
 from australian_health_policy_atlas.gold import classify_modality, extract_timeframe
+from australian_health_policy_atlas.records import decode_json, record, string
 
 
 def test_adversarial_modality_fixture() -> None:
@@ -10,8 +10,10 @@ def test_adversarial_modality_fixture() -> None:
         .read_text(encoding="utf-8")
         .splitlines()
     ):
-        case = json.loads(line)
-        assert classify_modality(case["text"]).modality == case["expected"], case["id"]
+        case = record(decode_json(line))
+        assert classify_modality(string(case["text"])).modality == case["expected"], (
+            case["id"]
+        )
 
 
 def test_timeframe_extraction() -> None:

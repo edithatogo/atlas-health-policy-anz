@@ -1,18 +1,42 @@
 from __future__ import annotations
 
-import pathlib
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pathlib
+    from collections.abc import Mapping
+    from pathlib import Path
+
+
 from dataclasses import replace
+from email.message import Message
+from typing import TypedDict, Unpack
 from urllib.error import HTTPError, URLError
 
 import pytest
 
-from australian_health_policy_atlas.capture import CaptureReceipt
+from australian_health_policy_atlas.capture import CapturePort, CaptureReceipt
 from australian_health_policy_atlas.crawl import CrawlPolicy, run_crawl
 from australian_health_policy_atlas.hashing import sha256_bytes
 from australian_health_policy_atlas.integrity import atomic_json, read_json
+from australian_health_policy_atlas.records import integer, record, records, string
 
 
-def policy(**changes):
+class PolicyChanges(TypedDict, total=False):
+    source_id: str
+    jurisdiction: str
+    seed_url: str
+    allowed_hosts: tuple[str, ...]
+    cutoff: str
+    max_depth: int
+    max_targets: int
+    max_links_per_page: int
+    max_attempts: int
+    max_bytes: int
+    policy_version: str
+
+
+def policy(**changes: Unpack[PolicyChanges]) -> CrawlPolicy:
     base = CrawlPolicy(
         "qld-test",
         "QLD",
@@ -23,8 +47,10 @@ def policy(**changes):
     return replace(base, **changes)
 
 
-def fetcher(pages, seen=None):
-    def fetch(url, *, cas_root, **_kwargs):
+def fetcher(
+    pages: Mapping[str, bytes | Exception], seen: list[str] | None = None
+) -> CapturePort:
+    def fetch(url: str, *, cas_root: Path, **_kwargs: object) -> CaptureReceipt:
         if seen is not None:
             seen.append(url)
         data = pages[url]
@@ -55,20 +81,20 @@ def test_crawl_resume_without_recapture(tmp_path: pathlib.Path) -> None:
         "https://health.test/policies": b'<a href="/policy.pdf">Policy</a>',
         "https://health.test/policy.pdf": b"%PDF-original-fixture",
     }
-    seen = []
+    seen: list[str] = []
     first = run_crawl(policy(), tmp_path, request_budget=1, fetch=fetcher(pages, seen))
-    assert first["counts"]["queued"] == 1
+    assert record(first["counts"])["queued"] == 1
     assert not first["scope_complete"]
     second = run_crawl(policy(), tmp_path, request_budget=1, fetch=fetcher(pages, seen))
     assert second["scope_complete"]
     assert not second["gate_b_passed"]
-    assert second["counts"]["captured"] == 2
+    assert record(second["counts"])["captured"] == 2
     run_crawl(policy(), tmp_path, fetch=fetcher(pages, seen))
     assert len(seen) == 2
 
 
 @pytest.mark.parametrize(
-    "changes,reason",
+    ("changes", "reason"),
     [
         ({"max_depth": 0}, "depth_limit"),
         ({"max_targets": 1}, "target_limit"),
@@ -76,7 +102,7 @@ def test_crawl_resume_without_recapture(tmp_path: pathlib.Path) -> None:
     ],
 )
 def test_limits_are_not_exhaustive_coverage(
-    tmp_path: pathlib.Path, changes, reason
+    tmp_path: pathlib.Path, changes: PolicyChanges, reason: str
 ) -> None:
     pages = {
         "https://health.test/policies": b'<a href="/a.pdf">A</a><a href="/b.pdf">B</a>',
@@ -88,7 +114,9 @@ def test_limits_are_not_exhaustive_coverage(
     assert not result["scope_complete"]
     assert reason in {
         b["reason"]
-        for b in read_json((tmp_path / "state.json").read_bytes())["boundaries"]
+        for b in records(
+            read_json((tmp_path / "state.json").read_bytes())["boundaries"]
+        )
     }
 
 
@@ -104,7 +132,7 @@ def test_external_link_is_accounted(tmp_path: pathlib.Path) -> None:
 
 
 @pytest.mark.parametrize(
-    "status,expected",
+    ("status", "expected"),
     [
         (404, "unavailable"),
         (410, "unavailable"),
@@ -115,42 +143,43 @@ def test_external_link_is_accounted(tmp_path: pathlib.Path) -> None:
         (503, "retryable"),
     ],
 )
-def test_http_dispositions(tmp_path: pathlib.Path, status, expected) -> None:
+def test_http_dispositions(tmp_path: pathlib.Path, status: int, expected: str) -> None:
     result = run_crawl(
         policy(),
         tmp_path,
         fetch=fetcher({
             "https://health.test/policies": HTTPError(
-                "https://health.test/policies", status, "test", {}, None
+                "https://health.test/policies", status, "test", Message(), None
             )
         }),
     )
-    assert result["counts"][expected] == 1
+    assert record(result["counts"])[expected] == 1
     assert not result["scope_complete"]
 
 
 def test_retries_are_bounded(tmp_path: pathlib.Path) -> None:
     fetch = fetcher({"https://health.test/policies": URLError("network unavailable")})
-    for _ in range(5):
+    result = run_crawl(policy(max_attempts=2), tmp_path, fetch=fetch)
+    for _ in range(4):
         result = run_crawl(policy(max_attempts=2), tmp_path, fetch=fetch)
-    assert result["counts"]["failed"] == 1
+    assert record(result["counts"])["failed"] == 1
     state = read_json((tmp_path / "state.json").read_bytes())
-    assert state["targets"][0]["attempts"] == 2
+    assert records(state["targets"])[0]["attempts"] == 2
 
 
 @pytest.mark.parametrize(
-    "error,kind",
+    ("error", "kind"),
     [
         (ValueError("max_bytes exceeded"), "oversized"),
         (ValueError("bad capture"), "failed"),
         (OSError("temporary"), "retryable"),
     ],
 )
-def test_capture_errors(tmp_path: pathlib.Path, error, kind) -> None:
+def test_capture_errors(tmp_path: pathlib.Path, error: Exception, kind: str) -> None:
     result = run_crawl(
         policy(), tmp_path, fetch=fetcher({"https://health.test/policies": error})
     )
-    assert result["counts"][kind] == 1
+    assert record(result["counts"])[kind] == 1
 
 
 def test_scope_drift_and_tamper_rejected(tmp_path: pathlib.Path) -> None:
@@ -159,7 +188,10 @@ def test_scope_drift_and_tamper_rejected(tmp_path: pathlib.Path) -> None:
     with pytest.raises(ValueError, match="policy changed"):
         run_crawl(policy(max_depth=3), tmp_path, fetch=fetch)
     state = read_json((tmp_path / "state.json").read_bytes())
-    (tmp_path / state["targets"][0]["receipt"]["object_path"]).write_bytes(b"tampered")
+    (
+        tmp_path
+        / string(record(records(state["targets"])[0]["receipt"])["object_path"])
+    ).write_bytes(b"tampered")
     with pytest.raises(ValueError, match="fixity"):
         run_crawl(policy(), tmp_path, fetch=fetch)
 
@@ -167,7 +199,7 @@ def test_scope_drift_and_tamper_rejected(tmp_path: pathlib.Path) -> None:
 def test_resume_selfhash_fails(tmp_path: pathlib.Path) -> None:
     run_crawl(policy(), tmp_path, fetch=fetcher({"https://health.test/policies": b"x"}))
     state = read_json((tmp_path / "state.json").read_bytes())
-    state["generation"] += 1
+    state["generation"] = integer(state["generation"]) + 1
     atomic_json(tmp_path / "state.json", state)
     with pytest.raises(ValueError, match="self-hash"):
         run_crawl(policy(), tmp_path)
@@ -185,11 +217,13 @@ def test_resume_selfhash_fails(tmp_path: pathlib.Path) -> None:
         {"allowed_hosts": ("wrong.test",)},
     ],
 )
-def test_invalid_policy(changes) -> None:
-    with pytest.raises(ValueError):
+def test_invalid_policy(changes: PolicyChanges) -> None:
+    with pytest.raises(
+        ValueError, match=r"identity|jurisdiction|cutoff|hosts|budgets|max_depth|HTTPS"
+    ):
         policy(**changes).validate()
 
 
 def test_request_budget(tmp_path: pathlib.Path) -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="positive invocation request budget"):
         run_crawl(policy(), tmp_path, request_budget=0)

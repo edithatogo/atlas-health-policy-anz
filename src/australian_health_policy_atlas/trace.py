@@ -2,18 +2,33 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+
 import json
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
 
 from .hashing import sha256_json
 
 
 def append_trace(
-    path: str | Path, *, event_type: str, payload: dict[str, Any], private: bool = False
-) -> dict[str, Any]:
-    event = {
+    path: str | Path,
+    *,
+    event_type: str,
+    payload: Mapping[str, object],
+    private: bool = False,
+) -> dict[str, object]:
+    """Append a hash-bound execution observation to the local trace ledger.
+
+    Returns:
+        The appended observation with its hash-chain metadata.
+
+    """
+    event: dict[str, object] = {
         "schema_version": "1.0",
         "recorded_at": datetime.now(UTC).isoformat(),
         "event_type": event_type,

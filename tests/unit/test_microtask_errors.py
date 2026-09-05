@@ -1,8 +1,25 @@
+from typing import TypedDict
+
 import pytest
 
-from australian_health_policy_atlas.microtasks import EvidenceInput, compile_packet
+from australian_health_policy_atlas.microtasks import (
+    EvidenceInput,
+    compile_packet,
+)
 
-BASE = dict(
+
+class PacketArguments(TypedDict):
+    output_schema: dict[str, object]
+    invariants: list[str]
+    stop_conditions: list[str]
+    abstention_codes: list[str]
+    task_id: str
+    skill_id: str
+    objective: str
+    open_question: str
+
+
+BASE: PacketArguments = PacketArguments(
     task_id="t",
     skill_id="s",
     objective="o",
@@ -22,7 +39,7 @@ def test_unknown_route_rejected() -> None:
 
 
 def test_unknown_abstention_rejected() -> None:
-    values = dict(BASE)
+    values = BASE.copy()
     values["abstention_codes"] = ["bad"]
     with pytest.raises(ValueError, match="unknown abstention"):
         compile_packet(**values, evidence=[EvidenceInput("a", "b", "c")])
