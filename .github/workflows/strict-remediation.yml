@@ -1,0 +1,191 @@
+name: Bounded strict remediation
+
+on:
+  push:
+    branches: [feat/nz-authority-registry]
+    paths: [.github/workflows/strict-remediation.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: atlas-strict-remediation
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/feat/nz-authority-registry'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write # One-time, test-gated source repair on this PR branch only.
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: true
+      - name: Install locked production test and typing environment
+        run: |
+          uv python install 3.14.6
+          uv sync --python 3.14.6 --group dev --group publication --extra nlp --locked
+      - name: Add conventional pytest fixture and void-return annotations
+        run: |
+          uv run --no-sync python - <<'PY'
+          import ast
+          from pathlib import Path
+          import tokenize
+          import io
+          import subprocess
+          import hashlib
+          import json
+          contracts = {n: hashlib.sha256(Path(n).read_bytes()).hexdigest() for n in ('pyproject.toml','uv.lock')}
+          fixtures = {'tmp_path': 'pathlib.Path', 'tmp_path_factory': 'pytest.TempPathFactory', 'monkeypatch': 'pytest.MonkeyPatch', 'capsys': 'pytest.CaptureFixture[str]', 'capfd': 'pytest.CaptureFixture[str]', 'caplog': 'pytest.LogCaptureFixture'}
+          changes = []
+          class Returns(ast.NodeVisitor):
+              def __init__(self):
+                  self.has_value = False
+              def visit_Return(self, node):
+                  self.has_value |= node.value is not None
+              def visit_Yield(self, node):
+                  self.has_value = True
+              visit_YieldFrom = visit_Yield
+              def visit_FunctionDef(self, node):
+                  pass
+              visit_AsyncFunctionDef = visit_FunctionDef
+              def visit_ClassDef(self, node):
+                  pass
+          for path in sorted(Path('tests').rglob('*.py')):
+              original = path.read_bytes()
+              text = original.decode()
+              tree = ast.parse(text)
+              lines = original.splitlines(keepends=True)
+              starts = [0]
+              for line in lines:
+                  starts.append(starts[-1] + len(line))
+              edits = []
+              added = set()
+              for node in ast.walk(tree):
+                  if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                      continue
+                  for arg in (*node.args.posonlyargs, *node.args.args, *node.args.kwonlyargs):
+                      annotation = fixtures.get(arg.arg)
+                      if arg.annotation is None and annotation:
+                          edits.append((starts[arg.end_lineno-1]+arg.end_col_offset, ': '+annotation))
+                          added.add(annotation.split('.')[0])
+                  returns = Returns()
+                  for stmt in node.body:
+                      returns.visit(stmt)
+                  if node.returns is None and not returns.has_value:
+                      fragment = b''.join(lines[node.lineno-1:node.body[0].lineno]).decode()
+                      depth = 0
+                      opened = False
+                      for tok in tokenize.generate_tokens(io.StringIO(fragment).readline):
+                          if tok.string == '(':
+                              depth += 1
+                              opened = True
+                          elif tok.string == ')':
+                              depth -= 1
+                              if opened and depth == 0:
+                                  row, col = tok.end
+                                  offset = starts[node.lineno+row-2] + len(lines[node.lineno+row-2].decode()[:col].encode())
+                                  edits.append((offset, ' -> None'))
+                                  break
+              if not edits:
+                  continue
+              top = 0
+              for node in tree.body:
+                  if (isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and isinstance(node.value.value,str)) or (isinstance(node,ast.ImportFrom) and node.module == '__future__'):
+                      top = starts[node.end_lineno]
+                  else:
+                      break
+              existing = {alias.asname or alias.name for n in tree.body if isinstance(n,ast.Import) for alias in n.names}
+              imports = ''.join('import '+name+'\n' for name in sorted(added-existing))
+              if not any(isinstance(n,ast.ImportFrom) and n.module=='__future__' and any(a.name=='annotations' for a in n.names) for n in tree.body):
+                  imports = 'from __future__ import annotations\n'+imports
+              if imports:
+                  edits.append((top, '\n'+imports+'\n'))
+              updated = original
+              for offset, replacement in sorted(edits, reverse=True):
+                  updated = updated[:offset] + replacement.encode() + updated[offset:]
+              ast.parse(updated)
+              path.write_bytes(updated)
+              changes.append({'path': str(path), 'annotations': len(edits)})
+          fixed = subprocess.run(['uv','run','--no-sync','ruff','check','--fix','--no-unsafe-fixes','src','scripts','tests'], capture_output=True, text=True, check=False)
+          if fixed.returncode not in (0,1):
+              raise SystemExit(fixed.stderr)
+          subprocess.run(['uv','run','--no-sync','ruff','format','src','scripts','tests'], check=True)
+          if contracts != {n: hashlib.sha256(Path(n).read_bytes()).hexdigest() for n in contracts}:
+              raise SystemExit('Quality configuration/lock changed unexpectedly')
+          Path('build/quality').mkdir(parents=True,exist_ok=True)
+          Path('build/quality/annotation-repair.json').write_text(json.dumps(changes,indent=2)+'\n')
+          print(json.dumps({'annotated_files':len(changes),'contracts_unchanged':True}))
+          PY
+      - name: Require complete tests, coverage and Conductor reconciliation before push
+        run: |
+          uv run --no-sync python scripts/test_goblin.py coverage
+          uv run --no-sync python scripts/validate_context.py
+          git diff --check
+      - name: Retain measured remaining diagnostics without declaring them passed
+        if: always()
+        run: |
+          uv run --no-sync python - <<'PY'
+          import collections,json,subprocess
+          from pathlib import Path
+          root=Path.cwd()
+          out=Path('build/quality'); out.mkdir(parents=True,exist_ok=True)
+          commands={'ruff':['ruff','check','--output-format=json','src','scripts','tests'], 'basedpyright':['basedpyright','--outputjson'], 'ty':['ty','check','--output-format','concise','src','scripts','tests']}
+          for name,args in commands.items():
+              p=subprocess.run(['uv','run','--no-sync',*args],capture_output=True,text=True,timeout=600)
+              (out/(name+'-full.txt')).write_text(p.stdout+p.stderr)
+              print('CHECKER',name,'EXIT',p.returncode)
+              if name=='ty':
+                  print(p.stdout+p.stderr)
+                  continue
+              parsed=json.loads(p.stdout)
+              diagnostics=parsed if name=='ruff' else parsed['generalDiagnostics']
+              grouped=collections.defaultdict(list)
+              for d in diagnostics:
+                  file=d.get('filename',d.get('file','')).removeprefix(str(root)+'/')
+                  line=d.get('location',{}).get('row',d.get('range',{}).get('start',{}).get('line',0)+1)
+                  code=d.get('code',d.get('rule',''))
+                  grouped[file].append({'line':line,'code':code,'message':d['message']})
+              print('TOTAL',len(diagnostics),'FILES',len(grouped))
+              print('CATEGORIES',dict(collections.Counter(d.get('code',d.get('rule','')) for d in diagnostics)))
+              (out/(name+'-by-file.json')).write_text(json.dumps(grouped,indent=2)+'\n')
+              for file,items in sorted(grouped.items()):
+                  print(file,len(items),dict(collections.Counter(d['code'] for d in items)))
+                  for d in items[:2]:
+                      print(' ',d['line'],d['code'],d['message'].split('\n')[0])
+          PY
+      - name: Commit only test-qualified source edits to the existing PR branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64,os,subprocess
+          if os.environ['GITHUB_REPOSITORY']!='edithatogo/atlas-health-policy-anz' or os.environ['GITHUB_REF']!='refs/heads/feat/nz-authority-registry':
+              raise SystemExit('Unexpected repository or branch')
+          subprocess.run(['git','config','user.name','github-actions[bot]'],check=True)
+          subprocess.run(['git','config','user.email','41898282+github-actions[bot]@users.noreply.github.com'],check=True)
+          subprocess.run(['git','add','src','scripts','tests'],check=True)
+          if subprocess.run(['git','diff','--cached','--quiet']).returncode==0:
+              raise SystemExit(0)
+          subprocess.run(['git','commit','-m','refactor: annotate pytest fixtures and apply tested safe lint repairs'],check=True)
+          auth=base64.b64encode(('x-access-token:'+os.environ['GH_TOKEN']).encode()).decode()
+          print('::add-mask::'+auth,flush=True)
+          env=dict(os.environ,GIT_TERMINAL_PROMPT='0',GIT_CONFIG_COUNT='1',GIT_CONFIG_KEY_0='http.https://github.com/.extraheader',GIT_CONFIG_VALUE_0='AUTHORIZATION: basic '+auth)
+          subprocess.run(['git','push','origin','HEAD:refs/heads/feat/nz-authority-registry'],env=env,check=True)
+          print('COMMITTED',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: strict-remediation-evidence
+          path: build/quality/
+          if-no-files-found: warn
+          retention-days: 30
