@@ -1,94 +1,88 @@
 # Implementation status
 
-Updated 5 September 2026. This file describes inspected code and measured
-engineering behaviour, not prospective capabilities or live corpus coverage.
+Updated 6 September 2026 (Australia/Brisbane). This file separates implemented
+software and measured hosted qualification from unfinished data-product work.
 
-## Recovery and provenance
+## Current GitHub status
 
-The received improved ZIP was empty. Its accompanying summary reported
-`qualified: false`, contrary to preceding conversational success claims. The
-intact older archive preserved history through `a15c911`; this history has not
-been rewritten. The audit is in
-`evidence/engineering/recovery-20260905/input-audit.json`.
+The application and recovered history are on `main`. PR #8 is merged at
+`f3ecbc3c40f6f1f6e458b04ec6bae7a6420cfa3c`. Its post-merge Context CI, Strict
+Python Quality, Test-Goblin and Security and Context workflows all passed.
+See `quality/github-integration-main-20260906.json` for exact run identities and
+artifact verification, and `conductor/github-integration-20260906.md` for the
+current context. Later documentation revisions require their own checks.
 
-The following later claimed components were **not recovered and are not claimed
-implemented**: lineage-aware incremental invalidation, deterministic replay
-capsules, a systematic metamorphic mutation generator, a substantive analytical
-framework projection engine, a benchmark-trained model qualification router,
-and a qualified structural/semantic comparison engine. A basic offline bundle,
-route contracts and lexical candidate code exist; those are different things.
+The earlier local-only test and unresolved lint/type descriptions are historical,
+not the current engineering state. Evidence under
+`evidence/engineering/recovery-20260905/` and the dated quality receipts is retained.
 
-## Implemented and exercised in local software tests
+## Implemented software and limits
 
-| Component | Actual behaviour | Boundary |
+| Component | Implemented behaviour | Qualification boundary |
 |---|---|---|
-| Capture | HTTPS validation, redirect host checks, bounded bodies/retries, CAS and receipts | No live corpus capture; no complete WARC capture |
-| Dynamic crawl | Exact policy-bound checkpoint, parent/depth lineage, retained-byte checks, persistent queue and dispositions | Generic discovery, not source-specific completeness |
-| HF staging | Immutable source packages, exact inventory, anonymous re-download/hash check, conditional pointer updates | Mocked Hub qualification only; no live upload |
-| Remote assessment | Verify every staged source at a pinned head and report readiness | `gate_b_passed` remains false; not final release closure |
-| Local comparison | Reference-to-local primary matrix plus local-to-reference view; confidence bounded by inputs | Conservative lexical candidates, no compliance certification |
-| Promotion checklist | Reject missing acceptance evidence and truthy non-booleans | Not a complete typed production qualification service |
-| Integrity | Strict JSON, self-hashes, safe paths, atomic writes and source-bound inventories | Hashes are not signatures or semantic truth |
-| Portable runner | Bundled source registry, cache-free deterministic zipapp, external-directory smoke test | Python 3.13 host tested; platform fleet not qualified |
-| Delivery | Clean Git requirement, fresh clone, reopened ZIP, fsck, expected HEAD, repeated zipapp identity | Packaging proof, not substantive or hosted qualification |
-| GraphRAG | Rebuildable graph and path-preserving lexical-seed retrieval | Semantic graph reasoning remains unqualified |
-| spaCy | Optional offsets, sentences, configured rule entities/concepts | Rule repetition is not independent triangulation |
-| SourceRight/CiteWeft/Authentext | Canonical revision observations and explicit adapter boundaries | Native execution and end-to-end integration not run |
+| Capture/crawl | HTTPS/redirect checks, bounded bodies and retries, CAS, checkpoint lineage and dispositions | Live adapter and document-corpus completeness remain unqualified |
+| HF staging | Immutable packages, exact inventories, anonymous re-download/hash verification and conditional pointers | Mocked SDK tests are not live publication evidence |
+| Remote assessment | Pinned-source verification and readiness reporting | Not completed final Bronze closure |
+| Institutional comparison | Reference-to-local primary matrix, reverse view, input-bounded confidence | Conservative lexical candidates; no compliance certification |
+| Integrity | Validated JSON/object boundaries, duplicate/non-finite rejection, hashes, safe paths and atomic writes | Hashes establish fixity, not semantic truth or signatures |
+| Local model runtime | Loopback endpoint checks, no ambient proxy, redirect refusal and response budgets | Not an OS sandbox or empirical model qualification |
+| Portable delivery | Bundled registries, deterministic zipapp and clean-tree delivery checks | No claim of fleet-wide platform qualification |
+| GraphRAG | Rebuildable graph and path-preserving lexical-seed evidence retrieval | No qualified semantic graph inference |
+| spaCy | Optional rule features, exact offsets and configured concepts, including macrons | No trained Maori-language claim or rule-based independence claim |
+| NZ/ANZ sources | NZ jurisdiction, authority registry, collection-specific acquisition/assessment and framework references | Source registration is not a completed corpus or legal-applicability determination |
+| Quality toolchain | Locked dependencies, strict Ruff/format/basedpyright/ty, pytest profiles, hosted security and SBOM | Scheduled mutation/prerelease experiments are separate from routine passes |
+| SourceRight/CiteWeft/Authentext | Exact revision observations and thin adapter contracts | Native end-to-end qualification remains open |
 
-PDF/DOCX routing now uses captured MIME and original URI when the CAS object
-has no extension. Conflicting hints are rejected. The paragraph-only DOCX route
-reports unextracted tables instead of claiming lossless extraction. Parser
-coverage and layout/reading-order qualification remain open.
+PDF/DOCX routing uses captured MIME and original URI for extensionless CAS files.
+Conflicting hints are rejected; unextracted DOCX tables are reported. Parser
+layout, reading-order and loss-accounting qualification remains open.
 
-## Production state
+The ANZ catalogue has 212 bodies/functions, with identity-checked membership in
+nine declared official directory snapshots. Source selections contain 28 AU-v1,
+81 NZ-selected, 192 deduplicated authority and 220 combined ANZ profiles. These
+are different denominators; the NZ selection is not additive to the authority
+collection. Open-ended categories retain their unknown coverage denominator.
+
+## Latest measured hosted assurance
+
+The exact main-branch quality artifact reports **348 unique tests**, zero
+failures/errors/skips, **97.30% combined statement/branch coverage**, **98.19%
+statement-only coverage** and **93.86% branch-only coverage**. The unchanged gate
+is 95% combined coverage; 100% critical-path coverage is not universally achieved.
+The parallel lane repeats tests and does not increase the unique count.
+
+The declared Python 3.14.6 environment and committed lock were used without a
+host-compatibility override. Ruff ALL/preview, formatting, strict basedpyright and
+strict ty pass over src/scripts/tests. Full-history Gitleaks, actionlint,
+pedantic zizmor, CodeQL, locked vulnerability auditing and SBOM generation passed.
+The five-case deterministic modality benchmark passes but does not qualify a
+clinical/legal comparison model. No trained-model bake-off or policy-effect
+result is claimed.
+
+## Remaining production state
 
 | Milestone | State |
 |---|---|
-| T00 Foundation | Active; exact dependency identities resolved, native integration and production toolchain incomplete |
-| T01 Source Census v1 | Closed finite 28-surface inventory, not an exhaustive document census |
-| T02 Bronze v1 | Active; capture/publication machinery tested locally, no current original-byte capture or remote publication |
-| T03 Silver v1 | Production-gated on Bronze and parser qualification |
-| T04 Gold v1 | Production-gated on Silver and extraction qualification |
-| T05 Platinum v1 | Production-gated on Gold and comparison qualification |
-| T07 Agent/workflow engineering | Active; this engineering pass belongs here and to T00/T02 |
+| T00 Foundation | Active; GitHub/runtime/strict CI integration done, native ecosystem qualification still open |
+| T01 AU Source Census v1 | Closed finite 28-surface inventory, not exhaustive document census |
+| T02 Bronze v1 | Active; live publication, acquisition and final release closure remain open |
+| T03 Silver v1 | Gated on qualified Bronze and parsers |
+| T04 Gold v1 | Gated on Silver and extraction qualification |
+| T05 Platinum v1 | Gated on Gold and comparison/framework qualification |
+| T07 Agent/workflow engineering | Active; the bounded quality-integration work is complete, not the whole roadmap |
 
-Previously preserved shadow observations remain quarantined. They cannot
-substitute for captured originals or close a medallion gate. Later production
-tracks were not marked complete and no new tracks were created.
+No track state or production gate is changed here. Shadow observations remain
+quarantined and cannot substitute for captured originals.
 
-## Latest measured software assurance
+## Previously claimed features still not established
 
-The local host run produced **222 tests passed** and **97.59% combined
-line/branch-aware package coverage**. Package coverage does not include every
-wrapper script; wrapper behaviour is exercised through integration tests.
+Lineage-aware incremental invalidation, deterministic replay capsules, a systematic
+metamorphic mutation generator, substantive framework projections, a benchmark-
+trained model router and qualified structural/semantic comparisons were not
+recovered and are not made implemented by strict-code remediation. Basic offline
+bundles, route contracts, regression/property tests and lexical candidates are
+not equivalent to those larger features.
 
-This used Python 3.13.5 and pytest 9.0.2 with an explicit temporary CLI override
-of the production pytest minimum and strict configuration. The committed
-Python 3.14.6/pytest >=9.1 contract was not weakened. One warning reports the
-missing pytest-timeout plugin. Consequently this is host-compatibility evidence,
-not the declared production test environment. Statement coverage is 98.68%; branch-only coverage is 94.08%.
-The configured 95% combined aggregate target passes;
-100% critical-path coverage is not universally achieved.
-
-Ruff, basedpyright, ty, actionlint, zizmor, live dependency/security audits,
-production lock resolution, native external-tool execution and hosted GitHub
-Actions were not run here. No production-qualified binary, clinical validation,
-trained model bake-off or real policy-effect result is claimed.
-
-## Concrete remaining work
-
-1. Provision and qualify the declared runtime and dependency lock without
-   changing requirements merely to fit a development host.
-2. Execute bounded live capture with a scoped public HF write credential;
-   qualify each source adapter, handle cross-host public document stores,
-   reconcile document-level inventories and disposition every boundary.
-3. Finish typed final Bronze publication/closure and clean-room recovery
-   qualification; source staging alone does not close Bronze.
-4. Use the captured corpus to qualify parsers, offsets, tables, references and
-   loss accounting, then complete Silver.
-5. Build genuine extraction and comparison benchmarks, method-independence
-   evidence and separate framework projections before Gold/Platinum promotion.
-
-The current blocker is not a need for more speculative architecture. It is
-access to an executable network/write runtime plus the remaining empirical and
-release-integration work documented above.
+See `docs/deployment/remaining-work.md` for the finite remaining acceptance work.
+This GitHub closeout performed no HF write, live document capture or medallion
+promotion and does not assert current external dataset or credential state.

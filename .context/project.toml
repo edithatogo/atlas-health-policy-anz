@@ -33,6 +33,7 @@ required_context = [
   "conductor/strict-quality-20260905.md",
   "conductor/strict-quality-results-20260905.md",
   "quality/README.md",
+  "conductor/github-integration-20260906.md",
 ]
 
 required_manifests = [
@@ -52,6 +53,7 @@ required_manifests = [
   "quality/resolved-test-tools.json",
   "quality/normalization-result.json",
   "quality/hosted-strict-checkpoint.json",
+  "quality/github-integration-main-20260906.json",
   "renovate.json",
   "schemas/microtask-packet-v1.json",
   "schemas/work-item-state-v1.json",
