@@ -31,16 +31,22 @@ jobs:
           version: "0.11.29"
           enable-cache: true
       - run: uv python install 3.14.6
-      - name: Synchronize test environment
+      - name: Synchronize test environment including exercised optional adapters
         shell: bash
         run: |
           if [[ -f uv.lock ]]; then
-            uv sync --python 3.14.6 --group test-goblin --locked
+            uv sync --python 3.14.6 --group test-goblin --group publication --extra nlp --locked
           else
-            uv sync --python 3.14.6 --group test-goblin
+            uv sync --python 3.14.6 --group test-goblin --group publication --extra nlp
           fi
+      - name: Check optional test dependencies are importable
+        run: >-
+          uv run --python 3.14.6 --group test-goblin --group publication --extra nlp
+          python -c "import huggingface_hub, spacy; print('HF and spaCy adapters available')"
       - name: Run lane
-        run: uv run --python 3.14.6 python scripts/test_goblin.py "${{ matrix.lane }}"
+        run: >-
+          uv run --python 3.14.6 --group test-goblin --group publication --extra nlp
+          python scripts/test_goblin.py "${{ matrix.lane }}"
 
   coverage-and-benchmarks:
     name: Coverage, benchmark and package
@@ -55,28 +61,36 @@ jobs:
           version: "0.11.29"
           enable-cache: true
       - run: uv python install 3.14.6
-      - name: Synchronize development environment
+      - name: Synchronize development environment including exercised optional adapters
         shell: bash
         run: |
           if [[ -f uv.lock ]]; then
-            uv sync --python 3.14.6 --group dev --locked
+            uv sync --python 3.14.6 --group dev --group publication --extra nlp --locked
           else
-            uv sync --python 3.14.6 --group dev
+            uv sync --python 3.14.6 --group dev --group publication --extra nlp
           fi
+      - name: Check optional test dependencies are importable
+        run: >-
+          uv run --python 3.14.6 --group dev --group publication --extra nlp
+          python -c "import huggingface_hub, spacy; print('HF and spaCy adapters available')"
       - name: Test with branch coverage
         env:
           COVERAGE_CORE: sysmon
         run: >-
-          uv run --python 3.14.6 pytest -q
+          uv run --python 3.14.6 --group dev --group publication --extra nlp pytest -q
           --cov=australian_health_policy_atlas
           --cov-branch
           --cov-report=term-missing
           --cov-report=xml
           --cov-fail-under=95
       - name: Run deterministic modality benchmark
-        run: uv run --python 3.14.6 python scripts/benchmark_modality.py
+        run: >-
+          uv run --python 3.14.6 --group dev --group publication --extra nlp
+          python scripts/benchmark_modality.py
       - name: Validate Conductor context
-        run: uv run --python 3.14.6 python scripts/validate_context.py
+        run: >-
+          uv run --python 3.14.6 --group dev --group publication --extra nlp
+          python scripts/validate_context.py
       - name: Build package
         run: uv build
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
