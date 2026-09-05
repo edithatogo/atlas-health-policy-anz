@@ -236,6 +236,7 @@
   "production_qualified": false,
   "remote_github_writes": 0,
   "schema_version": "1.0",
+  "stored_log_representation": "Trailing whitespace stripped; result content unchanged. Exact final-commit run is delivered separately.",
   "test_command": [
     "python",
     "-m",

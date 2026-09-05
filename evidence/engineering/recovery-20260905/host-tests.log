@@ -5,7 +5,7 @@
 =============================== warnings summary ===============================
 ../../../../opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1428
   /opt/pyvenv/lib/python3.13/site-packages/_pytest/config/__init__.py:1428: PytestConfigWarning: Unknown config option: timeout
-  
+
     self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
