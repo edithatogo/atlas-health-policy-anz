@@ -1,0 +1,57 @@
+schema_version = 1
+policy = "evidence-before-equivalence"
+
+[principles]
+non_retrieval_is_not_absence = true
+text_similarity_is_not_equivalence = true
+model_agreement_is_not_ground_truth = true
+consensus_is_not_correctness = true
+semantic_indexes_are_non_authoritative = true
+source_spans_required_for_high_consequence_claims = true
+pairwise_equivalence_is_not_transitive_by_default = true
+descriptive_and_normative_outputs_are_separate = true
+confidence_is_evidence_derived_not_model_self_reported = true
+coverage_requires_explicit_denominator = true
+
+[stages]
+ordered = ["scope", "authority", "temporal", "coverage", "candidate_retrieval", "equivalence", "framework_projection", "platinum_qualification"]
+fail_closed_on_claim_promotion = true
+continue_with_explicit_uncertainty = true
+
+[triangulation]
+method_triangulation = "required-for-difficult-cases"
+model_triangulation = "benchmark-driven-and-selective"
+majority_vote_as_ground_truth = false
+independent_prompts = true
+retain_disagreement = true
+require_material_model_independence = true
+shared_base_model_variants_count_as_one_family = true
+
+[retrieval]
+required_signals = ["lexical", "semantic"]
+optional_signals = ["ontology"]
+fusion_default = "reciprocal-rank-fusion"
+report_candidate_recall = true
+
+[models]
+require_immutable_revision = true
+require_model_manifest = true
+require_source_hashes = true
+require_prompt_or_schema_receipt = true
+require_benchmark_before_production = true
+self_reported_confidence_is_non_authoritative = true
+
+[benchmark]
+require_real_and_adversarial_cases = true
+require_jurisdiction_holdout = true
+require_temporal_holdout = true
+require_hard_negative_pairs = true
+report_stratified_metrics = true
+
+[autonomy]
+levels_manifest = ".context/autonomy.toml"
+allow_provisional_reporting = true
+allow_abstention_without_workflow_failure = true
+
+[platinum]
+requires = ["gold_provenance", "scope_qualification", "authority_qualification", "temporal_qualification", "coverage_denominator", "comparison_validity", "coverage_state", "method_manifest", "autonomy_state"]

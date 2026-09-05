@@ -1,0 +1,45 @@
+schema_version = 1
+policy = "exact-revision-or-recorded-compatibility-mode"
+
+[[dependency]]
+id = "sourceright"
+snapshot = "c5fa583431390eee1bf5eae04dc47b01c50d4a1e"
+qualification = "identity-observed-native-execution-not-run"
+kind = "quality-toolchain"
+required = true
+purpose = ["source-provenance", "source-quality", "claim-evidence-integrity"]
+integration = "thin-adapter"
+submodule = false
+fallback = "compatibility-mode-with-recorded-limitations"
+
+[[dependency]]
+id = "citeweft"
+snapshot = "b087e12730eaac427bc804bf6aaa04aa0f17c572"
+qualification = "identity-observed-native-execution-not-run"
+kind = "quality-toolchain"
+required = true
+purpose = ["citation-extraction", "citation-linkage", "reference-integrity"]
+integration = "thin-adapter"
+submodule = false
+fallback = "compatibility-mode-with-recorded-limitations"
+
+[[dependency]]
+id = "authentext"
+snapshot = "ca39b86eb604a6fe4cfa9a0918638195af82c1af"
+qualification = "identity-observed-native-execution-not-run"
+kind = "quality-toolchain"
+required = true
+purpose = ["humanization", "readability", "style-quality"]
+integration = "thin-adapter"
+submodule = false
+fallback = "compatibility-mode-with-recorded-limitations"
+
+[[dependency]]
+id = "spacy"
+kind = "optional-nlp-runtime"
+required = false
+purpose = ["sentence-segmentation", "exact-offset-entities", "role-concept-framework-extraction", "triangulation-support"]
+integration = "optional-adapter"
+submodule = false
+fallback = "deterministic-regex-and-tokenization"
+qualification = "rule-only-output-is-not-independent-triangulation; statistical-models-require-benchmark-and-model-manifest"

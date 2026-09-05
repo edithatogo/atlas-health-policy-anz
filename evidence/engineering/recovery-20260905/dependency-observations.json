@@ -1,0 +1,10 @@
+{
+  "observed_at": "2026-09-05T05:49:26.023807+00:00",
+  "method": "connected GitHub git/ref/heads/main",
+  "pins": {
+    "sourceright": "c5fa583431390eee1bf5eae04dc47b01c50d4a1e",
+    "citeweft": "b087e12730eaac427bc804bf6aaa04aa0f17c572",
+    "authentext": "ca39b86eb604a6fe4cfa9a0918638195af82c1af"
+  },
+  "native_execution": false
+}

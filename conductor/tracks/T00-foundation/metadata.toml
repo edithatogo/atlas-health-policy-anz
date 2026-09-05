@@ -1,0 +1,38 @@
+id = "T00"
+title = "Foundation and context management"
+status = "active"
+created = "2026-09-03"
+updated = "2026-09-05"
+
+outputs = [
+  ".context/project.toml",
+  ".context/ecosystem.toml",
+  ".context/dependencies.toml",
+  ".context/comparison.toml",
+  ".context/frameworks.toml",
+  ".context/autonomy.toml",
+  ".context/tiny-models.toml",
+  ".context/ci.toml",
+  "AGENTS.md",
+  "agents/catalog.md",
+  "skills/catalog.md",
+  "workflows/catalog.md",
+  "docs/COMPARISON_ASSURANCE.md",
+  "docs/TINY_MODEL_EXECUTION.md",
+  "docs/LOCAL_SENSITIVE_EXECUTION.md",
+  "docs/CI_CD.md",
+  "conductor/registry.toml",
+  "conductor/completion.md",
+  "scripts/validate_context.py",
+  "schemas/microtask-packet-v1.json",
+  "schemas/work-item-state-v1.json",
+  ".github/workflows/context-ci.yml",
+  ".github/workflows/security-context.yml",
+  ".github/workflows/dependency-review.yml",
+]
+
+unresolved = [
+  "native execution qualification for pinned sourceright/citeweft/authentext",
+  "GitHub remote repository plus issue/project reciprocal links",
+  "target Hugging Face medallion dataset repositories are roadmap targets and not yet created",
+]

@@ -1,0 +1,8 @@
+id = "T08"
+title = "Analytical framework registry and projections"
+status = "planned"
+created = "2026-09-03"
+updated = "2026-09-03"
+depends_on = ["T04"]
+
+unresolved = []

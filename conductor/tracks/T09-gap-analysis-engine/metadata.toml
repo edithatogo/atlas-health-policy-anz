@@ -1,0 +1,8 @@
+id = "T09"
+title = "Reproducible and institutional gap-analysis engine"
+status = "planned"
+created = "2026-09-03"
+updated = "2026-09-03"
+depends_on = ["T05", "T06", "T08"]
+
+unresolved = []

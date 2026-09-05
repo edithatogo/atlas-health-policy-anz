@@ -1,0 +1,38 @@
+{
+  "account": "edithatogo",
+  "next_action": "Execute publication workflow in a Hugging Face write-capable environment or networked GitHub runner with appropriate HF credentials; reverify remote revision and bytes before any publication claim.",
+  "observations": [
+    {
+      "detail": "OAuth connector authenticated as edithatogo.",
+      "operation": "hf_whoami",
+      "status": "authenticated"
+    },
+    {
+      "detail": "All four intended Atlas dataset repositories were absent at observation time.",
+      "operation": "hub_repo_details",
+      "status": "not_found"
+    },
+    {
+      "detail": "The connected Hugging Face tool surface exposes read/compute operations but no dataset create/upload mutation.",
+      "operation": "connector_capability",
+      "status": "blocked"
+    },
+    {
+      "detail": "Networked CPU job attempt returned Payment Required before capture could run.",
+      "http_status": 402,
+      "operation": "hf_jobs.cpu-basic",
+      "status": "blocked"
+    }
+  ],
+  "original_documents_uploaded": 0,
+  "publication_performed": false,
+  "recorded_at": "2026-09-03T11:35:40.049437+00:00",
+  "schema_version": "1.0",
+  "status": "external_environment_blocked",
+  "target_datasets": [
+    "edithatogo/au-health-policy-atlas-bronze",
+    "edithatogo/au-health-policy-atlas-silver",
+    "edithatogo/au-health-policy-atlas-gold",
+    "edithatogo/au-health-policy-atlas-platinum"
+  ]
+}

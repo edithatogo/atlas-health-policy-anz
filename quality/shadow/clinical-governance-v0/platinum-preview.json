@@ -1,0 +1,190 @@
+{
+  "not_a_medallion_release": true,
+  "observation_date": "2026-09-03",
+  "production_promotion_allowed": false,
+  "reference": "2026 National Model for Clinical Governance",
+  "reference_foundations": [
+    "leading systems and organisational culture",
+    "partnering with patients, carers and consumers",
+    "building a healthy workforce culture",
+    "enabling high-quality and integrated clinical practice",
+    "managing and reducing risk",
+    "using data for better care"
+  ],
+  "rows": [
+    {
+      "authority": "framework",
+      "comparability": "scope-limited",
+      "evidence_state": "A2",
+      "foundations": {
+        "building a healthy workforce culture": "not_determined",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "QLD",
+      "limitations": [
+        "scope_limited_to_allied_health",
+        "no_bronze_exact_span"
+      ],
+      "scope": "allied-health; Queensland Health"
+    },
+    {
+      "authority": "mandatory-policy-directive",
+      "comparability": "systemwide",
+      "evidence_state": "A2",
+      "foundations": {
+        "building a healthy workforce culture": "observed",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "NSW",
+      "limitations": [
+        "no_bronze_exact_span"
+      ],
+      "scope": "NSW Health system"
+    },
+    {
+      "authority": "best-practice-framework",
+      "comparability": "systemwide-guidance",
+      "evidence_state": "A2",
+      "foundations": {
+        "building a healthy workforce culture": "observed",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "VIC",
+      "limitations": [
+        "no_bronze_exact_span"
+      ],
+      "scope": "Victorian healthcare sectors"
+    },
+    {
+      "authority": "framework",
+      "comparability": "systemwide",
+      "evidence_state": "A3",
+      "foundations": {
+        "building a healthy workforce culture": "not_determined",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "not_determined"
+      },
+      "jurisdiction": "SA",
+      "limitations": [
+        "no_bronze_exact_span",
+        "limited_web_snapshot_detail"
+      ],
+      "scope": "SA Health"
+    },
+    {
+      "authority": "framework",
+      "comparability": "systemwide",
+      "evidence_state": "A2",
+      "foundations": {
+        "building a healthy workforce culture": "observed",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "WA",
+      "limitations": [
+        "no_bronze_exact_span"
+      ],
+      "scope": "WA health system"
+    },
+    {
+      "authority": "service-plan-governance-source",
+      "comparability": "secondary-framework-reference",
+      "evidence_state": "A3",
+      "foundations": {
+        "building a healthy workforce culture": "not_determined",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "not_determined",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "TAS",
+      "limitations": [
+        "secondary_reference_to_clinical_governance_framework",
+        "no_bronze_exact_span"
+      ],
+      "scope": "Tasmanian Health Service"
+    },
+    {
+      "authority": "system-governance-arrangements",
+      "comparability": "systemwide",
+      "evidence_state": "A2",
+      "foundations": {
+        "building a healthy workforce culture": "observed",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "ACT",
+      "limitations": [
+        "no_bronze_exact_span"
+      ],
+      "scope": "ACT health system"
+    },
+    {
+      "authority": "service-level-framework-source",
+      "comparability": "scope-limited",
+      "evidence_state": "A3",
+      "foundations": {
+        "building a healthy workforce culture": "not_determined",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "NT",
+      "limitations": [
+        "scope_limited_to_top_end_health_service",
+        "no_bronze_exact_span"
+      ],
+      "scope": "Top End Health Service"
+    },
+    {
+      "authority": "national-model",
+      "comparability": "national-reference",
+      "evidence_state": "A2",
+      "foundations": {
+        "building a healthy workforce culture": "observed",
+        "enabling high-quality and integrated clinical practice": "observed",
+        "leading systems and organisational culture": "observed",
+        "managing and reducing risk": "observed",
+        "partnering with patients, carers and consumers": "observed",
+        "using data for better care": "observed"
+      },
+      "jurisdiction": "Cth",
+      "limitations": [
+        "no_bronze_exact_span"
+      ],
+      "scope": "Australian public/private acute health services"
+    }
+  ],
+  "rules": [
+    "Observed means the source-grounded summary contains a corresponding concept; it is not a compliance determination.",
+    "Not determined does not mean absent.",
+    "Queensland and NT sources are scope-limited and Tasmania is a secondary governance source; they must not be ranked as systemwide equivalents.",
+    "No row can be promoted to Platinum until original Bronze bytes and reversible Silver/Gold lineage exist."
+  ],
+  "schema_version": "0.1-shadow",
+  "title": "Clinical governance cross-jurisdiction comparison preview"
+}

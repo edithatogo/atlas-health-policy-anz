@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/au-health-policy-atlas/comparison-finding-v1.schema.json",
+  "title": "Comparison Finding v1",
+  "type": "object",
+  "required": ["finding_id", "left_assertion_id", "right_assertion_id", "relationship", "evidence_state", "reason_codes", "method_evidence"],
+  "properties": {
+    "evidence_state": {"enum": ["A0", "A1", "A2", "A3", "A4"]},
+    "coverage": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+  }
+}

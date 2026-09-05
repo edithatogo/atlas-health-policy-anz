@@ -1,0 +1,29 @@
+{
+  "files": [
+    {
+      "bytes": 19278,
+      "path": "data/sources/source-surfaces-v1.json",
+      "sha256": "2732105bdeaa01d02e67401a448ec3c61032aaaf6674d3361cd595047c3af5e0"
+    },
+    {
+      "bytes": 1282,
+      "path": "evidence/public-corpus/source-census-v1/completion.json",
+      "sha256": "1d8094d392cb78a53ac9fb956dc1a607213f1495ce9562898387bbb5fa60698f"
+    },
+    {
+      "bytes": 672,
+      "path": "publication/huggingface/bronze-v1/README.md",
+      "sha256": "fe5d9ec712e17fb1326e920480b9a69217268d8258a1a7cc22ec3dbc1d0ba598"
+    },
+    {
+      "bytes": 481,
+      "path": "publication/huggingface/bronze-v1/publication-contract.json",
+      "sha256": "abbf9cbe0b9d27cfa5c5b63d370cd4bc51e195a5e602db8804a86f5e19fc7d7c"
+    }
+  ],
+  "manifest_sha256": "52b6d5abc4f8745818f6147932363f16d103befc71875380a4ac16675022e4ea",
+  "observation_date": "2026-09-03",
+  "release_id": "source-census-v1",
+  "schema_version": "1.0",
+  "status": "closed-candidate"
+}

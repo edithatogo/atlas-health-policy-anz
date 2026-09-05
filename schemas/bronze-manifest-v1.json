@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/au-health-policy-atlas/bronze-manifest-v1.schema.json",
+  "title": "Bronze Manifest v1",
+  "type": "object",
+  "required": ["schema_version", "release_id", "layer", "record_count", "objects", "manifest_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "release_id": {"type": "string", "minLength": 1},
+    "layer": {"const": "bronze"},
+    "record_count": {"type": "integer", "minimum": 0},
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["object_id", "source_id", "source_uri", "sha256", "size_bytes", "media_type", "observed_at", "stored_path"],
+        "properties": {
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "size_bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

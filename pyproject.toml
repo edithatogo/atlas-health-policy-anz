@@ -1,0 +1,123 @@
+[build-system]
+requires = ["uv_build>=0.11.29,<0.13.0"]
+build-backend = "uv_build"
+
+[project]
+name = "australian-health-policy-atlas"
+version = "0.1.0"
+description = "Evidence-first computational comparison of Australian health policies, procedures and guidelines"
+requires-python = ">=3.14,<3.15"
+license = "Apache-2.0"
+authors = [{ name = "edithatogo" }]
+dependencies = []
+
+[project.optional-dependencies]
+nlp = ["spacy>=3.8.16,<4"]
+
+[project.scripts]
+au-health-policy-atlas = "australian_health_policy_atlas.cli:main"
+
+[dependency-groups]
+test = [
+  "jsonschema[format-nongpl]>=4.25,<5",
+  "packaging>=26,<27",
+  "pytest>=9.1,<10",
+  "pytest-cov>=7.1,<8",
+  "pytest-timeout>=2.4,<3",
+  "pytest-xdist>=3.8,<4",
+]
+test-goblin = [
+  { include-group = "test" },
+  "hypothesis>=6.164,<7",
+  "mutmut>=3.5,<4",
+  "pytest-gremlins>=1.9,<2",
+  "pytest-picked>=0.5,<1",
+  "pytest-randomly>=4,<5",
+  "pytest-testmon>=2.2,<3",
+]
+typing = [
+  "basedpyright>=1.36,<2",
+  "ruff>=0.16,<0.17",
+  "ty>=0.0.18,<1",
+]
+profiling = ["scalene>=2.3,<3"]
+security = [
+  "cyclonedx-bom>=7.3,<8",
+  "pip-audit>=2.10,<3",
+  "zizmor>=1.13,<2",
+]
+publication = ["huggingface_hub>=0.28,<2"]
+dev = [
+  { include-group = "test-goblin" },
+  { include-group = "typing" },
+  { include-group = "profiling" },
+  { include-group = "security" },
+]
+
+[tool.uv]
+package = true
+default-groups = ["test-goblin", "typing"]
+
+[tool.uv.dependency-groups]
+test = { requires-python = ">=3.14,<3.15" }
+test-goblin = { requires-python = ">=3.14,<3.15" }
+typing = { requires-python = ">=3.14,<3.15" }
+profiling = { requires-python = ">=3.14,<3.15" }
+security = { requires-python = ">=3.14,<3.15" }
+publication = { requires-python = ">=3.14,<3.15" }
+dev = { requires-python = ">=3.14,<3.15" }
+
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers", "-ra"]
+minversion = "9.1"
+testpaths = ["tests"]
+xfail_strict = true
+markers = [
+  "unit: isolated deterministic logic",
+  "integration: component and adapter boundaries",
+  "e2e: complete bounded workflows",
+  "smoke: critical-path checks",
+  "property: generative invariants",
+  "metamorphic: controlled transformation invariants",
+  "contract: versioned provider/consumer contracts",
+  "simulation: deterministic state-machine/event tests",
+  "edge: malformed and failure-mode cases",
+  "model: live model qualification only",
+]
+timeout = 30
+
+[tool.coverage.run]
+branch = true
+source = ["australian_health_policy_atlas"]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+skip_covered = false
+
+[tool.basedpyright]
+include = ["src", "scripts", "tests"]
+pythonVersion = "3.14"
+typeCheckingMode = "strict"
+reportMissingTypeStubs = "warning"
+
+[tool.ty.environment]
+python-version = "3.14"
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+src = ["src", "scripts", "tests"]
+preview = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["COM812", "CPY001", "D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN", "D", "PLR2004", "S101"]
+"scripts/**/*.py" = ["T201"]
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"

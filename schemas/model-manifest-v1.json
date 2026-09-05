@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/au-health-policy-atlas/model-manifest-v1.schema.json",
+  "title": "Model Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "model_id", "source_repository", "revision", "artifact", "sha256", "runtime", "task_classes", "benchmark_receipts"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "model_id": {"type": "string", "minLength": 1},
+    "source_repository": {"type": "string", "minLength": 1},
+    "revision": {"type": "string", "minLength": 1},
+    "artifact": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "runtime": {"enum": ["llama.cpp", "transformers", "transformers.js", "onnxruntime", "other"]},
+    "task_classes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "benchmark_receipts": {"type": "array", "items": {"type": "string"}}
+  }
+}

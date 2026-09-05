@@ -1,0 +1,60 @@
+schema_version = 1
+policy = "confidence-gated-autonomy"
+default = "autonomous-with-evidence"
+
+[principles]
+minimal_approval_spam = true
+routine_medallion_promotion_is_autonomous = true
+routine_public_hf_publication_is_autonomous = true
+analysis_may_complete_with_provisional_findings = true
+confidence_is_claim_level = true
+confidence_must_include_coverage = true
+abstention_is_valid_output = true
+human_review_is_exception_not_default = true
+
+[[level]]
+id = "A0"
+name = "mechanically_verified"
+autonomy = "full"
+minimum_evidence = ["deterministic_programmatic_evidence", "provenance_complete", "replayable"]
+output_label = "verified"
+review = "not-required"
+
+[[level]]
+id = "A1"
+name = "robustly_triangulated"
+autonomy = "full"
+minimum_evidence = ["multiple_independent_methods", "source_spans", "scope_authority_temporal_pass", "benchmark_qualified"]
+output_label = "high-confidence"
+review = "not-required"
+
+[[level]]
+id = "A2"
+name = "supported_but_incomplete"
+autonomy = "full-reporting"
+minimum_evidence = ["source_grounded", "at_least_one_qualified_method"]
+output_label = "supported-needs-verification"
+review = "recommended"
+
+[[level]]
+id = "A3"
+name = "provisional_or_conflicted"
+autonomy = "full-reporting-no-assertion-upgrade"
+minimum_evidence = ["source_or_method_uncertainty_recorded"]
+output_label = "provisional-needs-additional-verification"
+review = "recommended-before-consequential-use"
+
+[[level]]
+id = "A4"
+name = "insufficient_evidence"
+autonomy = "abstain-and-continue"
+minimum_evidence = []
+output_label = "not-determined"
+review = "optional-if-user-wants-resolution"
+
+[exceptions]
+human_intervention_only_for = [
+  "missing_credentials_that_cannot_be_refreshed_programmatically",
+  "destructive_or_irreversible_external_mutation",
+  "explicit_user_requested_manual_adjudication",
+]

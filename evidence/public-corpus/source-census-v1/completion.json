@@ -1,0 +1,33 @@
+{
+  "acceptance": {
+    "all_8_state_territory_jurisdictions_present": true,
+    "all_sources_have_disposition": true,
+    "all_sources_https": true,
+    "capture_adapter_declared": true,
+    "hf_bronze_contract_frozen": true,
+    "national_comparator_present": true
+  },
+  "jurisdiction_counts": {
+    "ACT": 2,
+    "Cth": 2,
+    "NSW": 4,
+    "NT": 3,
+    "QLD": 6,
+    "SA": 2,
+    "TAS": 3,
+    "VIC": 3,
+    "WA": 3
+  },
+  "limitations": [
+    "Tasmania and the Northern Territory expose relevant public PPG material across distributed topic, publication and digital-library surfaces rather than a single comprehensive statewide PPG register.",
+    "Source Census v1 is a closed census of source surfaces. Individual-document completeness is a Bronze v1 capture obligation and is not claimed by T01.",
+    "Live byte capture and Hugging Face publication are not evidence requirements for T01 and are tracked under T02."
+  ],
+  "observation_date": "2026-09-03",
+  "registry_sha256": "2732105bdeaa01d02e67401a448ec3c61032aaaf6674d3361cd595047c3af5e0",
+  "release_id": "source-census-v1",
+  "schema_version": "1.0",
+  "scope": "official public source surfaces; individual-document inventory is delegated to Bronze capture",
+  "source_surface_count": 28,
+  "status": "qualified"
+}

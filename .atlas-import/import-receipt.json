@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "history-preserving-import",
+  "track": "T00",
+  "status": "verified",
+  "source_commit": "9cb1e709b8380dd71d35f22f866a02187119a3e2",
+  "source_tree": "a7211fdde23bafc254a10c52e755448b98665551",
+  "source_files_verified": 252,
+  "bootstrap_parent": "02cad1fefcab74d129e5cd62482c48863cee4dd3",
+  "compressed_sha256": "04ff28fd3fd6e24e1229d1892576ba0719a0ff2f343b6da5d27bf5e07894f792",
+  "stream_sha256": "cd77df821aaeec1371a48ab8c93a6d7a133645f51b6c109205aef39f1b9e1d96",
+  "python_syntax": "passed",
+  "context_validation": "passed",
+  "bootstrap_python": "3.12.3",
+  "full_test_suite": "not_run_by_importer",
+  "production_runtime_qualified": false,
+  "production_medallion_qualified": false,
+  "hf_writes": 0,
+  "original_payloads_captured": 0,
+  "workflow_run_id": "33958000207"
+}

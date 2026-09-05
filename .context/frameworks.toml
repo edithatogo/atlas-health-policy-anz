@@ -1,0 +1,52 @@
+schema_version = 1
+policy = "separate-projections-no-false-voting"
+
+[[framework_family]]
+id = "national-quality-and-governance"
+examples = ["NSQHS", "National Model Clinical Governance Framework"]
+mode = "standards-concordance"
+
+[[framework_family]]
+id = "legal-regulatory"
+mode = "authority-and-legal-concordance"
+
+[[framework_family]]
+id = "evidence"
+mode = "evidence-concordance"
+
+[[framework_family]]
+id = "human-factors-sociotechnical"
+mode = "systems-analysis"
+
+[[framework_family]]
+id = "safety-resilience"
+examples = ["Safety-I", "Safety-II", "resilient-healthcare"]
+mode = "systems-analysis"
+
+[[framework_family]]
+id = "implementation-science"
+mode = "implementation-analysis"
+
+[[framework_family]]
+id = "consumer-partnership"
+mode = "co-production-analysis"
+
+[[framework_family]]
+id = "equity-cultural-safety"
+mode = "equity-analysis"
+
+[[framework_family]]
+id = "rural-remote"
+mode = "feasibility-analysis"
+
+[[framework_family]]
+id = "workforce-scope"
+mode = "scope-of-practice-analysis"
+
+[[framework_family]]
+id = "policy-burden"
+mode = "complexity-and-administrative-burden"
+
+[[framework_family]]
+id = "readability-accessibility"
+mode = "communication-quality"

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>edithatogo/renovate-config",
+    ":dependencyDashboard"
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Dependency update dashboard",
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "minimumReleaseAge": "7 days",
+  "internalChecksFilter": "strict",
+  "automerge": false,
+  "platformAutomerge": false,
+  "rebaseWhen": "behind-base-branch",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "schedule": ["after 6am and before 9am on monday"],
+  "timezone": "Australia/Sydney",
+  "enabledManagers": ["pep621", "github-actions", "custom.regex"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.python-version$/", "/^quality\\/tool-versions\\.json$/", "/^\\.github\\/workflows\\/.*\\.ya?ml$/"],
+      "matchStrings": ["(?<currentValue>3\\.14\\.\\d+)", "\"python\": \"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"", "--python (?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "python",
+      "datasourceTemplate": "python-version"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^quality\\/tool-versions\\.json$/", "/^\\.github\\/workflows\\/.*\\.ya?ml$/"],
+      "matchStrings": ["\"uv\": \"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"", "version: \"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""],
+      "depNameTemplate": "astral-sh/uv",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "pinDigests": true,
+      "dependencyDashboardApproval": true,
+      "separateMinorPatch": true
+    },
+    {
+      "matchManagers": ["pep621", "custom.regex"],
+      "groupName": "Python runtime and quality stack",
+      "dependencyDashboardApproval": true,
+      "separateMinorPatch": true
+    },
+    {
+      "description": "Never adopt prereleases implicitly",
+      "matchCurrentVersion": "!/^0/",
+      "ignoreUnstable": true
+    },
+    {
+      "description": "Require dashboard approval for major updates",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    }
+  ]
+}

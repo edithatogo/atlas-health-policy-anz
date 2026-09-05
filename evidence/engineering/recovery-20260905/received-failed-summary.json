@@ -1,0 +1,9 @@
+{
+  "qualified": false,
+  "stage1": {
+    "repo": "/mnt/data/atlas_work",
+    "checks": [],
+    "qualified": false,
+    "fatal": "git repository missing"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "blockers": [
+    "Current model container has no outbound DNS/network path to official government source bytes.",
+    "Hugging Face connector exposes read/compute operations but no dataset repository write action.",
+    "Attempt to use Hugging Face Jobs cpu-basic for networked capture returned HTTP 402 Payment Required.",
+    "Therefore original-byte fixity, zero-loss recovery and remote Hugging Face publication verification cannot be truthfully completed in this session."
+  ],
+  "document_discovery_snapshot": "evidence/public-corpus/bronze-v1/portal-discovery-evidence-v1.json",
+  "gate_b_passed": false,
+  "next_machine_action": "Run the existing capture/publication workflow in a networked GitHub Action or an authenticated Hugging Face write-capable environment; no architecture change is required.",
+  "original_payloads_captured": 0,
+  "public_corpus_rule": "Only unauthenticated official public artefacts enter Bronze v1; staff-login-only links receive out-of-scope-public-v1 dispositions.",
+  "release_id": "bronze-v1",
+  "schema_version": "1.0",
+  "source_surface_total": 28,
+  "status": "executing",
+  "surface_capture_queued": 28,
+  "vertical_slice_targets": 9
+}
