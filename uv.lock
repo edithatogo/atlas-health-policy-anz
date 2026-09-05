@@ -47,6 +47,15 @@ wheels = [
 ]
 
 [[package]]
+name = "asttokens"
+version = "3.0.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/25/1e/faf0f247f6f881b98fc4d6d07e14085cb89d13665084e6d6ac1dc2c03d0b/asttokens-3.0.2.tar.gz", hash = "sha256:3ecdbd8f2cc195f53ccada3a613538bb5f9ef6f6869129f13e03c30a677b8fe2", size = 63136, upload-time = "2026-07-12T03:31:49.084Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d4/2b/04b8a15f3a1c77bc79ddf5c73875327f34b4fa75982df2b76e45e402d364/asttokens-3.0.2-py3-none-any.whl", hash = "sha256:9da13157f5b28becde0bd374fc677dcd3c290614264eff096f167c469cd9f933", size = 28702, upload-time = "2026-07-12T03:31:47.542Z" },
+]
+
+[[package]]
 name = "attrs"
 version = "26.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -68,23 +77,31 @@ nlp = [
 [package.dev-dependencies]
 dev = [
     { name = "basedpyright" },
+    { name = "coverage" },
     { name = "cyclonedx-bom" },
     { name = "hypothesis" },
+    { name = "inline-snapshot" },
     { name = "jsonschema", extra = ["format-nongpl"] },
     { name = "mutmut" },
     { name = "packaging" },
     { name = "pip-audit" },
     { name = "pytest" },
+    { name = "pytest-benchmark" },
     { name = "pytest-cov" },
     { name = "pytest-gremlins" },
+    { name = "pytest-httpserver" },
+    { name = "pytest-mock" },
     { name = "pytest-picked" },
     { name = "pytest-randomly" },
+    { name = "pytest-socket" },
+    { name = "pytest-subprocess" },
     { name = "pytest-testmon" },
     { name = "pytest-timeout" },
     { name = "pytest-xdist" },
     { name = "ruff" },
     { name = "scalene" },
     { name = "ty" },
+    { name = "types-jsonschema" },
     { name = "zizmor" },
 ]
 profiling = [
@@ -99,23 +116,56 @@ security = [
     { name = "zizmor" },
 ]
 test = [
+    { name = "coverage" },
+    { name = "inline-snapshot" },
     { name = "jsonschema", extra = ["format-nongpl"] },
     { name = "packaging" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "pytest-httpserver" },
+    { name = "pytest-mock" },
+    { name = "pytest-socket" },
+    { name = "pytest-subprocess" },
     { name = "pytest-timeout" },
     { name = "pytest-xdist" },
 ]
 test-goblin = [
+    { name = "coverage" },
     { name = "hypothesis" },
+    { name = "inline-snapshot" },
     { name = "jsonschema", extra = ["format-nongpl"] },
     { name = "mutmut" },
     { name = "packaging" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-gremlins" },
+    { name = "pytest-httpserver" },
+    { name = "pytest-mock" },
     { name = "pytest-picked" },
     { name = "pytest-randomly" },
+    { name = "pytest-socket" },
+    { name = "pytest-subprocess" },
+    { name = "pytest-testmon" },
+    { name = "pytest-timeout" },
+    { name = "pytest-xdist" },
+]
+test-performance = [
+    { name = "coverage" },
+    { name = "hypothesis" },
+    { name = "inline-snapshot" },
+    { name = "jsonschema", extra = ["format-nongpl"] },
+    { name = "mutmut" },
+    { name = "packaging" },
+    { name = "pytest" },
+    { name = "pytest-benchmark" },
+    { name = "pytest-cov" },
+    { name = "pytest-gremlins" },
+    { name = "pytest-httpserver" },
+    { name = "pytest-mock" },
+    { name = "pytest-picked" },
+    { name = "pytest-randomly" },
+    { name = "pytest-socket" },
+    { name = "pytest-subprocess" },
     { name = "pytest-testmon" },
     { name = "pytest-timeout" },
     { name = "pytest-xdist" },
@@ -124,6 +174,7 @@ typing = [
     { name = "basedpyright" },
     { name = "ruff" },
     { name = "ty" },
+    { name = "types-jsonschema" },
 ]
 
 [package.metadata]
@@ -132,24 +183,32 @@ provides-extras = ["nlp"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "basedpyright", marker = "python_full_version == '3.14.*'", specifier = ">=1.36,<2" },
+    { name = "basedpyright", marker = "python_full_version == '3.14.*'", specifier = ">=1.39.9,<2" },
+    { name = "coverage", extras = ["toml"], marker = "python_full_version == '3.14.*'", specifier = ">=7.10.6,<8" },
     { name = "cyclonedx-bom", marker = "python_full_version == '3.14.*'", specifier = ">=7.3,<8" },
     { name = "hypothesis", marker = "python_full_version == '3.14.*'", specifier = ">=6.164,<7" },
+    { name = "inline-snapshot", marker = "python_full_version == '3.14.*'", specifier = ">=0.35.4,<0.36" },
     { name = "jsonschema", extras = ["format-nongpl"], marker = "python_full_version == '3.14.*'", specifier = ">=4.25,<5" },
     { name = "mutmut", marker = "python_full_version == '3.14.*'", specifier = ">=3.5,<4" },
     { name = "packaging", marker = "python_full_version == '3.14.*'", specifier = ">=26,<27" },
     { name = "pip-audit", marker = "python_full_version == '3.14.*'", specifier = ">=2.10,<3" },
     { name = "pytest", marker = "python_full_version == '3.14.*'", specifier = ">=9.1,<10" },
+    { name = "pytest-benchmark", marker = "python_full_version == '3.14.*'", specifier = ">=5.3,<6" },
     { name = "pytest-cov", marker = "python_full_version == '3.14.*'", specifier = ">=7.1,<8" },
     { name = "pytest-gremlins", marker = "python_full_version == '3.14.*'", specifier = ">=1.9,<2" },
+    { name = "pytest-httpserver", marker = "python_full_version == '3.14.*'", specifier = ">=1.1.5,<2" },
+    { name = "pytest-mock", marker = "python_full_version == '3.14.*'", specifier = ">=3.15.1,<4" },
     { name = "pytest-picked", marker = "python_full_version == '3.14.*'", specifier = ">=0.5,<1" },
     { name = "pytest-randomly", marker = "python_full_version == '3.14.*'", specifier = ">=4,<5" },
+    { name = "pytest-socket", marker = "python_full_version == '3.14.*'", specifier = ">=0.8.1,<1" },
+    { name = "pytest-subprocess", marker = "python_full_version == '3.14.*'", specifier = ">=1.6,<2" },
     { name = "pytest-testmon", marker = "python_full_version == '3.14.*'", specifier = ">=2.2,<3" },
     { name = "pytest-timeout", marker = "python_full_version == '3.14.*'", specifier = ">=2.4,<3" },
     { name = "pytest-xdist", marker = "python_full_version == '3.14.*'", specifier = ">=3.8,<4" },
-    { name = "ruff", marker = "python_full_version == '3.14.*'", specifier = ">=0.16,<0.17" },
+    { name = "ruff", marker = "python_full_version == '3.14.*'", specifier = ">=0.16.1,<0.17" },
     { name = "scalene", marker = "python_full_version == '3.14.*'", specifier = ">=2.3,<3" },
     { name = "ty", marker = "python_full_version == '3.14.*'", specifier = ">=0.0.18,<1" },
+    { name = "types-jsonschema", marker = "python_full_version == '3.14.*'", specifier = ">=4.25,<5" },
     { name = "zizmor", marker = "python_full_version == '3.14.*'", specifier = ">=1.13,<2" },
 ]
 profiling = [{ name = "scalene", marker = "python_full_version == '3.14.*'", specifier = ">=2.3,<3" }]
@@ -160,31 +219,65 @@ security = [
     { name = "zizmor", marker = "python_full_version == '3.14.*'", specifier = ">=1.13,<2" },
 ]
 test = [
+    { name = "coverage", extras = ["toml"], marker = "python_full_version == '3.14.*'", specifier = ">=7.10.6,<8" },
+    { name = "inline-snapshot", marker = "python_full_version == '3.14.*'", specifier = ">=0.35.4,<0.36" },
     { name = "jsonschema", extras = ["format-nongpl"], marker = "python_full_version == '3.14.*'", specifier = ">=4.25,<5" },
     { name = "packaging", marker = "python_full_version == '3.14.*'", specifier = ">=26,<27" },
     { name = "pytest", marker = "python_full_version == '3.14.*'", specifier = ">=9.1,<10" },
     { name = "pytest-cov", marker = "python_full_version == '3.14.*'", specifier = ">=7.1,<8" },
+    { name = "pytest-httpserver", marker = "python_full_version == '3.14.*'", specifier = ">=1.1.5,<2" },
+    { name = "pytest-mock", marker = "python_full_version == '3.14.*'", specifier = ">=3.15.1,<4" },
+    { name = "pytest-socket", marker = "python_full_version == '3.14.*'", specifier = ">=0.8.1,<1" },
+    { name = "pytest-subprocess", marker = "python_full_version == '3.14.*'", specifier = ">=1.6,<2" },
     { name = "pytest-timeout", marker = "python_full_version == '3.14.*'", specifier = ">=2.4,<3" },
     { name = "pytest-xdist", marker = "python_full_version == '3.14.*'", specifier = ">=3.8,<4" },
 ]
 test-goblin = [
+    { name = "coverage", extras = ["toml"], marker = "python_full_version == '3.14.*'", specifier = ">=7.10.6,<8" },
     { name = "hypothesis", marker = "python_full_version == '3.14.*'", specifier = ">=6.164,<7" },
+    { name = "inline-snapshot", marker = "python_full_version == '3.14.*'", specifier = ">=0.35.4,<0.36" },
     { name = "jsonschema", extras = ["format-nongpl"], marker = "python_full_version == '3.14.*'", specifier = ">=4.25,<5" },
     { name = "mutmut", marker = "python_full_version == '3.14.*'", specifier = ">=3.5,<4" },
     { name = "packaging", marker = "python_full_version == '3.14.*'", specifier = ">=26,<27" },
     { name = "pytest", marker = "python_full_version == '3.14.*'", specifier = ">=9.1,<10" },
     { name = "pytest-cov", marker = "python_full_version == '3.14.*'", specifier = ">=7.1,<8" },
     { name = "pytest-gremlins", marker = "python_full_version == '3.14.*'", specifier = ">=1.9,<2" },
+    { name = "pytest-httpserver", marker = "python_full_version == '3.14.*'", specifier = ">=1.1.5,<2" },
+    { name = "pytest-mock", marker = "python_full_version == '3.14.*'", specifier = ">=3.15.1,<4" },
     { name = "pytest-picked", marker = "python_full_version == '3.14.*'", specifier = ">=0.5,<1" },
     { name = "pytest-randomly", marker = "python_full_version == '3.14.*'", specifier = ">=4,<5" },
+    { name = "pytest-socket", marker = "python_full_version == '3.14.*'", specifier = ">=0.8.1,<1" },
+    { name = "pytest-subprocess", marker = "python_full_version == '3.14.*'", specifier = ">=1.6,<2" },
+    { name = "pytest-testmon", marker = "python_full_version == '3.14.*'", specifier = ">=2.2,<3" },
+    { name = "pytest-timeout", marker = "python_full_version == '3.14.*'", specifier = ">=2.4,<3" },
+    { name = "pytest-xdist", marker = "python_full_version == '3.14.*'", specifier = ">=3.8,<4" },
+]
+test-performance = [
+    { name = "coverage", extras = ["toml"], marker = "python_full_version == '3.14.*'", specifier = ">=7.10.6,<8" },
+    { name = "hypothesis", marker = "python_full_version == '3.14.*'", specifier = ">=6.164,<7" },
+    { name = "inline-snapshot", marker = "python_full_version == '3.14.*'", specifier = ">=0.35.4,<0.36" },
+    { name = "jsonschema", extras = ["format-nongpl"], marker = "python_full_version == '3.14.*'", specifier = ">=4.25,<5" },
+    { name = "mutmut", marker = "python_full_version == '3.14.*'", specifier = ">=3.5,<4" },
+    { name = "packaging", marker = "python_full_version == '3.14.*'", specifier = ">=26,<27" },
+    { name = "pytest", marker = "python_full_version == '3.14.*'", specifier = ">=9.1,<10" },
+    { name = "pytest-benchmark", marker = "python_full_version == '3.14.*'", specifier = ">=5.3,<6" },
+    { name = "pytest-cov", marker = "python_full_version == '3.14.*'", specifier = ">=7.1,<8" },
+    { name = "pytest-gremlins", marker = "python_full_version == '3.14.*'", specifier = ">=1.9,<2" },
+    { name = "pytest-httpserver", marker = "python_full_version == '3.14.*'", specifier = ">=1.1.5,<2" },
+    { name = "pytest-mock", marker = "python_full_version == '3.14.*'", specifier = ">=3.15.1,<4" },
+    { name = "pytest-picked", marker = "python_full_version == '3.14.*'", specifier = ">=0.5,<1" },
+    { name = "pytest-randomly", marker = "python_full_version == '3.14.*'", specifier = ">=4,<5" },
+    { name = "pytest-socket", marker = "python_full_version == '3.14.*'", specifier = ">=0.8.1,<1" },
+    { name = "pytest-subprocess", marker = "python_full_version == '3.14.*'", specifier = ">=1.6,<2" },
     { name = "pytest-testmon", marker = "python_full_version == '3.14.*'", specifier = ">=2.2,<3" },
     { name = "pytest-timeout", marker = "python_full_version == '3.14.*'", specifier = ">=2.4,<3" },
     { name = "pytest-xdist", marker = "python_full_version == '3.14.*'", specifier = ">=3.8,<4" },
 ]
 typing = [
-    { name = "basedpyright", marker = "python_full_version == '3.14.*'", specifier = ">=1.36,<2" },
-    { name = "ruff", marker = "python_full_version == '3.14.*'", specifier = ">=0.16,<0.17" },
+    { name = "basedpyright", marker = "python_full_version == '3.14.*'", specifier = ">=1.39.9,<2" },
+    { name = "ruff", marker = "python_full_version == '3.14.*'", specifier = ">=0.16.1,<0.17" },
     { name = "ty", marker = "python_full_version == '3.14.*'", specifier = ">=0.0.18,<1" },
+    { name = "types-jsonschema", marker = "python_full_version == '3.14.*'", specifier = ">=4.25,<5" },
 ]
 
 [[package]]
@@ -498,6 +591,15 @@ wheels = [
 ]
 
 [[package]]
+name = "executing"
+version = "2.2.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cc/28/c14e053b6762b1044f34a13aab6859bbf40456d37d23aa286ac24cfd9a5d/executing-2.2.1.tar.gz", hash = "sha256:3632cc370565f6648cc328b32435bd120a1e4ebb20c77e3fdde9a13cd1e533c4", size = 1129488, upload-time = "2025-09-01T09:48:10.866Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c1/ea/53f2148663b321f21b5a606bd5f191517cf40b7072c0497d3c92c4a13b1e/executing-2.2.1-py2.py3-none-any.whl", hash = "sha256:760643d3452b4d777d295bb167ccc74c64a81df23fb5e08eff250c425a4b2017", size = 28317, upload-time = "2025-09-01T09:48:08.5Z" },
+]
+
+[[package]]
 name = "filelock"
 version = "3.32.5"
 source = { registry = "https://pypi.org/simple" }
@@ -679,6 +781,22 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/72/34/14ca021ce8e5dfedc35312d08ba8bf51fdd999c576889fc2c24cb97f4f10/iniconfig-2.3.0.tar.gz", hash = "sha256:c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730", size = 20503, upload-time = "2025-10-18T21:55:43.219Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl", hash = "sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12", size = 7484, upload-time = "2025-10-18T21:55:41.639Z" },
+]
+
+[[package]]
+name = "inline-snapshot"
+version = "0.35.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "asttokens" },
+    { name = "executing" },
+    { name = "pytest" },
+    { name = "rich" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/59/46/3c459f0350e88d6a5ca58a4792a7215c3b0990cf9bb6a2b37ac8d74a2504/inline_snapshot-0.35.4.tar.gz", hash = "sha256:82432a58b7ea77a172515f5024cd26fdea8dc0f873c7a4251e4e0471a914db14", size = 2537089, upload-time = "2026-08-11T07:07:56.213Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/97/b3/dc18eb603de18daf5cacc27bb4c5e80c5403d9ca3eade7342fe4228652bf/inline_snapshot-0.35.4-py3-none-any.whl", hash = "sha256:0ad221c1bc6fe4ce249f7c1c4131284099ecac1a5c1023aa7b1a95921c07265d", size = 95725, upload-time = "2026-08-11T07:07:54.24Z" },
 ]
 
 [[package]]
@@ -1188,6 +1306,15 @@ wheels = [
 ]
 
 [[package]]
+name = "py-cpuinfo2"
+version = "10.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/97/a8b1ddada14c8280a047c0746f95cb05d94a31b1a331cea22bcdc2b2a82d/py_cpuinfo2-10.1.1.tar.gz", hash = "sha256:7861133863663f16e06eca63b12904ef100b5760415e92372dac0162799a4771", size = 100840, upload-time = "2026-03-25T21:49:40.797Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/23/0a/ba69d2dde1ae12ef1d389ea5a216384c5ff6ef7a1e7a48d1e9b6686f6790/py_cpuinfo2-10.1.1-py3-none-any.whl", hash = "sha256:adc53396bfb206e6498d078ec2ab407f85799ecd819584ac36a8f80a2d4d762d", size = 23791, upload-time = "2026-03-25T21:49:39.574Z" },
+]
+
+[[package]]
 name = "py-serializable"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1290,6 +1417,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pytest-benchmark"
+version = "5.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "py-cpuinfo2" },
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/63/8f/83a15e40dbc34a580ee56eb56983cae5394c6e94d50cf28fe268e457be25/pytest_benchmark-5.3.0.tar.gz", hash = "sha256:358444d4e89be901ee2b6404fb043ac3d7684002ad7f3563cc153fca6339c965", size = 375410, upload-time = "2026-08-23T17:45:08.891Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/eb/42/7e80f7cfa191e0a766d1de99b4661847415ad5db34f8209d81fd42175b59/pytest_benchmark-5.3.0-py3-none-any.whl", hash = "sha256:920ab1dfcffa718d49aa15ba144c7e357bda59216a0dc308016cc1c7236f719d", size = 48401, upload-time = "2026-08-23T17:45:07.094Z" },
+]
+
+[[package]]
 name = "pytest-cov"
 version = "7.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1317,6 +1457,30 @@ wheels = [
 ]
 
 [[package]]
+name = "pytest-httpserver"
+version = "1.1.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "werkzeug" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/50/17/ad187f46998814014f7cda309de700b87c0eb4b2e111e18bc8c819be7116/pytest_httpserver-1.1.5.tar.gz", hash = "sha256:dc3d82e1fe00e491829d8939c549bf4bd9b39a260f87113c619b9d517c2f8ff1", size = 70974, upload-time = "2026-02-14T13:27:23.412Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/df/0bdf90b84c6a586a9fd2b509523a3ab26b1cc1b1dba2fb62a32e4411ea9e/pytest_httpserver-1.1.5-py3-none-any.whl", hash = "sha256:ee83feb587ab652c0c6729598db2820e9048233bac8df756818b7845a1621d0a", size = 23330, upload-time = "2026-02-14T13:27:22.119Z" },
+]
+
+[[package]]
+name = "pytest-mock"
+version = "3.15.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/68/14/eb014d26be205d38ad5ad20d9a80f7d201472e08167f0bb4361e251084a9/pytest_mock-3.15.1.tar.gz", hash = "sha256:1849a238f6f396da19762269de72cb1814ab44416fa73a8686deac10b0d87a0f", size = 34036, upload-time = "2025-09-16T16:37:27.081Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5a/cc/06253936f4a7fa2e0f48dfe6d851d9c56df896a9ab09ac019d70b760619c/pytest_mock-3.15.1-py3-none-any.whl", hash = "sha256:0a25e2eb88fe5168d535041d09a4529a188176ae608a6d249ee65abc0949630d", size = 10095, upload-time = "2025-09-16T16:37:25.734Z" },
+]
+
+[[package]]
 name = "pytest-picked"
 version = "0.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1338,6 +1502,30 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/27/b3/36192dacc0f470ac2cc516f73e01739c9a48a8224f76beada4f85e1c8a89/pytest_randomly-4.1.0.tar.gz", hash = "sha256:47f1d9746c3bc3efabd53ae1ebfb8bb385cf3d4df4b505b6d58d9c97a3dfe70f", size = 14302, upload-time = "2026-04-20T13:01:51.831Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9a/db/2df9a1fca597a273f957a559c20c2d95d629928384507b2afa43ba6909d1/pytest_randomly-4.1.0-py3-none-any.whl", hash = "sha256:f55e89e53367b090c0c053697d7f9d77595543d0e0516c93978b50c0f6b252f9", size = 8353, upload-time = "2026-04-20T13:01:50.382Z" },
+]
+
+[[package]]
+name = "pytest-socket"
+version = "0.8.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ba/ce/4ef7b049852c95a8727b4a7e6496f762df1ac0b47bc0320d10293f5e95ec/pytest_socket-0.8.1.tar.gz", hash = "sha256:2f57787914ad2e1308d09ce141b95c3e55741fbb4fb7b7556593a6b063e0c9c7", size = 17313, upload-time = "2026-08-19T15:16:25.653Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/87/ef/ab507f117b3d19b54e3c9c632a99c28c3b284562ec6e02e274581d530d92/pytest_socket-0.8.1-py3-none-any.whl", hash = "sha256:f9846bed1dcd96eed459e5e14795bbaf96715cf4e827891fe70773817ecb8ed4", size = 8751, upload-time = "2026-08-19T15:16:24.426Z" },
+]
+
+[[package]]
+name = "pytest-subprocess"
+version = "1.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/76/7a/0d5855132e11de2a96da26e596560757ebbbf8190cfe36cbf85d7423f384/pytest_subprocess-1.6.0.tar.gz", hash = "sha256:b2d746eb1b768a6f9087e5c7c91f87fb9d40c7fdc777550dc00397af428a0654", size = 47910, upload-time = "2026-05-10T08:22:54.207Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c5/4f/ebe38bf128380f6a8a9b0fbbbe24cbf83915bb2f934717be65cadf55b6fa/pytest_subprocess-1.6.0-py3-none-any.whl", hash = "sha256:00037100f30429c8546adc81f357fddb5213eb036fe3bfb47b7b6befc965e5b2", size = 23803, upload-time = "2026-05-10T08:22:52.52Z" },
 ]
 
 [[package]]
@@ -1868,6 +2056,18 @@ wheels = [
 ]
 
 [[package]]
+name = "types-jsonschema"
+version = "4.26.0.20260518"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "referencing" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/dd/46/73b6a5d61a61015c4248030a8cb07e5bdddb4041430fae9e585a68692578/types_jsonschema-4.26.0.20260518.tar.gz", hash = "sha256:e1dd53dc97a64f5eccdd6fa9839666e09bb500a8ebba2db6fdaf1789faea81a6", size = 16638, upload-time = "2026-05-18T06:06:44.106Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/07/d5/134f8a147dcecda10db7f60cfc6af0578a25a5c53c87b3907a64385e0184/types_jsonschema-4.26.0.20260518-py3-none-any.whl", hash = "sha256:30b30a518c7fe335df85c919fcbcc631b69c03d4a4b5b632fa916bea03065307", size = 16072, upload-time = "2026-05-18T06:06:43.264Z" },
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.16.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1954,6 +2154,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/1d/7a/eb316761ec35664ea5174709a68bbd3389de60d4a1ebab8808bfc264ed67/webcolors-25.10.0.tar.gz", hash = "sha256:62abae86504f66d0f6364c2a8520de4a0c47b80c03fc3a5f1815fedbef7c19bf", size = 53491, upload-time = "2025-10-31T07:51:03.977Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e2/cc/e097523dd85c9cf5d354f78310927f1656c422bd7b2613b2db3e3f9a0f2c/webcolors-25.10.0-py3-none-any.whl", hash = "sha256:032c727334856fc0b968f63daa252a1ac93d33db2f5267756623c210e57a4f1d", size = 14905, upload-time = "2025-10-31T07:51:01.778Z" },
+]
+
+[[package]]
+name = "werkzeug"
+version = "3.1.8"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "markupsafe" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/dd/b2/381be8cfdee792dd117872481b6e378f85c957dd7c5bca38897b08f765fd/werkzeug-3.1.8.tar.gz", hash = "sha256:9bad61a4268dac112f1c5cd4630a56ede601b6ed420300677a869083d70a4c44", size = 875852, upload-time = "2026-04-02T18:49:14.268Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/93/8c/2e650f2afeb7ee576912636c23ddb621c91ac6a98e66dc8d29c3c69446e1/werkzeug-3.1.8-py3-none-any.whl", hash = "sha256:63a77fb8892bf28ebc3178683445222aa500e48ebad5ec77b0ad80f8726b1f50", size = 226459, upload-time = "2026-04-02T18:49:12.72Z" },
 ]
 
 [[package]]
