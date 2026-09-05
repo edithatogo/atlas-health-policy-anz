@@ -1,0 +1,79 @@
+name: Bounded public Bronze capture
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "43 13 * * 2,5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bronze-capture-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      ready: ${{ steps.preflight.outputs.ready }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - id: preflight
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        shell: bash
+        run: |
+          if [[ ! -f uv.lock || -z "$HF_TOKEN" ]]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Bronze blocked: committed uv.lock and scoped HF write credential required." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - id: matrix
+        env:
+          PYTHONPATH: src
+        shell: bash
+        run: |
+          matrix=$(python -m australian_health_policy_atlas.operations --matrix)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  capture:
+    needs: preflight
+    if: needs.preflight.outputs.ready == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.preflight.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: true
+      - run: uv sync --python 3.14.6 --locked --no-default-groups --group publication
+      - name: Restore, capture, publish, and verify bounded source checkpoints
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          SOURCE_ID: ${{ matrix.source_id }}
+        shell: bash
+        run: |
+          mkdir -p build/receipts
+          uv run --no-sync python -m australian_health_policy_atlas.operations \
+            --source-id "$SOURCE_ID" --workspace "$RUNNER_TEMP/atlas-source" \
+            --request-budget 20 > "build/receipts/${SOURCE_ID}.json"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: source-receipt-${{ matrix.source_id }}
+          path: build/receipts/*.json
+          if-no-files-found: warn
+          retention-days: 14
