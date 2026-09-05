@@ -1,0 +1,38 @@
+name: Public Bronze staging assessment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bronze-assessment-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  assess:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: true
+      - name: Require committed production lock
+        run: test -f uv.lock
+      - run: uv sync --python 3.14.6 --locked --no-default-groups --group publication
+      - name: Verify pinned remote staging without claiming a medallion release
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: uv run --no-sync python scripts/assess_bronze.py
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: bronze-staging-assessment
+          path: build/receipts/bronze-assessment.json
+          if-no-files-found: warn
+          retention-days: 14

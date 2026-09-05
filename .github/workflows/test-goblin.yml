@@ -1,0 +1,91 @@
+name: Test-Goblin
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-goblin-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Python 3.14 / ${{ matrix.lane }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [unit, integration, smoke, property, contract]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: true
+      - run: uv python install 3.14.6
+      - name: Synchronize test environment
+        shell: bash
+        run: |
+          if [[ -f uv.lock ]]; then
+            uv sync --python 3.14.6 --group test-goblin --locked
+          else
+            uv sync --python 3.14.6 --group test-goblin
+          fi
+      - name: Run lane
+        run: uv run --python 3.14.6 python scripts/test_goblin.py "${{ matrix.lane }}"
+
+  coverage-and-benchmarks:
+    name: Coverage, benchmark and package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: true
+      - run: uv python install 3.14.6
+      - name: Synchronize development environment
+        shell: bash
+        run: |
+          if [[ -f uv.lock ]]; then
+            uv sync --python 3.14.6 --group dev --locked
+          else
+            uv sync --python 3.14.6 --group dev
+          fi
+      - name: Test with branch coverage
+        env:
+          COVERAGE_CORE: sysmon
+        run: >-
+          uv run --python 3.14.6 pytest -q
+          --cov=australian_health_policy_atlas
+          --cov-branch
+          --cov-report=term-missing
+          --cov-report=xml
+          --cov-fail-under=95
+      - name: Run deterministic modality benchmark
+        run: uv run --python 3.14.6 python scripts/benchmark_modality.py
+      - name: Validate Conductor context
+        run: uv run --python 3.14.6 python scripts/validate_context.py
+      - name: Build package
+        run: uv build
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: atlas-quality-receipts
+          path: |
+            build/benchmarks/
+            coverage.xml
+            dist/
+          if-no-files-found: warn
+          retention-days: 30
