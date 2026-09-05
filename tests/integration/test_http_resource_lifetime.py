@@ -20,11 +20,17 @@ if TYPE_CHECKING:
 @pytest.mark.integration
 @pytest.mark.parametrize("status", [404, 503])
 def test_capture_closes_http_error_before_propagation(
-    tmp_path: Path, mocker: MockerFixture, status: int,
+    tmp_path: Path,
+    mocker: MockerFixture,
+    status: int,
 ) -> None:
     body = BytesIO(b"synthetic error response")
-    error = HTTPError("https://health.test/policies", status, "fixture", Message(), body)
-    opener = mocker.patch("australian_health_policy_atlas.capture.urlopen", side_effect=error)
+    error = HTTPError(
+        "https://health.test/policies", status, "fixture", Message(), body
+    )
+    opener = mocker.patch(
+        "australian_health_policy_atlas.capture.urlopen", side_effect=error
+    )
     try:
         with pytest.raises(HTTPError) as observed:
             capture_url("https://health.test/policies", cas_root=tmp_path, retries=0)
@@ -36,15 +42,27 @@ def test_capture_closes_http_error_before_propagation(
 
 
 @pytest.mark.integration
-@pytest.mark.parametrize(("status", "disposition"), [(404, "unavailable"), (503, "retryable")])
+@pytest.mark.parametrize(
+    ("status", "disposition"), [(404, "unavailable"), (503, "retryable")]
+)
 def test_crawl_closes_error_from_injected_capture_boundary(
-    tmp_path: Path, mocker: MockerFixture, status: int, disposition: str,
+    tmp_path: Path,
+    mocker: MockerFixture,
+    status: int,
+    disposition: str,
 ) -> None:
     body = BytesIO(b"synthetic adapter error")
-    error = HTTPError("https://health.test/policies", status, "fixture", Message(), body)
+    error = HTTPError(
+        "https://health.test/policies", status, "fixture", Message(), body
+    )
     fetch = mocker.Mock(side_effect=error)
-    policy = CrawlPolicy("quality-http", "QLD", "https://health.test/policies",
-                         ("health.test",), "2026-09-05")
+    policy = CrawlPolicy(
+        "quality-http",
+        "QLD",
+        "https://health.test/policies",
+        ("health.test",),
+        "2026-09-05",
+    )
     try:
         result = run_crawl(policy, tmp_path, request_budget=1, fetch=fetch)
         assert body.closed

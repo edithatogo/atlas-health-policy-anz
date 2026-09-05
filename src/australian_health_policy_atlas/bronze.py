@@ -5,10 +5,10 @@ from __future__ import annotations
 import json
 import mimetypes
 import shutil
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterable
 
 from .hashing import sha256_file, sha256_json
 
@@ -55,7 +55,9 @@ def ingest_local_file(
     )
 
 
-def write_manifest(objects: Iterable[BronzeObject], path: str | Path, *, release_id: str) -> dict[str, object]:
+def write_manifest(
+    objects: Iterable[BronzeObject], path: str | Path, *, release_id: str
+) -> dict[str, object]:
     records = [asdict(item) for item in objects]
     payload: dict[str, object] = {
         "schema_version": "1.0",
@@ -66,5 +68,7 @@ def write_manifest(objects: Iterable[BronzeObject], path: str | Path, *, release
     }
     payload["manifest_sha256"] = sha256_json(payload)
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    Path(path).write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    Path(path).write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     return payload

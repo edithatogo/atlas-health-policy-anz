@@ -1,4 +1,8 @@
-from australian_health_policy_atlas.domain import EvidenceState, MedallionLayer, ReleaseStatus
+from australian_health_policy_atlas.domain import (
+    EvidenceState,
+    MedallionLayer,
+    ReleaseStatus,
+)
 from australian_health_policy_atlas.release import qualify_release
 
 

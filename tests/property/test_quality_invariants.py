@@ -2,8 +2,9 @@
 
 import hashlib
 
-from hypothesis import given, strategies as st
 import pytest
+from hypothesis import given
+from hypothesis import strategies as st
 
 from australian_health_policy_atlas.domain import MedallionLayer
 from australian_health_policy_atlas.hashing import canonical_json_bytes, sha256_bytes
@@ -24,12 +25,20 @@ def test_json_is_invariant_to_key_insertion_order(value: dict[str, int]) -> None
 
 
 @pytest.mark.property
-@given(st.sets(st.sampled_from(tuple(MedallionLayer))), st.dictionaries(
-    st.text(alphabet="abcdef", min_size=1, max_size=8), st.booleans(), max_size=8))
+@given(
+    st.sets(st.sampled_from(tuple(MedallionLayer))),
+    st.dictionaries(
+        st.text(alphabet="abcdef", min_size=1, max_size=8), st.booleans(), max_size=8
+    ),
+)
 def test_silver_gate_never_compensates_for_missing_evidence(
-    closed: set[MedallionLayer], evidence: dict[str, bool],
+    closed: set[MedallionLayer],
+    evidence: dict[str, bool],
 ) -> None:
-    decision = promotion_gate(MedallionLayer.SILVER, closed_layers=closed,
-                              acceptance_results=evidence)
-    expected = MedallionLayer.BRONZE in closed and bool(evidence) and all(evidence.values())
+    decision = promotion_gate(
+        MedallionLayer.SILVER, closed_layers=closed, acceptance_results=evidence
+    )
+    expected = (
+        MedallionLayer.BRONZE in closed and bool(evidence) and all(evidence.values())
+    )
     assert decision.permitted is expected

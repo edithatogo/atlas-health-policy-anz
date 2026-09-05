@@ -109,6 +109,9 @@ source = ["australian_health_policy_atlas"]
 relative_files = true
 patch = ["subprocess"]
 
+[tool.coverage.paths]
+atlas = ["src/australian_health_policy_atlas", "*.pyz/australian_health_policy_atlas", "*/*.pyz/australian_health_policy_atlas", "*/src/australian_health_policy_atlas"]
+
 [tool.coverage.report]
 fail_under = 95
 precision = 2

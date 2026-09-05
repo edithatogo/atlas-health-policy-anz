@@ -20,14 +20,31 @@ def test_hard_gate_failure_abstains() -> None:
 
 
 def test_deterministic_evidence_is_a0() -> None:
-    assert compose_confidence(base(deterministic_evidence=True)).state is EvidenceState.VERIFIED
+    assert (
+        compose_confidence(base(deterministic_evidence=True)).state
+        is EvidenceState.VERIFIED
+    )
 
 
 def test_independent_triangulation_is_a1() -> None:
-    result = compose_confidence(base(independent_methods_agree=3, independent_methods_total=3, benchmark_passed=True, coverage=0.99))
+    result = compose_confidence(
+        base(
+            independent_methods_agree=3,
+            independent_methods_total=3,
+            benchmark_passed=True,
+            coverage=0.99,
+        )
+    )
     assert result.state is EvidenceState.HIGH_CONFIDENCE
 
 
 def test_conflict_cannot_be_upgraded_by_models() -> None:
-    result = compose_confidence(base(independent_methods_agree=4, independent_methods_total=4, benchmark_passed=True, conflicting_evidence=True))
+    result = compose_confidence(
+        base(
+            independent_methods_agree=4,
+            independent_methods_total=4,
+            benchmark_passed=True,
+            conflicting_evidence=True,
+        )
+    )
     assert result.state is EvidenceState.PROVISIONAL

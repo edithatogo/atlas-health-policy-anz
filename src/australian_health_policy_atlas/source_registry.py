@@ -7,18 +7,35 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-
-JURISDICTIONS = frozenset({"Cth", "ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA", "NZ", "ANZ"})
+JURISDICTIONS = frozenset({
+    "Cth",
+    "ACT",
+    "NSW",
+    "NT",
+    "QLD",
+    "SA",
+    "TAS",
+    "VIC",
+    "WA",
+    "NZ",
+    "ANZ",
+})
 
 
 def load_registry(path: str | Path | None = None) -> dict[str, Any]:
     if path is None:
         from importlib.resources import files
-        resource = files("australian_health_policy_atlas").joinpath("_data/jurisdictions-v1.json")
+
+        resource = files("australian_health_policy_atlas").joinpath(
+            "_data/jurisdictions-v1.json"
+        )
         if resource.is_file():
             text = resource.read_text(encoding="utf-8")
         else:
-            text = (Path(__file__).resolve().parents[2] / "data/sources/jurisdictions-v1.json").read_text(encoding="utf-8")
+            text = (
+                Path(__file__).resolve().parents[2]
+                / "data/sources/jurisdictions-v1.json"
+            ).read_text(encoding="utf-8")
     else:
         text = Path(path).read_text(encoding="utf-8")
     value = json.loads(text)

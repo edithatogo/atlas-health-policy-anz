@@ -50,9 +50,13 @@ def run_institutional_gap_analysis(
 ) -> dict[str, Any]:
     root = Path(output_dir)
     local_dir = root / "local"
-    prep = prepare_local_document(local_document, source_id=local_source_id, output_dir=local_dir)
+    prep = prepare_local_document(
+        local_document, source_id=local_source_id, output_dir=local_dir
+    )
     local_assertions: list[PolicyAssertion] = []
-    for line in (local_dir / "gold-candidates.jsonl").read_text(encoding="utf-8").splitlines():
+    for line in (
+        (local_dir / "gold-candidates.jsonl").read_text(encoding="utf-8").splitlines()
+    ):
         row = json.loads(line)
         local_assertions.append(
             PolicyAssertion(
@@ -65,7 +69,9 @@ def run_institutional_gap_analysis(
                 action=row.get("action"),
                 object=row.get("object"),
                 timeframe=row.get("timeframe"),
-                evidence_state=EvidenceState.SUPPORTED_NEEDS_VERIFICATION if row.get("deterministic") else EvidenceState.PROVISIONAL,
+                evidence_state=EvidenceState.SUPPORTED_NEEDS_VERIFICATION
+                if row.get("deterministic")
+                else EvidenceState.PROVISIONAL,
                 reason_codes=(row.get("reason_code", "unknown"),),
             )
         )
@@ -77,21 +83,38 @@ def run_institutional_gap_analysis(
     matrix_path = root / "gap-matrix.jsonl"
     with matrix_path.open("w", encoding="utf-8") as handle:
         for row in rows:
-            handle.write(json.dumps({
-                "reference_assertion_id": row.target_assertion_id,
-                "local_candidate_assertion_id": row.comparator_assertion_id,
-                "target_assertion_id": row.target_assertion_id,
-                "comparator_assertion_id": row.comparator_assertion_id,
-                "relationship": row.relationship,
-                "evidence_state": row.evidence_state.value,
-                "reason_codes": list(row.reason_codes),
-            }, sort_keys=True) + "\n")
-    with (root / "local-to-reference-candidates.jsonl").open("w", encoding="utf-8") as handle:
+            handle.write(
+                json.dumps(
+                    {
+                        "reference_assertion_id": row.target_assertion_id,
+                        "local_candidate_assertion_id": row.comparator_assertion_id,
+                        "target_assertion_id": row.target_assertion_id,
+                        "comparator_assertion_id": row.comparator_assertion_id,
+                        "relationship": row.relationship,
+                        "evidence_state": row.evidence_state.value,
+                        "reason_codes": list(row.reason_codes),
+                    },
+                    sort_keys=True,
+                )
+                + "\n"
+            )
+    with (root / "local-to-reference-candidates.jsonl").open(
+        "w", encoding="utf-8"
+    ) as handle:
         for row in reverse_rows:
-            handle.write(json.dumps({"local_assertion_id": row.target_assertion_id,
-                "reference_candidate_assertion_id": row.comparator_assertion_id,
-                "relationship": row.relationship, "evidence_state": row.evidence_state.value,
-                "reason_codes": list(row.reason_codes)}, sort_keys=True) + "\n")
+            handle.write(
+                json.dumps(
+                    {
+                        "local_assertion_id": row.target_assertion_id,
+                        "reference_candidate_assertion_id": row.comparator_assertion_id,
+                        "relationship": row.relationship,
+                        "evidence_state": row.evidence_state.value,
+                        "reason_codes": list(row.reason_codes),
+                    },
+                    sort_keys=True,
+                )
+                + "\n"
+            )
     receipt: dict[str, Any] = {
         "schema_version": "1.0",
         "local_document_sha256": sha256_file(local_document),
@@ -102,7 +125,9 @@ def run_institutional_gap_analysis(
         "direction": "reference_requirements_against_local_corpus",
         "coverage_denominator": "reference_assertion_count",
         "matrix_sha256": sha256_file(matrix_path),
-        "reverse_matrix_sha256": sha256_file(root / "local-to-reference-candidates.jsonl"),
+        "reverse_matrix_sha256": sha256_file(
+            root / "local-to-reference-candidates.jsonl"
+        ),
         "network_used": False,
         "limitations": [
             "no_candidate_found is a retrieval result, not confirmed policy non-compliance",
@@ -111,5 +136,7 @@ def run_institutional_gap_analysis(
         ],
     }
     receipt["receipt_sha256"] = sha256_json(receipt)
-    (root / "institutional-gap-receipt.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (root / "institutional-gap-receipt.json").write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     return receipt

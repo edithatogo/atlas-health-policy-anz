@@ -11,4 +11,5 @@ def test_load_jsonl_skips_blank_lines(tmp_path: Path) -> None:
 
 def test_empty_benchmark_accuracy_zero() -> None:
     result = evaluate_classifier([], lambda _text: "x")
-    assert result.total == 0 and result.accuracy == 0.0
+    assert result.total == 0
+    assert result.accuracy == 0.0

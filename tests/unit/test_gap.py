@@ -17,5 +17,7 @@ def assertion(identifier: str, modality: str, action: str) -> PolicyAssertion:
 
 
 def test_gap_detects_material_modality_difference() -> None:
-    rows = build_gap_rows([assertion("a", "must", "escalate")], [assertion("b", "should", "escalate")])
+    rows = build_gap_rows(
+        [assertion("a", "must", "escalate")], [assertion("b", "should", "escalate")]
+    )
     assert rows[0].relationship == "material_difference"

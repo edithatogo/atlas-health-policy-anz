@@ -14,10 +14,14 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("manifest")
     parser.add_argument("--output-dir", required=True)
-    parser.add_argument("--dataset-id", default="edithatogo/au-health-policy-atlas-bronze")
+    parser.add_argument(
+        "--dataset-id", default="edithatogo/au-health-policy-atlas-bronze"
+    )
     args = parser.parse_args()
     manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
-    receipt = build_bronze_hf_candidate(manifest, output_dir=args.output_dir, dataset_id=args.dataset_id)
+    receipt = build_bronze_hf_candidate(
+        manifest, output_dir=args.output_dir, dataset_id=args.dataset_id
+    )
     print(json.dumps(receipt, sort_keys=True))
     return 0
 

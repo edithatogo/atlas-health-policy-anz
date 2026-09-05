@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import html
 import re
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from html.parser import HTMLParser
-from typing import Iterable
 
 from .hashing import sha256_text
 
@@ -26,7 +26,19 @@ class SilverSegment:
 
 
 class _VisibleTextParser(HTMLParser):
-    BLOCKS = frozenset({"p", "li", "h1", "h2", "h3", "h4", "h5", "h6", "td", "th", "blockquote"})
+    BLOCKS = frozenset({
+        "p",
+        "li",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "td",
+        "th",
+        "blockquote",
+    })
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -61,20 +73,26 @@ class _VisibleTextParser(HTMLParser):
             self.blocks.append(text)
 
 
-def normalize_text(source_id: str, text: str, *, parser_id: str = "plain-text-v1") -> list[SilverSegment]:
+def normalize_text(
+    source_id: str, text: str, *, parser_id: str = "plain-text-v1"
+) -> list[SilverSegment]:
     blocks = [re.sub(r"\s+", " ", line).strip() for line in text.splitlines()]
     blocks = [item for item in blocks if item]
     return _segments(source_id, blocks, parser_id)
 
 
-def normalize_html(source_id: str, html_text: str, *, parser_id: str = "stdlib-html-v1") -> list[SilverSegment]:
+def normalize_html(
+    source_id: str, html_text: str, *, parser_id: str = "stdlib-html-v1"
+) -> list[SilverSegment]:
     parser = _VisibleTextParser()
     parser.feed(html_text)
     parser.close()
     return _segments(source_id, parser.blocks, parser_id)
 
 
-def _segments(source_id: str, blocks: Iterable[str], parser_id: str) -> list[SilverSegment]:
+def _segments(
+    source_id: str, blocks: Iterable[str], parser_id: str
+) -> list[SilverSegment]:
     output: list[SilverSegment] = []
     for index, text in enumerate(blocks, 1):
         digest = sha256_text(text)

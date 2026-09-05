@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-
 ROUTE_ORDER = (
     "deterministic_rule",
     "lexical_or_structural_model",
@@ -27,6 +26,11 @@ def choose_route(task_class: str, qualifications: list[RouteQualification]) -> s
     by_route = {item.route: item for item in qualifications}
     for route in ROUTE_ORDER:
         item = by_route.get(route)
-        if item and item.available and item.benchmark_passed and task_class in item.task_classes:
+        if (
+            item
+            and item.available
+            and item.benchmark_passed
+            and task_class in item.task_classes
+        ):
             return route
     raise LookupError(f"no qualified route for task class {task_class}")

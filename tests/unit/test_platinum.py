@@ -1,5 +1,9 @@
 from australian_health_policy_atlas.domain import EvidenceState
-from australian_health_policy_atlas.platinum import baseline_relationship, jaccard_similarity, qualify_comparability
+from australian_health_policy_atlas.platinum import (
+    baseline_relationship,
+    jaccard_similarity,
+    qualify_comparability,
+)
 
 
 def test_modality_mismatch_is_material_even_when_text_similar() -> None:

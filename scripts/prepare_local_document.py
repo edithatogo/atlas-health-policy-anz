@@ -15,7 +15,9 @@ def main() -> int:
     parser.add_argument("--source-id", required=True)
     parser.add_argument("--output-dir", required=True)
     args = parser.parse_args()
-    receipt = prepare_local_document(args.document, source_id=args.source_id, output_dir=args.output_dir)
+    receipt = prepare_local_document(
+        args.document, source_id=args.source_id, output_dir=args.output_dir
+    )
     print(json.dumps(receipt, sort_keys=True))
     return 0
 

@@ -43,7 +43,15 @@ def discover_links(
     *,
     base_url: str,
     same_host_only: bool = True,
-    document_extensions: tuple[str, ...] = (".pdf", ".doc", ".docx", ".rtf", ".odt", ".html", ".htm"),
+    document_extensions: tuple[str, ...] = (
+        ".pdf",
+        ".doc",
+        ".docx",
+        ".rtf",
+        ".odt",
+        ".html",
+        ".htm",
+    ),
 ) -> list[DiscoveredLink]:
     parser = _LinkParser()
     parser.feed(html_text)
@@ -61,8 +69,20 @@ def discover_links(
             continue
         seen.add(absolute)
         path_lower = parsed.path.lower()
-        extension = next((ext for ext in document_extensions if path_lower.endswith(ext)), "")
-        document_words = ("policy", "guideline", "procedure", "directive", "standard", "framework", "manual")
-        likely = bool(extension) or any(word in (text + " " + parsed.path).lower() for word in document_words)
+        extension = next(
+            (ext for ext in document_extensions if path_lower.endswith(ext)), ""
+        )
+        document_words = (
+            "policy",
+            "guideline",
+            "procedure",
+            "directive",
+            "standard",
+            "framework",
+            "manual",
+        )
+        likely = bool(extension) or any(
+            word in (text + " " + parsed.path).lower() for word in document_words
+        )
         output.append(DiscoveredLink(absolute, text, likely, extension))
     return output

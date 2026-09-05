@@ -58,23 +58,25 @@ def prepare_local_document(
             "deterministic": fields.deterministic,
             "reason_code": fields.reason_code,
         })
-        typed_assertions.append(PolicyAssertion(
-            assertion_id=candidate_id,
-            jurisdiction="INSTITUTION",
-            source_id=source_id,
-            source_span_id=segment.segment_id,
-            actor=fields.actor,
-            modality=fields.modality,
-            action=fields.action,
-            object=fields.object,
-            timeframe=fields.timeframe,
-            evidence_state=(
-                EvidenceState.VERIFIED
-                if fields.deterministic
-                else EvidenceState.PROVISIONAL
-            ),
-            reason_codes=(fields.reason_code,),
-        ))
+        typed_assertions.append(
+            PolicyAssertion(
+                assertion_id=candidate_id,
+                jurisdiction="INSTITUTION",
+                source_id=source_id,
+                source_span_id=segment.segment_id,
+                actor=fields.actor,
+                modality=fields.modality,
+                action=fields.action,
+                object=fields.object,
+                timeframe=fields.timeframe,
+                evidence_state=(
+                    EvidenceState.VERIFIED
+                    if fields.deterministic
+                    else EvidenceState.PROVISIONAL
+                ),
+                reason_codes=(fields.reason_code,),
+            )
+        )
     with gold_path.open("w", encoding="utf-8") as handle:
         for row in gold_rows:
             handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
@@ -88,7 +90,9 @@ def prepare_local_document(
             )
             row = {"segment_id": segment.segment_id, **analysis.as_dict()}
             nlp_rows.append(row)
-            concepts = [span.text for span in analysis.spans if span.label == "POLICY_CONCEPT"]
+            concepts = [
+                span.text for span in analysis.spans if span.label == "POLICY_CONCEPT"
+            ]
             if concepts:
                 assertion_id = f"{segment.segment_id}.assertion.1"
                 if any(item.assertion_id == assertion_id for item in typed_assertions):
@@ -104,7 +108,9 @@ def prepare_local_document(
             assertions=typed_assertions,
             concept_links=concept_links,
         )
-        graph_manifest = write_graph(graph, output / "graph", graph_id=f"{source_id}.local")
+        graph_manifest = write_graph(
+            graph, output / "graph", graph_id=f"{source_id}.local"
+        )
     receipt: dict[str, Any] = {
         "schema_version": "1.0",
         "source_id": source_id,

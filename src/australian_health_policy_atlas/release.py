@@ -3,7 +3,13 @@
 from __future__ import annotations
 
 from .confidence import compose_confidence
-from .domain import ConfidenceSignals, EvidenceState, MedallionLayer, ReleaseReceipt, ReleaseStatus
+from .domain import (
+    ConfidenceSignals,
+    EvidenceState,
+    MedallionLayer,
+    ReleaseReceipt,
+    ReleaseStatus,
+)
 from .hashing import sha256_json
 from .state_machine import promotion_gate
 
@@ -17,7 +23,9 @@ def qualify_release(
     acceptance_results: dict[str, bool],
     closed_layers: set[MedallionLayer],
 ) -> ReleaseReceipt:
-    gate = promotion_gate(layer, closed_layers=closed_layers, acceptance_results=acceptance_results)
+    gate = promotion_gate(
+        layer, closed_layers=closed_layers, acceptance_results=acceptance_results
+    )
     if not gate.permitted:
         return ReleaseReceipt(
             release_id=release_id,

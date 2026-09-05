@@ -2,13 +2,26 @@ from pathlib import Path
 
 import pytest
 
-from australian_health_policy_atlas.domain import ComparisonFinding, EvidenceState, PolicyAssertion
-from australian_health_policy_atlas.graph import GraphEdge, GraphNode, PolicyGraph, build_policy_graph, load_graph, write_graph
+from australian_health_policy_atlas.domain import (
+    ComparisonFinding,
+    EvidenceState,
+    PolicyAssertion,
+)
+from australian_health_policy_atlas.graph import (
+    GraphEdge,
+    GraphNode,
+    PolicyGraph,
+    build_policy_graph,
+    load_graph,
+    write_graph,
+)
 from australian_health_policy_atlas.graphrag import retrieve_graph_context
 from australian_health_policy_atlas.silver import normalize_text
 
 
-def _assertion(assertion_id: str, segment_id: str, jurisdiction: str, modality: str = "must") -> PolicyAssertion:
+def _assertion(
+    assertion_id: str, segment_id: str, jurisdiction: str, modality: str = "must"
+) -> PolicyAssertion:
     return PolicyAssertion(
         assertion_id=assertion_id,
         jurisdiction=jurisdiction,
@@ -23,15 +36,28 @@ def _assertion(assertion_id: str, segment_id: str, jurisdiction: str, modality: 
 
 
 def test_policy_graph_build_write_load_and_graphrag(tmp_path: Path) -> None:
-    segments = normalize_text("src", "Registered nurses must escalate deteriorating patients.\nConsumers may escalate care.")
+    segments = normalize_text(
+        "src",
+        "Registered nurses must escalate deteriorating patients.\nConsumers may escalate care.",
+    )
     left = _assertion("a1", segments[0].segment_id, "QLD")
     right = _assertion("a2", segments[0].segment_id, "NSW")
-    finding = ComparisonFinding("f1", "a1", "a2", "candidate_equivalent", EvidenceState.HIGH_CONFIDENCE, ("triangulated",))
+    finding = ComparisonFinding(
+        "f1",
+        "a1",
+        "a2",
+        "candidate_equivalent",
+        EvidenceState.HIGH_CONFIDENCE,
+        ("triangulated",),
+    )
     graph = build_policy_graph(
         segments=segments,
         assertions=[left, right],
         findings=[finding],
-        concept_links={"a1": ["clinical deterioration"], "a2": ["clinical deterioration"]},
+        concept_links={
+            "a1": ["clinical deterioration"],
+            "a2": ["clinical deterioration"],
+        },
         framework_links={"a1": ["NSQHS"]},
     )
     assert "concept:clinical deterioration" in graph.nodes
@@ -58,7 +84,9 @@ def test_graph_rejects_conflicts_and_missing_endpoints() -> None:
 def test_graphrag_external_seed_and_no_hits() -> None:
     graph = PolicyGraph()
     graph.add_node(GraphNode("concept:x", "concept", "unrelated", {}))
-    context = retrieve_graph_context(graph, "zzzz", external_seed_scores={"concept:x": 0.9})
+    context = retrieve_graph_context(
+        graph, "zzzz", external_seed_scores={"concept:x": 0.9}
+    )
     assert context.hits[0].node_id == "concept:x"
     assert "external_semantic_seed_scores_supplied" in context.reason_codes
     empty = retrieve_graph_context(graph, "zzzz")
@@ -66,7 +94,9 @@ def test_graphrag_external_seed_and_no_hits() -> None:
     assert "no_graph_candidate_found" in empty.reason_codes
 
 
-def test_graph_projects_bronze_frameworks_and_skips_invalid_links(tmp_path: Path) -> None:
+def test_graph_projects_bronze_frameworks_and_skips_invalid_links(
+    tmp_path: Path,
+) -> None:
     from australian_health_policy_atlas.bronze import ingest_local_file
 
     source_file = tmp_path / "policy.txt"

@@ -2,6 +2,7 @@
 
 A self-hash detects changes; it is not a signature or evidence of correctness.
 """
+
 from __future__ import annotations
 
 import json
@@ -51,8 +52,15 @@ def read_json(data: bytes) -> dict[str, Any]:
 
 def safe_path(root: Path, relative: str) -> Path:
     path = PurePosixPath(relative)
-    if (not relative or relative == "." or path.is_absolute() or ".." in path.parts or
-            "\\" in relative or ":" in relative or str(path) != relative):
+    if (
+        not relative
+        or relative == "."
+        or path.is_absolute()
+        or ".." in path.parts
+        or "\\" in relative
+        or ":" in relative
+        or str(path) != relative
+    ):
         raise ValueError("unsafe relative path")
     candidate = root / path
     for parent in [candidate, *candidate.parents]:
@@ -74,7 +82,7 @@ def atomic_bytes(path: Path, data: bytes) -> None:
             stream.write(data)
             stream.flush()
             os.fsync(stream.fileno())
-        os.replace(temporary, path)
+        Path(temporary).replace(path)
     finally:
         temporary.unlink(missing_ok=True)
 

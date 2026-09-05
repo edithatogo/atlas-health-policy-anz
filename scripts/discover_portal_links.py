@@ -23,7 +23,10 @@ def main() -> int:
         links = [item for item in links if item.likely_document]
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text("".join(json.dumps(item.__dict__, sort_keys=True) + "\n" for item in links), encoding="utf-8")
+    output.write_text(
+        "".join(json.dumps(item.__dict__, sort_keys=True) + "\n" for item in links),
+        encoding="utf-8",
+    )
     print(json.dumps({"links": len(links)}, sort_keys=True))
     return 0
 

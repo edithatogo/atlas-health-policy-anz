@@ -6,11 +6,20 @@ from dataclasses import dataclass
 
 from .domain import MedallionLayer, ReleaseStatus, WorkStatus
 
-
 WORK_TRANSITIONS: dict[WorkStatus, frozenset[WorkStatus]] = {
     WorkStatus.QUEUED: frozenset({WorkStatus.EVIDENCE_READY, WorkStatus.FAILED}),
-    WorkStatus.EVIDENCE_READY: frozenset({WorkStatus.CANDIDATE, WorkStatus.ABSTAINED, WorkStatus.FAILED}),
-    WorkStatus.CANDIDATE: frozenset({WorkStatus.VERIFIED, WorkStatus.SUPPORTED, WorkStatus.PROVISIONAL, WorkStatus.ABSTAINED, WorkStatus.FAILED}),
+    WorkStatus.EVIDENCE_READY: frozenset({
+        WorkStatus.CANDIDATE,
+        WorkStatus.ABSTAINED,
+        WorkStatus.FAILED,
+    }),
+    WorkStatus.CANDIDATE: frozenset({
+        WorkStatus.VERIFIED,
+        WorkStatus.SUPPORTED,
+        WorkStatus.PROVISIONAL,
+        WorkStatus.ABSTAINED,
+        WorkStatus.FAILED,
+    }),
     WorkStatus.VERIFIED: frozenset(),
     WorkStatus.SUPPORTED: frozenset(),
     WorkStatus.PROVISIONAL: frozenset(),
@@ -21,7 +30,10 @@ WORK_TRANSITIONS: dict[WorkStatus, frozenset[WorkStatus]] = {
 RELEASE_TRANSITIONS: dict[ReleaseStatus, frozenset[ReleaseStatus]] = {
     ReleaseStatus.PLANNED: frozenset({ReleaseStatus.EXECUTING}),
     ReleaseStatus.EXECUTING: frozenset({ReleaseStatus.CANDIDATE}),
-    ReleaseStatus.CANDIDATE: frozenset({ReleaseStatus.EXECUTING, ReleaseStatus.QUALIFIED}),
+    ReleaseStatus.CANDIDATE: frozenset({
+        ReleaseStatus.EXECUTING,
+        ReleaseStatus.QUALIFIED,
+    }),
     ReleaseStatus.QUALIFIED: frozenset({ReleaseStatus.CLOSED}),
     ReleaseStatus.CLOSED: frozenset(),
 }
@@ -42,17 +54,23 @@ class InvalidTransition(ValueError):
 
 def transition_work(current: WorkStatus, target: WorkStatus) -> WorkStatus:
     if target not in WORK_TRANSITIONS[current]:
-        raise InvalidTransition(f"work transition {current.value}->{target.value} is not permitted")
+        raise InvalidTransition(
+            f"work transition {current.value}->{target.value} is not permitted"
+        )
     return target
 
 
 def transition_release(current: ReleaseStatus, target: ReleaseStatus) -> ReleaseStatus:
     if target not in RELEASE_TRANSITIONS[current]:
-        raise InvalidTransition(f"release transition {current.value}->{target.value} is not permitted")
+        raise InvalidTransition(
+            f"release transition {current.value}->{target.value} is not permitted"
+        )
     return target
 
 
-def predecessor_closed(layer: MedallionLayer, closed_layers: set[MedallionLayer]) -> bool:
+def predecessor_closed(
+    layer: MedallionLayer, closed_layers: set[MedallionLayer]
+) -> bool:
     predecessor = LAYER_PREDECESSOR[layer]
     return predecessor is None or predecessor in closed_layers
 
@@ -74,7 +92,9 @@ def promotion_gate(
         reasons.append("predecessor_release_not_closed")
     if not acceptance_results:
         reasons.append("acceptance_evidence_missing")
-    failed = sorted(key for key, passed in acceptance_results.items() if passed is not True)
+    failed = sorted(
+        key for key, passed in acceptance_results.items() if passed is not True
+    )
     if failed:
         reasons.extend(f"acceptance_failed:{key}" for key in failed)
     return PromotionDecision(not reasons, tuple(reasons))
