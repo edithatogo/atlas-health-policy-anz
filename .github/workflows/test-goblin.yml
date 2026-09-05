@@ -1,18 +1,14 @@
 name: Test-Goblin
-
 on:
   pull_request:
   push:
     branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: test-goblin-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   tests:
     name: Python 3.14 / ${{ matrix.lane }}
@@ -30,24 +26,16 @@ jobs:
         with:
           version: "0.11.29"
           enable-cache: true
-      - run: uv python install 3.14.6
-      - name: Synchronize test environment including exercised optional adapters
-        shell: bash
-        run: |
-          if [[ -f uv.lock ]]; then
-            uv sync --python 3.14.6 --group test-goblin --group publication --extra nlp --locked
-          else
-            uv sync --python 3.14.6 --group test-goblin --group publication --extra nlp
-          fi
-      - name: Check optional test dependencies are importable
-        run: >-
-          uv run --python 3.14.6 --group test-goblin --group publication --extra nlp
-          python -c "import huggingface_hub, spacy; print('HF and spaCy adapters available')"
-      - name: Run lane
-        run: >-
-          uv run --python 3.14.6 --group test-goblin --group publication --extra nlp
-          python scripts/test_goblin.py "${{ matrix.lane }}"
-
+      - name: Install exact runtime
+        run: uv python install 3.14.6
+      - name: Synchronize locked test environment and optional adapters
+        run: uv sync --python 3.14.6 --group test-goblin --group publication --extra nlp --locked
+      - name: Check optional dependencies
+        run: uv run --no-sync python -c "import huggingface_hub, spacy; print('HF and spaCy adapters available')"
+      - name: Run lane without shell template expansion
+        env:
+          ATLAS_TEST_LANE: ${{ matrix.lane }}
+        run: uv run --no-sync python scripts/test_goblin.py "$ATLAS_TEST_LANE"
   coverage-and-benchmarks:
     name: Coverage, benchmark and package
     runs-on: ubuntu-24.04
@@ -60,37 +48,22 @@ jobs:
         with:
           version: "0.11.29"
           enable-cache: true
-      - run: uv python install 3.14.6
-      - name: Synchronize development environment including exercised optional adapters
-        shell: bash
-        run: |
-          if [[ -f uv.lock ]]; then
-            uv sync --python 3.14.6 --group dev --group publication --extra nlp --locked
-          else
-            uv sync --python 3.14.6 --group dev --group publication --extra nlp
-          fi
-      - name: Check optional test dependencies are importable
-        run: >-
-          uv run --python 3.14.6 --group dev --group publication --extra nlp
-          python -c "import huggingface_hub, spacy; print('HF and spaCy adapters available')"
+      - name: Install exact runtime
+        run: uv python install 3.14.6
+      - name: Synchronize locked development environment and optional adapters
+        run: uv sync --python 3.14.6 --group dev --group publication --extra nlp --locked
+      - name: Check optional dependencies
+        run: uv run --no-sync python -c "import huggingface_hub, spacy; print('HF and spaCy adapters available')"
       - name: Test with branch coverage
         env:
           COVERAGE_CORE: sysmon
         run: >-
-          uv run --python 3.14.6 --group dev --group publication --extra nlp pytest -q
-          --cov=australian_health_policy_atlas
-          --cov-branch
-          --cov-report=term-missing
-          --cov-report=xml
-          --cov-fail-under=95
+          uv run --no-sync pytest -q --cov=australian_health_policy_atlas --cov-branch
+          --cov-report=term-missing --cov-report=xml --cov-fail-under=95
       - name: Run deterministic modality benchmark
-        run: >-
-          uv run --python 3.14.6 --group dev --group publication --extra nlp
-          python scripts/benchmark_modality.py
+        run: uv run --no-sync python scripts/benchmark_modality.py
       - name: Validate Conductor context
-        run: >-
-          uv run --python 3.14.6 --group dev --group publication --extra nlp
-          python scripts/validate_context.py
+        run: uv run --no-sync python scripts/validate_context.py
       - name: Build package
         run: uv build
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

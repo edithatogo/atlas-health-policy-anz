@@ -1,0 +1,61 @@
+name: Resolve and commit Atlas dependency lock
+on:
+  push:
+    branches: [fix/anz-regulators-and-ci]
+    paths: [.ci/lock-request]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: atlas-dependency-lock
+  cancel-in-progress: false
+jobs:
+  lock:
+    name: Resolve a real lock on the maintenance branch
+    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/fix/anz-regulators-and-ci'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write # Commit only uv.lock and its receipt to the named maintenance branch; never main.
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          ref: fix/anz-regulators-and-ci
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: false
+      - name: Resolve exact declared runtime and all dependency groups
+        run: |
+          uv python install 3.14.6
+          uv lock --python 3.14.6
+          uv lock --check
+          git diff --exit-code -- pyproject.toml
+      - name: Record and push only the resolved lock and receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os, pathlib, subprocess, tomllib
+          def git(*args):
+              return subprocess.check_output(['git', *args], text=True).strip()
+          branch = 'fix/anz-regulators-and-ci'
+          if git('branch', '--show-current') != branch or os.environ['GITHUB_REPOSITORY'] != 'edithatogo/atlas-health-policy-anz':
+              raise SystemExit('Refusing unexpected repository or branch')
+          lock = pathlib.Path('uv.lock').read_bytes()
+          packages = tomllib.loads(lock.decode())['package']
+          path = pathlib.Path('evidence/dependencies/lock-receipt.json')
+          path.parent.mkdir(parents=True, exist_ok=True)
+          path.write_text(json.dumps({'schema_version': 1, 'kind': 'resolved-dependency-lock', 'input_commit': git('rev-parse', 'HEAD'), 'pyproject_sha256': hashlib.sha256(pathlib.Path('pyproject.toml').read_bytes()).hexdigest(), 'lock_sha256': hashlib.sha256(lock).hexdigest(), 'packages': len(packages), 'python': '3.14.6', 'uv': '0.11.29', 'workflow_run_id': os.environ['GITHUB_RUN_ID'], 'audit_passed': False}, indent=2) + '\n')
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', 'uv.lock', str(path)], check=True)
+          subprocess.run(['git', 'commit', '-m', 'build: commit resolved Python 3.14 dependency lock and receipt'], check=True)
+          auth = base64.b64encode(('x-access-token:' + os.environ['GH_TOKEN']).encode()).decode()
+          print('::add-mask::' + auth, flush=True)
+          env = dict(os.environ, GIT_TERMINAL_PROMPT='0', GIT_CONFIG_COUNT='1', GIT_CONFIG_KEY_0='http.https://github.com/.extraheader', GIT_CONFIG_VALUE_0='AUTHORIZATION: basic ' + auth)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:refs/heads/' + branch], env=env, check=True)
+          print(path.read_text())
+          PY

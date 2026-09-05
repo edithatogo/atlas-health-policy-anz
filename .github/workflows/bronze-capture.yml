@@ -1,19 +1,16 @@
 name: Bounded public Bronze capture
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "43 13 * * 2,5"
-
 permissions:
   contents: read
-
 concurrency:
   group: bronze-capture-${{ github.ref }}
   cancel-in-progress: false
-
 jobs:
   preflight:
+    name: Check publication prerequisites and source matrix
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
@@ -24,6 +21,7 @@ jobs:
         with:
           persist-credentials: false
       - id: preflight
+        name: Check lock and credential availability
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         shell: bash
@@ -35,14 +33,15 @@ jobs:
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
       - id: matrix
+        name: Build bounded source matrix
         env:
           PYTHONPATH: src
         shell: bash
         run: |
           matrix=$(python -m australian_health_policy_atlas.operations --matrix)
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-
   capture:
+    name: Capture and verify public source ${{ matrix.source_id }}
     needs: preflight
     if: needs.preflight.outputs.ready == 'true'
     runs-on: ubuntu-24.04
@@ -59,7 +58,8 @@ jobs:
         with:
           version: "0.11.29"
           enable-cache: true
-      - run: uv sync --python 3.14.6 --locked --no-default-groups --group publication
+      - name: Install locked publication dependencies
+        run: uv sync --python 3.14.6 --locked --no-default-groups --group publication
       - name: Restore, capture, publish, and verify bounded source checkpoints
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}

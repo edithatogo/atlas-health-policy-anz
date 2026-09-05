@@ -1,19 +1,16 @@
 name: Source Health
-
 on:
   schedule:
     - cron: "23 17 * * 1"
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: source-health-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   portal-capture:
+    name: Check source portal availability
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -23,14 +20,14 @@ jobs:
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           version: "0.11.29"
-      - run: uv python install 3.14.6
+      - name: Install exact runtime
+        run: uv python install 3.14.6
       - name: Capture seed portals without promoting a release
         env:
           PYTHONPATH: src
         run: >-
           uv run --isolated --no-project --python 3.14.6 python
-          scripts/capture_registry_portals.py
-          --continue-on-error
+          scripts/capture_registry_portals.py --continue-on-error
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
