@@ -1,0 +1,1 @@
+Apply independently verified strict-remediation patch 6881e47adfce8455fee746f2de866bda375b58aff7a1386b23b832aaf282f3f6 to fix/strict-type-quality only. Commit only after all unchanged gates pass.

@@ -1,59 +1,72 @@
-name: Bounded strict remediation
+name: Apply verified strict remediation
 
 on:
   push:
-    branches: [feat/nz-authority-registry]
-    paths: [.github/workflows/strict-remediation.yml]
+    branches: [fix/strict-type-quality]
+    paths: [.strict-repair/READY]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: atlas-strict-remediation
+  group: atlas-verified-strict-repair
   cancel-in-progress: false
 
 jobs:
-  snapshot:
-    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/feat/nz-authority-registry'
+  repair:
+    name: Verify reviewed patch and require unchanged quality gates
+    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/fix/strict-type-quality'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 35
+    permissions:
+      contents: write # Bounded, test-gated edits on this PR branch only; removed after import.
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Check out the repair branch without persisted credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+          fetch-depth: 0
+          ref: fix/strict-type-quality
+      - name: Install the pinned uv runtime manager
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           version: "0.11.29"
           enable-cache: true
-      - name: Install locked runtime and all declared analysis dependencies
+      - name: Synchronize the unchanged locked production and test dependencies
         run: |
           uv python install 3.14.6
           uv sync --python 3.14.6 --group dev --group publication --extra nlp --locked
-      - name: Package only tracked public source and installed development tools
+      - name: Verify transport identities and apply the exact reviewed patch
+        run: uv run --no-sync python .strict-repair/apply.py apply
+      - name: Require Ruff, formatting and both strict type checkers
         run: |
-          mkdir -p build/remediation
-          git archive --format=tar HEAD | gzip -n > build/remediation/source.tar.gz
-          git rev-parse HEAD > build/remediation/source-commit.txt
-          uv run --no-sync python - <<'PY'
-          import json,sys,sysconfig,tarfile
-          from pathlib import Path
-          out=Path('build/remediation')
-          purelib=Path(sysconfig.get_path('purelib'))
-          runtime=Path(sys.base_prefix)
-          with tarfile.open(out/'toolchain.tar.gz','w:gz',compresslevel=3) as tf:
-              tf.add(runtime,arcname='python',filter=lambda info: None if '__pycache__' in info.name else info)
-              tf.add(purelib,arcname='site-packages',filter=lambda info: None if '__pycache__' in info.name else info)
-              for name in ('ruff','ty'):
-                  tool=Path(sys.executable).parent/name
-                  tf.add(tool,arcname='bin/'+name)
-          (out/'environment.json').write_text(json.dumps({'python':sys.version,'purpose':'temporary offline strict remediation','contains':'tracked public source and installed runtime/tools only','credentials_included':False},indent=2)+'\n')
-          PY
-          sha256sum build/remediation/* > build/remediation/checksums.sha256
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+          uv run --no-sync python scripts/strict_quality.py ruff
+          uv run --no-sync python scripts/strict_quality.py format
+          uv run --no-sync python scripts/strict_quality.py basedpyright
+          uv run --no-sync python scripts/strict_quality.py ty
+      - name: Require the full coverage suite and independent parallel repeat
+        run: |
+          uv run --no-sync python scripts/test_goblin.py coverage
+          uv run --no-sync python scripts/test_goblin.py parallel
+      - name: Require benchmark, context and whitespace checks
+        run: |
+          uv run --no-sync python scripts/test_goblin.py benchmark
+          uv run --no-sync python scripts/benchmark_modality.py
+          uv run --no-sync python scripts/validate_context.py
+          git diff --cached --check
+      - name: Commit only the test-qualified source changes on the repair branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: uv run --no-sync python .strict-repair/apply.py commit
+      - name: Retain exact checker and test receipts
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
         with:
-          name: atlas-locked-remediation-snapshot
-          path: build/remediation/
-          compression-level: 0
-          retention-days: 3
-          if-no-files-found: error
+          name: strict-repair-qualification
+          path: |
+            build/quality/
+            coverage.json
+            quality/strict-remediation-hosted.json
+          if-no-files-found: warn
+          retention-days: 7
