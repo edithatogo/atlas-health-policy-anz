@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Enforce whole-repository static checks; retain failures, never baseline them away."""
 
 from __future__ import annotations
@@ -7,7 +6,7 @@ import argparse
 import hashlib
 import json
 import os
-import subprocess
+import subprocess  # noqa: S404 - run only the closed-set static-analysis commands below
 import sys
 from importlib.metadata import version
 from pathlib import Path
@@ -27,7 +26,11 @@ class Arguments(argparse.Namespace):
 
 
 def main() -> int:
-    """Run the selected non-compensatory check and write a failure-aware receipt."""
+    """Run the selected check and retain complete diagnostics.
+
+    Returns:
+        The check's exit code, or a nonzero execution/timeout failure code.
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("checker", choices=sorted(CHECKS))
     args = parser.parse_args(namespace=Arguments())
@@ -47,9 +50,9 @@ def main() -> int:
         "baseline_suppression": False,
     }
     try:
-        completed = subprocess.run(
+        completed = subprocess.run(  # noqa: S603 - closed-set argv and no shell
             command, capture_output=True, text=True, check=False, timeout=600
-        )  # ruff: ignore[subprocess-without-shell-equals-true] - closed-set argv and no shell
+        )
         code, stdout, stderr = completed.returncode, completed.stdout, completed.stderr
     except subprocess.TimeoutExpired:
         code, stdout, stderr = 124, "", "Static analysis exceeded its time budget."

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Run bounded, explicitly loaded pytest profiles from the installed lock."""
 
 from __future__ import annotations
@@ -7,7 +6,7 @@ import argparse
 import hashlib
 import json
 import os
-import subprocess
+import subprocess  # noqa: S404 - fixed pytest executable and allowlisted profiles
 import sys
 from importlib import metadata
 from pathlib import Path
@@ -66,7 +65,14 @@ class Arguments(argparse.Namespace):
 def plugin_arguments(
     distributions: tuple[str, ...],
 ) -> tuple[list[str], dict[str, str]]:
-    """Resolve only allowlisted distribution entry points; never autoload plugins."""
+    """Resolve only allowlisted distribution entry points.
+
+    Returns:
+        Explicit plugin arguments and their installed distribution versions.
+
+    Raises:
+        RuntimeError: A plugin has missing or ambiguous entry-point metadata.
+    """
     arguments: list[str] = []
     versions: dict[str, str] = {}
     seen: set[str] = set()
@@ -90,7 +96,11 @@ def plugin_arguments(
 
 
 def main() -> int:
-    """Execute a fixed profile and retain its reproducible plugin/seed receipt."""
+    """Execute a fixed profile and retain its plugin/seed receipt.
+
+    Returns:
+        The test exit code, or a nonzero execution/timeout failure code.
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("lane", choices=sorted(LANES))
     parser.add_argument("--seed", type=int, default=20260905)
@@ -115,6 +125,7 @@ def main() -> int:
         *plugins,
         "-q",
         "--disable-socket",
+        "--inline-snapshot=disable",
         f"--randomly-seed={seed}",
         *LANES[lane],
     ]
@@ -148,7 +159,9 @@ def main() -> int:
     path = output / (lane + "-receipt.json")
     path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     try:
-        completed = subprocess.run(command, env=environment, check=False, timeout=900)  # ruff: ignore[subprocess-without-shell-equals-true] - fixed argv, allowlisted plugins, no shell
+        completed = subprocess.run(  # noqa: S603 - fixed argv, no shell
+            command, env=environment, check=False, timeout=900
+        )
         code = completed.returncode
     except subprocess.TimeoutExpired:
         code = 124

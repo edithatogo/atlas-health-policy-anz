@@ -1,1 +1,0 @@
-Apply verified HTTP response ownership repairs, exact zipapp coverage aliases, safe Ruff fixes and formatting. Commit only after strict serial/parallel tests, benchmark assertions, context and package build pass. Retain unresolved static-analysis failures without suppression.

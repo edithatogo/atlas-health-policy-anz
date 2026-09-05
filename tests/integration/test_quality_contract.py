@@ -1,7 +1,7 @@
 """Exercise installed testing adapters, network isolation and strict configuration."""
 
 import socket
-import subprocess
+import subprocess  # noqa: S404 - CompletedProcess fixture only; execution is mocked
 import sys
 import tomllib
 from pathlib import Path
@@ -17,9 +17,12 @@ from australian_health_policy_atlas.external_tools import run_json_tool
 from australian_health_policy_atlas.state_machine import promotion_gate
 
 if TYPE_CHECKING:
+    from http.client import HTTPResponse
+
     from pytest_httpserver import HTTPServer
     from pytest_mock import MockerFixture
-    from pytest_subprocess import FakeProcess
+
+    from tests.quality_protocols import SubprocessFixture
 
 
 @pytest.mark.quality
@@ -50,7 +53,7 @@ def test_undeclared_network_access_is_blocked() -> None:
 
 
 @pytest.mark.quality
-def test_subprocess_adapter_uses_registered_fixture(fp: FakeProcess) -> None:
+def test_subprocess_adapter_uses_registered_fixture(fp: SubprocessFixture) -> None:
     command = [sys.executable, "--version"]
     fp.register(command, stdout="synthetic-tool-output\n")
     result = run_json_tool("test-fixture", command, {"synthetic": True})
@@ -77,7 +80,11 @@ def test_external_tool_contract_uses_autospec(mocker: MockerFixture) -> None:
 @pytest.mark.allow_hosts(["127.0.0.1"])
 def test_http_contract_uses_loopback_only(httpserver: HTTPServer) -> None:
     httpserver.expect_request("/manifest").respond_with_data(b"synthetic-capture")
-    with urlopen(httpserver.url_for("/manifest"), timeout=2) as response:  # ruff: ignore[suspicious-url-open-usage] - test server is bound to loopback, pytest-socket restricts connections
+    response = cast(
+        "HTTPResponse",
+        urlopen(httpserver.url_for("/manifest"), timeout=2),  # noqa: S310 - loopback server and pytest-socket host restriction
+    )
+    with response:
         assert response.read() == b"synthetic-capture"
 
 
