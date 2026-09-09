@@ -23,3 +23,12 @@
 - [x] Add pinned remote source assessment that cannot substitute for Gate B closure.
 - [ ] Qualify each source-specific live discovery adapter and its document denominator.
 - [ ] Complete typed final Bronze release closure and independent full reconstruction.
+
+## Bounded original-packet integration (10 September 2026)
+
+Implementation and acceptance: `conductor/source-packet-integration-20260910.md`.
+Reuse the eight already captured public originals without synthetic crawl state.
+Registry pins, exact byte/member verification, deterministic staging, explicit
+failure/census outcomes and clean public replay are required. Complete software
+qualification and observe publication separately; a missing credential never
+closes Bronze. No existing release checkbox is changed by this addition.

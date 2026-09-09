@@ -1,9 +1,21 @@
 # Implementation status
 
-Updated 6 September 2026 (Australia/Brisbane). This file separates implemented
+Updated 10 September 2026 (Australia/Brisbane). This file separates implemented
 software and measured hosted qualification from unfinished data-product work.
 
-## Current GitHub status
+## 10 September 2026: verified source-packet staging
+
+The later PR #10 source packet on `e4faa5fa` contains eight actual original PDFs
+(17,390,153 bytes), seven explicit capture failures and a separate census gap.
+This supersedes zero-held-payload assumptions, not the historical observations
+below. The new independent packet importer verifies registry-pinned metadata and
+all original bytes, produces a deterministic package and supports anonymous
+exact-revision HF reconstruction. See `docs/SOURCE_PACKET_STAGING.md` and
+`conductor/source-packet-integration-20260910.md`. The workflow reports missing
+credentials as blocked; its presence is not proof of publication. No corpus or
+medallion gate is closed by this bounded integration.
+
+## Historical GitHub integration checkpoint
 
 The application and recovered history are on `main`. PR #8 is merged at
 `f3ecbc3c40f6f1f6e458b04ec6bae7a6420cfa3c`. Its post-merge Context CI, Strict
@@ -43,7 +55,7 @@ nine declared official directory snapshots. Source selections contain 28 AU-v1,
 are different denominators; the NZ selection is not additive to the authority
 collection. Open-ended categories retain their unknown coverage denominator.
 
-## Latest measured hosted assurance
+## Previous measured hosted assurance (6 September checkpoint)
 
 The exact main-branch quality artifact reports **348 unique tests**, zero
 failures/errors/skips, **97.30% combined statement/branch coverage**, **98.19%
@@ -84,5 +96,5 @@ bundles, route contracts, regression/property tests and lexical candidates are
 not equivalent to those larger features.
 
 See `docs/deployment/remaining-work.md` for the finite remaining acceptance work.
-This GitHub closeout performed no HF write, live document capture or medallion
+The 6 September GitHub closeout performed no HF write, live document capture or medallion
 promotion and does not assert current external dataset or credential state.

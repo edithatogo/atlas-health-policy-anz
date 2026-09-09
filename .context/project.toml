@@ -34,6 +34,8 @@ required_context = [
   "conductor/strict-quality-results-20260905.md",
   "quality/README.md",
   "conductor/github-integration-20260906.md",
+  "conductor/source-packet-integration-20260910.md",
+  "docs/SOURCE_PACKET_STAGING.md",
 ]
 
 required_manifests = [
@@ -66,6 +68,9 @@ required_manifests = [
   "schemas/model-manifest-v1.json",
   "data/sources/jurisdictions-v1.json",
   "data/sources/crawl-policies-v1.json",
+  "data/sources/source-packets-v1.json",
+  "schemas/source-packet-registry-v1.json",
+  "schemas/source-packet-staging-v1.json",
   "data/sources/authorities-anz-v1.csv",
   "data/sources/authority-coverage-v1.json",
   "data/sources/frameworks-anz-v1.json",
