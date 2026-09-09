@@ -32,7 +32,7 @@ from australian_health_policy_atlas.packet_staging import (
     publish_packet_stage,
     verify_packet_stage,
 )
-from australian_health_policy_atlas.records import integer, string
+from australian_health_policy_atlas.records import integer, record, string
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -79,6 +79,8 @@ def _check_output_paths(args: Arguments) -> None:
     inputs = (
         args.repository / "source-packets",
         args.repository / "data/sources",
+        args.repository / "data/source-documents",
+        args.repository / "data/source-intake",
         args.repository / "uv.lock",
     )
     outputs = [args.receipt, args.workspace]
@@ -221,11 +223,18 @@ def render_summary(result: dict[str, object]) -> str:
     failed = integer(result.get("failed_packet_count", 0))
     published = integer(result.get("published_packet_count", 0))
     unknown = result.get("remote_effect_unknown") is True
+    holdings = record(result.get("holdings", {}))
+    unique = integer(holdings.get("unique_original_count", 0))
+    occurrences = integer(holdings.get("captured_original_occurrences", 0))
+    capture_failures = integer(holdings.get("failed_capture_record_count", 0))
     return (
         "## Atlas source-packet execution\n\n"
         f"{status}\n\n"
         f"Selected packets: **{selected}**. Failed packets: **{failed}**. "
         f"Remotely verified packets: **{published}**.\n\n"
+        f"Verified holdings: **{unique}** distinct original byte objects across "
+        f"**{occurrences}** successful capture records; **{capture_failures}** "
+        "historical failed capture records retained. These are not corpus coverage.\n\n"
         f"Remote effect still unknown: **{'yes' if unknown else 'no'}**.\n\n"
         "A green blocked job is not an upload. Verified packets may already have "
         "existed remotely; these counts do not claim new writes.\n\n"

@@ -35,7 +35,7 @@
           },
           "directory": {
             "type": "string",
-            "pattern": "^source-packets/[a-z][a-z0-9-]{0,95}$"
+            "pattern": "^(source-packets|data/source-documents)/[a-z][a-z0-9-]{0,95}$"
           },
           "source_revision": {
             "type": "string",
@@ -65,8 +65,42 @@
               "minLength": 1
             },
             "uniqueItems": true
+          },
+          "metadata_format": {
+            "enum": [
+              "source-packet-1.0",
+              "finite-source-intake-1.0"
+            ]
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "metadata_format"
+              ],
+              "properties": {
+                "metadata_format": {
+                  "const": "finite-source-intake-1.0"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "directory": {
+                  "pattern": "^data/source-documents/"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "directory": {
+                  "pattern": "^source-packets/"
+                }
+              }
+            }
+          }
+        ]
       }
     }
   }

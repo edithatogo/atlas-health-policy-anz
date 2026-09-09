@@ -34,6 +34,7 @@ from .packet_ingestion import (
     PacketSpec,
     inspect_packet,
     inventory_paths,
+    packet_metadata_paths,
     require_packet,
 )
 from .records import integer, record, records, string
@@ -89,10 +90,10 @@ def build_packet_stage(
     _empty_destination(destination, source)
     observation = inspect_packet(source, spec)
     require_packet(observation["captured_count"] != 0, "no originals to stage")
-    for name in METADATA:
-        atomic_bytes(
-            safe_path(destination, "evidence/" + name), (source / name).read_bytes()
-        )
+    for name, original in zip(
+        METADATA, packet_metadata_paths(source, spec, "original"), strict=True
+    ):
+        atomic_bytes(safe_path(destination, "evidence/" + name), original.read_bytes())
     for row in records(observation["objects"]):
         target = safe_path(destination, string(row["dataset_path"]))
         target.parent.mkdir(parents=True, exist_ok=True)

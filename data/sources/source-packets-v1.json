@@ -18,6 +18,27 @@
       "known_census_gaps": [
         "Queensland State Disaster Risk report: full original-document URL not established in this packet."
       ]
+    },
+    {
+      "packet_id": "qld-energy-resilience-20260909",
+      "directory": "data/source-documents/qld-energy-resilience-20260909",
+      "source_revision": "f5e6761286d57e78715bbe9ba6e802982676deb9",
+      "request_sha256": "66bc20336a2d800f8adebf4063924c9d377ffcc3da4c33ee7a9e1683190f00ed",
+      "capture_sha256": "e1f15817d46adf6857b24058c1114a8fbd9ae8ea56753d3d2c11f6ff3af96332",
+      "allowed_hosts": [
+        "www.cairns-hinterland.health.qld.gov.au",
+        "www.forgov.qld.gov.au",
+        "www.health.qld.gov.au",
+        "www.housing.qld.gov.au",
+        "www.publications.qld.gov.au",
+        "www.qra.qld.gov.au",
+        "www.statedevelopment.qld.gov.au",
+        "www.treasury.qld.gov.au"
+      ],
+      "known_census_gaps": [
+        "The captured Queensland Strategy for Disaster Resilience document is a summary; the full strategy has not been captured."
+      ],
+      "metadata_format": "finite-source-intake-1.0"
     }
   ]
 }

@@ -36,8 +36,24 @@ Because the intended GitHub repository is public, standard GitHub-hosted runners
 GitHub Actions builds release manifests and publication candidates; Hugging Face remains the data plane. Publication is followed by remote revision/hash/schema/viewer verification. A GitHub release receipt records the corresponding HF immutable revision.
 
 
-## Foundation bootstrap state
-The current repository is still context/schema infrastructure and has not adopted a qualified production Python package dependency set. Do not fabricate a lockfile in an environment that cannot resolve Python 3.14/dependencies. Current Actions run the standard-library context validator in an isolated exact 3.14.6 runtime. Once production dependencies are accepted, `uv.lock` becomes required and supply-chain CI switches to `uv sync --locked`, pip-audit and CycloneDX.
+## Current locked foundation and offline acquisition preflight
+The production Python 3.14.6 lock and strict test/security environment are already
+qualified; the earlier bootstrap-only description is historical. `uv.lock` is
+required and normal jobs use locked synchronization, vulnerability auditing and
+CycloneDX. Conductor and source-packet verification also retain dependency-free
+exact-runtime lanes.
+
+Relevant PRs compile an offline acquisition plan, checking exact policy identities,
+unique source membership, matrix size and positive integer frontier budgets. The
+scheduled Bronze workflow installs the exact interpreter BEFORE importing the
+package, rather than relying on the runner default. No credential or capture job
+is available to PR execution. The existing schedule and three-job concurrency are
+unchanged. Plan and capture consume the same fixed collection and budget settings.
+
+The default ANZ plan has 220 profiles and 20 frontier attempts per source. The
+plan compiler caps aggregate frontier attempts at 5,120 and matrix jobs at 256.
+These are programmatic limits, not a guarantee on redirects, HF transfers, billed
+runtime or coverage. See `conductor/intake-compatibility-20260910.md`.
 
 ## Attestation and agentic automation boundaries
 Use GitHub Artifact Attestations for release packages and SBOMs once there are release artefacts. GitHub Agentic Workflows may later augment issue/CI/docs maintenance, but they must not replace deterministic evidence qualification or medallion gates. GitHub Models is not part of the design; the service was retired in 2026, so model experimentation should use local/Hugging Face/provider-specific routes instead.

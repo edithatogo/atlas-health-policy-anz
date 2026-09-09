@@ -3,7 +3,24 @@
 Updated 10 September 2026 (Australia/Brisbane). This file separates implemented
 software and measured hosted qualification from unfinished data-product work.
 
-## 10 September 2026: verified source-packet staging
+## Current preserved holdings and execution preflight
+
+The importer now registers both preserved capture histories, including the earlier
+finite intake under `data/source-documents/`. Exact cross-packet accounting reports
+ten distinct original PDFs (18,318,626 bytes), eighteen successful original capture
+occurrences and fifteen failed records across thirty-three requested records.
+Only the finite registered holdings are described; these are not corpus coverage.
+The source bytes have not changed or been newly downloaded. The QRA strategy
+summary remains a summary, with the full-document gap explicit.
+
+The format adapter preserves raw metadata and supports the existing independent
+staging/reconstruction path. The scheduled acquisition workflow now uses exact
+Python 3.14.6 for a secret-free, identity-bound matrix/budget plan before any
+trusted-main credential/capture step. `run_source` validates before Hub effects.
+See `conductor/intake-compatibility-20260910.md` and the PR's actual CI results.
+No HF publication or native ecosystem-tool qualification is implied.
+
+## Earlier 10 September 2026: verified source-packet staging
 
 The later PR #10 source packet on `e4faa5fa` contains eight actual original PDFs
 (17,390,153 bytes), seven explicit capture failures and a separate census gap.

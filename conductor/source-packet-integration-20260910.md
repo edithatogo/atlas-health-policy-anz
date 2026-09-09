@@ -54,3 +54,11 @@ absence, not a completed HF upload. Read
 [packet execution reliability](packet-execution-20260910.md) for the next bounded
 T02/T07 change: retained per-packet checkpoints, independent fault dispositions,
 unknown remote effects and a safe visible job summary. No data release is promoted.
+
+## Current format compatibility and acquisition preflight
+
+Read [intake compatibility](intake-compatibility-20260910.md) after the execution
+checkpoint above. It registers the already preserved ten-original intake without
+moving or duplicating source bytes, retains both capture histories, reports exact
+cross-packet holdings and qualifies the offline scheduled-capture plan. No corpus,
+publication or medallion completion is implied by this finite software increment.

@@ -86,6 +86,10 @@ def run_source(
         RuntimeError: The bounded operation cannot produce a valid terminal result.
 
     """
+    policy.validate()
+    if type(request_budget) is not int or request_budget <= 0:
+        message = "positive integer request budget required"
+        raise ValueError(message)
     crawl_root = workspace / "crawl"
     restored = False
     if hub is not None:
@@ -99,9 +103,6 @@ def run_source(
                 if crawl_root.exists() and any(crawl_root.iterdir()):
                     message = "incomplete remote checkpoint; refusing silent restart"
                     raise ValueError(message) from exc
-    if request_budget <= 0:
-        message = "positive request budget required"
-        raise ValueError(message)
     for offset in range(0, request_budget, 5):
         batch = min(request_budget - offset, 5)
         readiness = run_crawl(
@@ -175,6 +176,8 @@ def main(argv: list[str] | None = None) -> int:
     selected = [p for p in policies if p.source_id == args.source_id]
     if len(selected) != 1:
         parser.error("select an exact governed --source-id")
+    if args.request_budget <= 0:
+        parser.error("positive integer request budget required")
     token = os.environ.get("HF_TOKEN")
     if not token and not args.capture_only:
         sys.stdout.write(

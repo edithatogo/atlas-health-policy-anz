@@ -32,3 +32,14 @@ Registry pins, exact byte/member verification, deterministic staging, explicit
 failure/census outcomes and clean public replay are required. Complete software
 qualification and observe publication separately; a missing credential never
 closes Bronze. No existing release checkbox is changed by this addition.
+
+## Preserved intake formats and acquisition preflight (10 September 2026)
+
+- [x] Adapt the earlier finite-intake layout while retaining exact pinned metadata and original bytes.
+- [x] Register both preserved histories; count distinct byte objects separately from requests and failures.
+- [x] Reject invalid acquisition budgets before remote side effects and compile an offline bounded plan.
+- [ ] Observe live public HF publication independently of software/integrity acceptance.
+
+See `conductor/intake-compatibility-20260910.md`. Python locking and main CI were
+qualified in prior merged work; they are not unfinished Bronze prerequisites. The
+finite registered holdings still do not constitute the entire AU/NZ corpus.
