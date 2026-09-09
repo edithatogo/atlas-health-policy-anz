@@ -12,9 +12,7 @@ from pathlib import Path
 from typing import TypedDict, cast
 
 ROOT = Path(__file__).resolve().parents[1]
-COLLECTION = (
-    ROOT / "data" / "source-intake" / "credentialing-socp-anz-20260910"
-)
+COLLECTION = ROOT / "data" / "source-intake" / "credentialing-socp-anz-20260910"
 CATALOGUES = (
     COLLECTION / "schn-medical-surgical-model-catalogue.csv",
     COLLECTION / "schn-paediatric-model-catalogue.csv",
@@ -27,33 +25,31 @@ FORBIDDEN_MARKERS = (
     "private key",
     "drive.google.com",
 )
-README_TEXT = "\n".join(
-    (
-        "---",
-        "pretty_name: Australian Credentialing and Scope of Clinical Practice Policy Atlas",
-        "language:",
-        "  - en",
-        "license: other",
-        "size_categories:",
-        "  - n<1K",
-        "---",
-        "",
-        "# Australian credentialing and scope-of-clinical-practice Policy Atlas",
-        "",
-        "This public metadata dataset catalogues selected Australian credentialing",
-        "authorities and the observed NSW State Scope of Clinical Practice Unit",
-        "model-scope library.",
-        "",
-        "It contains no patient, practitioner, credential, referee, committee-case,",
-        "tenant or production-system information. Source documents retain their",
-        "publisher terms and are not redistributed here.",
-        "",
-        "Catalogue metadata is not a controlled policy instrument. Verify the current",
-        "publisher source, authority, effective date, local service capability and",
-        "applicable governance before use.",
-        "",
-    )
-)
+README_TEXT = "\n".join((
+    "---",
+    "pretty_name: Australian Credentialing and Scope of Clinical Practice Policy Atlas",
+    "language:",
+    "  - en",
+    "license: other",
+    "size_categories:",
+    "  - n<1K",
+    "---",
+    "",
+    "# Australian credentialing and scope-of-clinical-practice Policy Atlas",
+    "",
+    "This public metadata dataset catalogues selected Australian credentialing",
+    "authorities and the observed NSW State Scope of Clinical Practice Unit",
+    "model-scope library.",
+    "",
+    "It contains no patient, practitioner, credential, referee, committee-case,",
+    "tenant or production-system information. Source documents retain their",
+    "publisher terms and are not redistributed here.",
+    "",
+    "Catalogue metadata is not a controlled policy instrument. Verify the current",
+    "publisher source, authority, effective date, local service capability and",
+    "applicable governance before use.",
+    "",
+))
 
 
 class SourceRow(TypedDict):
@@ -83,14 +79,17 @@ class DatasetReceipt(TypedDict):
 
 def read_csv(path: Path) -> list[dict[str, str]]:
     """Read one catalogue and reject incomplete CSV cells."""
-    with path.open(encoding="utf-8", newline="") as stream:
-        rows = list(csv.DictReader(stream))
     validated: list[dict[str, str]] = []
-    for row_number, row in enumerate(rows, start=2):
-        if None in row or any(value is None for value in row.values()):
-            message = f"Incomplete CSV row {row_number}: {path}"
-            raise ValueError(message)
-        validated.append({str(key): str(value) for key, value in row.items()})
+    with path.open(encoding="utf-8", newline="") as stream:
+        reader = csv.DictReader(stream)
+        for row_number, row in enumerate(reader, start=2):
+            validated_row: dict[str, str] = {}
+            for key, value in row.items():
+                if key is None or not isinstance(value, str):
+                    message = f"Incomplete CSV row {row_number}: {path}"
+                    raise ValueError(message)
+                validated_row[key] = value
+            validated.append(validated_row)
     return validated
 
 
@@ -108,26 +107,28 @@ def load_sources(path: Path) -> list[SourceRow]:
     if not isinstance(parsed, dict):
         msg = "Collection request must be a JSON object"
         raise TypeError(msg)
-    raw_sources = parsed.get("sources")
+    parsed_mapping = cast("dict[str, object]", parsed)
+    raw_sources = parsed_mapping.get("sources")
     if not isinstance(raw_sources, list):
         msg = "Collection request must contain a sources array"
         raise TypeError(msg)
 
     sources: list[SourceRow] = []
-    for raw_source in raw_sources:
+    for raw_source in cast("list[object]", raw_sources):
         if not isinstance(raw_source, dict):
             msg = "Each source must be a JSON object"
             raise TypeError(msg)
+        source_mapping = cast("dict[str, object]", raw_source)
         source: SourceRow = {
-            "id": require_text(raw_source.get("id"), "id"),
-            "title": require_text(raw_source.get("title"), "title"),
+            "id": require_text(source_mapping.get("id"), "id"),
+            "title": require_text(source_mapping.get("title"), "title"),
             "publisher": require_text(
-                raw_source.get("publisher"),
+                source_mapping.get("publisher"),
                 "publisher",
             ),
-            "url": require_text(raw_source.get("url"), "url"),
+            "url": require_text(source_mapping.get("url"), "url"),
             "authority_class": require_text(
-                raw_source.get("authority_class"),
+                source_mapping.get("authority_class"),
                 "authority_class",
             ),
         }
@@ -173,10 +174,7 @@ def scan_public_boundary(output: Path) -> None:
         body = path.read_text(encoding="utf-8").lower()
         for marker in FORBIDDEN_MARKERS:
             if marker in body:
-                msg = (
-                    "Public dataset contains forbidden marker "
-                    f"{marker!r}: {path}"
-                )
+                msg = f"Public dataset contains forbidden marker {marker!r}: {path}"
                 raise ValueError(msg)
 
 
