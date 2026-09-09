@@ -77,3 +77,15 @@
 - Added an rcagent-style portable policy-gap-analysis skill, local/sensitive institutional runner, offline bundle verification and a dependency-free zipapp build.
 - Added Test-Goblin, source-health and Bronze Hugging Face publication workflows.
 - Activated T07 while retaining corpus medallion tracks behind their existing maturity gates.
+
+## Source-packet staging integration (10 September 2026)
+
+- Add registry-pinned offline verification for captured original-document packets.
+- Preserve capture failures and separate census gaps without inventing crawl or
+  production-completeness state.
+- Add deterministic source-only packages, conditional immutable HF publication,
+  anonymous byte verification and independently reproducible clean reconstruction.
+- Verify actual Queensland originals and adversarial synthetic cases under the
+  existing strict toolchain.
+- Add secret-free PR verification and main-only publication/blocker receipts;
+  remove the temporary read-only development export workflow.

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "kind": "local-packet-staging-qualification",
+  "observed_date": "2026-09-10",
+  "timezone": "Australia/Brisbane",
+  "base_code_commit": "e4faa5fa7dc2198adbfc108f5d484a2b21bc8c98",
+  "tracks": [
+    "T02",
+    "T07"
+  ],
+  "runtime": {
+    "python": "3.14.6",
+    "source": "checksum-verified read-only GitHub Actions development exports",
+    "host_compatibility_override": false
+  },
+  "pyproject_sha256": "69ca7eab1fdd3d3231758ff93d5e44409ba132401e4d89c3d7b67a9147393099",
+  "uv_lock_sha256": "8d19325b11a134540c41566bd37a8b36dabba1b729d05e072f18ae3503219d60",
+  "source_sha256": {
+    "src/australian_health_policy_atlas/packet_ingestion.py": "a8c0f5e7f6f6be7db99515e17c23004bddf0f24c0fee54e9dcd78935e86af54d",
+    "src/australian_health_policy_atlas/packet_staging.py": "5a9b99dd29c7b151bf78e6371c679975ca09789a13377e738d20534e0dda9f63",
+    "scripts/source_packets.py": "7af98f28a7d7c3fca256b065ac90929b035328ae4dc7b2909d8d16683e19bd0e",
+    "tests/packet_support.py": "49362079485c7e981940084779ba78374f4097fdbfbc0bd2b48b8b11ab2075bf",
+    "tests/unit/test_packet_ingestion.py": "d30748859275067ae6aee0f6ceeef721f9a37245f6c45a27718a3553fabccb05",
+    "tests/unit/test_packet_staging.py": "d89c7bfc8f5b2e465f1aac5eb7d1fe38c8dbdf958e84bb55bc5fbc05860c5a67",
+    "tests/unit/test_source_packets_cli.py": "73e0763f7d07ffc9b7b76ddbf25004cfd1e7a39dea714518985645df8ba4e505",
+    "tests/integration/test_source_packet_contracts.py": "f29ed3b52516e92b870ebb9237a183ce1641cee539ecd7ed27682ea8de0568b3",
+    "tests/property/test_packet_mutations.py": "abf7ca4c73658f150efe76a4c2983703c569a80bb33b588f59e89569fb5c88f0"
+  },
+  "checks": {
+    "ruff": "passed",
+    "format": "passed",
+    "basedpyright": "passed",
+    "ty": "passed",
+    "context": "passed",
+    "parallel": "passed",
+    "coverage": "passed"
+  },
+  "junit": {
+    "tests": 435,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "coverage": {
+    "covered_lines": 2935,
+    "num_statements": 2984,
+    "percent_covered": 97.52555137170522,
+    "percent_covered_display": "97.53",
+    "missing_lines": 49,
+    "excluded_lines": 100,
+    "percent_statements_covered": 98.35790884718499,
+    "percent_statements_covered_display": "98.36",
+    "num_branches": 734,
+    "num_partial_branches": 41,
+    "covered_branches": 691,
+    "missing_branches": 43,
+    "percent_branches_covered": 94.141689373297,
+    "percent_branches_covered_display": "94.14"
+  },
+  "originals": {
+    "packet_id": "queensland-energy-health-20260909",
+    "source_count": 15,
+    "captured_count": 8,
+    "unique_original_bytes": 17390153,
+    "failed_count": 7,
+    "known_census_gaps": 1,
+    "integrity_verified_offline": true
+  },
+  "software_regression_cases_added": 87,
+  "model_or_clinical_qualification": false,
+  "hf_writes": 0,
+  "original_policy_payloads_recaptured": 0,
+  "gate_b_passed": false,
+  "boundary": "Local checks and simulated Hub tests only. Hosted PR checks and any real HF publication require separate exact-revision observations. No source originals, lock, strict setting or acquisition universe changed."
+}

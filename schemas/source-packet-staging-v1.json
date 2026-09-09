@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Source packet staging manifest, never a production release",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "origin",
+    "observation",
+    "files",
+    "not_medallion_release",
+    "gate_b_passed",
+    "sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "source-packet-staging-package"
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "directory",
+        "source_revision",
+        "request_sha256",
+        "capture_sha256",
+        "allowed_hosts",
+        "known_census_gaps"
+      ],
+      "properties": {
+        "packet_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,95}$"
+        },
+        "directory": {
+          "type": "string",
+          "pattern": "^source-packets/[a-z][a-z0-9-]{0,95}$"
+        },
+        "source_revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "request_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "capture_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "allowed_hosts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9.-]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "known_census_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "kind",
+        "integrity_verified",
+        "network_used",
+        "capture_failures",
+        "known_census_gaps",
+        "acquisition_complete",
+        "not_medallion_release",
+        "gate_b_passed",
+        "sha256"
+      ],
+      "properties": {
+        "kind": {
+          "const": "packet-integrity-observation"
+        },
+        "integrity_verified": {
+          "const": true
+        },
+        "network_used": {
+          "const": false
+        },
+        "not_medallion_release": {
+          "const": true
+        },
+        "gate_b_passed": {
+          "const": false
+        },
+        "capture_failures": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "known_census_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "acquisition_complete": {
+          "type": "boolean"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 259,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "size_bytes"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 33554432
+          }
+        }
+      }
+    },
+    "not_medallion_release": {
+      "const": true
+    },
+    "gate_b_passed": {
+      "const": false
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

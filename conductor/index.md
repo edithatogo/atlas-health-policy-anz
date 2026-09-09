@@ -42,3 +42,12 @@ the current closeout, rather than treating those historical diagnostics as open.
 The strict-toolchain lock was resolved and installed on hosted Python 3.14.6 in run `33961762760`, with source commit `6a3e5abb71a3b63bd17bb90aeb175edc7e57d2f3`. Exact selected tools and hashes remain in `quality/resolved-test-tools.json` and `uv.lock`. The later post-merge runs supply runtime, test and security qualification; resolution alone was not sufficient.
 
 Use `uv run --no-sync python scripts/test_goblin.py routine` after synchronizing the declared locked test environment. Direct unconfigured pytest calls do not autoload arbitrary installed plugins. Canonical qualification uses the complete coverage profile; changed-test selection is never a release gate.
+
+## Latest source-packet integration
+
+Read [source-packet integration](source-packet-integration-20260910.md) after the
+prior GitHub closeout. The eight actual originals added through PR #10 are now
+inputs to independent packet verification, deterministic staging and pinned public
+replay. See `docs/SOURCE_PACKET_STAGING.md`. The existing T02/T07 track states and
+all production medallion gates remain unchanged. Publication status comes from
+actual run receipts, not the presence of upload code or a green blocked job.
