@@ -2,7 +2,7 @@
   "schema_version": 1,
   "collection_id": "credentialing-socp-anz-20260910",
   "kind": "bounded-public-source-metadata-intake",
-  "scope": "Public Australian credentialing and scope-of-clinical-practice authorities, implementation guidance and model-SoCP catalogue metadata",
+  "scope": "Public Australian credentialing and scope-of-clinical-practice authorities, implementation guidance, Rural Generalist Medicine sources and model-SoCP catalogue metadata",
   "authorization": "Repository owner expressly requested public credentialing and model-SoCP sources be catalogued in the Policy Atlas.",
   "evaluation_material_allowed": false,
   "medallion_promotion": false,
@@ -65,6 +65,48 @@
       "publisher": "Australian Medical Council",
       "url": "https://www.amc.org.au/accredited-organisations/assessment-and-accreditation-of-specialist-medical-programs-and-professional-development-programs/rural-generalist-medicine/",
       "authority_class": "specialty-recognition"
+    },
+    {
+      "id": "medical-board-rural-generalist-recognition-2025",
+      "title": "Rural generalist medicine approved as a new field of specialty practice",
+      "publisher": "Medical Board of Australia",
+      "url": "https://www.medicalboard.gov.au/News/2025-09-22-Rural-generalist-medicine-approved-as-a-new-field-of-specialty-practice",
+      "authority_class": "regulator-recognition-notice"
+    },
+    {
+      "id": "medical-board-specialty-recognition-faq",
+      "title": "FAQ: recognition of medical specialties",
+      "publisher": "Medical Board of Australia",
+      "url": "https://www.medicalboard.gov.au/Codes-Guidelines-Policies/FAQ/FAQ-recognition-of-medical-specialties.aspx",
+      "authority_class": "regulator-guidance"
+    },
+    {
+      "id": "acrrm-rural-generalist-registration-2026",
+      "title": "Rural Generalist Registration",
+      "publisher": "Australian College of Rural and Remote Medicine",
+      "url": "https://acrrm.org.au/about-us/about-the-college/rural-generalist-medicine/rural-generalist-registration",
+      "authority_class": "college-registration-guidance"
+    },
+    {
+      "id": "acrrm-rural-generalist-program-accreditation-2026",
+      "title": "ACRRM Rural Generalist training program accredited for specialist registration",
+      "publisher": "Australian College of Rural and Remote Medicine",
+      "url": "https://www.acrrm.org.au/about-us/news-events/media-releases/article/2026/08/10/acrrm-rural-generalist-training-program-accredited-for-specialist-registration",
+      "authority_class": "college-accreditation-notice"
+    },
+    {
+      "id": "racgp-additional-rural-skills-2026",
+      "title": "Additional Rural Skills Training requirements",
+      "publisher": "Royal Australian College of General Practitioners",
+      "url": "https://www.racgp.org.au/education/gp-training/rural-generalist/arst-information-from-2022",
+      "authority_class": "college-training-guidance"
+    },
+    {
+      "id": "ahpra-specialist-registration",
+      "title": "Specialist registration",
+      "publisher": "Australian Health Practitioner Regulation Agency",
+      "url": "https://www.ahpra.gov.au/Registration/Applying-for-registration/Specialist-Registration",
+      "authority_class": "registration-guidance"
     }
   ],
   "expected_inventory": {
@@ -84,5 +126,5 @@
       "Urology"
     ]
   },
-  "evidence_ceiling": "This intake records public source metadata and expected catalogue structure. It does not establish local adoption, source currency beyond the observation date, controlled-document status, service capability, individual competence or an individual scope-of-practice decision."
+  "evidence_ceiling": "This intake records public source metadata and expected catalogue structure. It does not establish local adoption, source currency beyond the observation date, controlled-document status, service capability, individual competence or an individual scope-of-practice decision. Rural Generalist registration, qualification and protected-title rules must be checked against current regulator and Ahpra sources before operational use."
 }
