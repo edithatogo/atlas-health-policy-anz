@@ -45,3 +45,12 @@ The core AU/NZ acquisition collections remain unchanged. T02 still owns their
 live capture, final release manifest and clean public reconstruction; T03-T05
 remain sequentially gated. Missing HF credentials leave publication blocked,
 not complete. PR/run receipts record any actual publication separately.
+
+## Follow-up: integration and execution reliability
+
+PR #12 is merged at `192c7e652fc4ddbf76c6400a700754f509f9808d`. Its trusted-main
+publication job returned `blocked_missing_hf_token`; this is observed credential
+absence, not a completed HF upload. Read
+[packet execution reliability](packet-execution-20260910.md) for the next bounded
+T02/T07 change: retained per-packet checkpoints, independent fault dispositions,
+unknown remote effects and a safe visible job summary. No data release is promoted.

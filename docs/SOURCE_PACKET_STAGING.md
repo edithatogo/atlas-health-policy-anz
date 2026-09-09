@@ -37,19 +37,20 @@ uv run --no-sync python -m scripts.source_packets stage --workspace /tmp/atlas-s
 uv run --no-sync python -m scripts.source_packets publish --workspace /tmp/atlas-publish
 ```
 
-The verify and stage modes need only Python 3.14, the source checkout and its
-originals. For dependency-free checks use `PYTHONPATH=src python -S -m
-scripts.source_packets verify`. Publication requires the existing `publication`
-dependency group and scoped `HF_TOKEN` through environment/secrets. No credentials
-are accepted as command arguments, emitted in receipts or copied into packages.
-Use fresh workspace directories: nonempty, overlapping and symlinked output paths
-are rejected rather than overwritten.
+Verify/stage need only Python 3.14 and the source checkout. For dependency-free
+checks use `PYTHONPATH=src python -S -m scripts.source_packets verify`. Publication
+requires the existing locked `publication` dependency group and scoped `HF_TOKEN`
+through environment/secrets. No credential is accepted as a command argument,
+emitted in a receipt, or copied into a package. `--packet-id` selects one registered
+entry, never an arbitrary institutional document.
 
-The registry is the only source selector. Optional `--packet-id` selects one
-registered entry, not an arbitrary local document. Metadata pins protect against
-unnoticed input substitution, but hashes are not signatures and registry trust
-still matters. This public uploader is not the sensitive institution-local mode.
-It does not make an adversarial filesystem or malicious PDF safe.
+`--receipt` selects the atomic progress journal. `--summary` optionally selects a
+fixed-label Markdown status report; Actions passes its own step-summary path.
+Keep both reports outside the staging workspace and preserved input locations.
+A valid existing stage is independently reverified on a rerun. A corrupt stage,
+unexpected member, overlapping or symlinked path fails instead of being overwritten.
+Old receipts are not trusted to skip validation. This is re-execution with verified
+stage reuse, not a general restart-from-journal engine.
 
 ## Immutable package and clean replay
 
@@ -65,11 +66,9 @@ objects/<original-sha256>.pdf
 
 Adjacent scripts, evaluation documents, models, embeddings and traces are never
 selected. Identical original bytes are stored once while each source retains its
-own record. The manifest binds the complete inventory and includes the unresolved
-capture/census observations. The staging schema is validated in contract tests;
-runtime verification also recomputes the complete manifest from pinned metadata
-and actual original bytes. A re-sealed forged manifest cannot remove failures or
-promote Gate B.
+own record. The manifest binds the complete inventory and unresolved capture/census
+observations. Runtime verification recomputes that manifest from pinned metadata
+and actual originals: a re-sealed forgery cannot remove failures or promote Gate B.
 
 The immutable public destination is:
 
@@ -78,38 +77,60 @@ edithatogo/au-health-policy-atlas-bronze
   staging/packets/<packet-id>/<manifest-sha256>/...
 ```
 
-The publisher uses conditional Hub commits and verifies the returned immutable
-revision. It then downloads every declared member **anonymously** through the
-existing Hub boundary and reconstructs the package in a clean temporary folder.
-An existing identical package is reverified without rewriting its object paths.
-A conflicting or corrupt package fails; no mutable latest pointer is published.
-A concurrent unrelated writer may cause a conditional failure; a later normal run
-can reverify/retry without overwriting a mismatched immutable package.
+Conditional Hub commits are followed by anonymous reconstruction at the exact
+returned revision. Identical remote packages are verified again without rewriting
+their paths. Conflicting or corrupt packages fail; no mutable latest pointer is
+published. A concurrent unrelated writer may cause a conditional failure; a later
+run can reverify without overwriting mismatched immutable data.
 
-`restore_packet_stage(hub, spec, reference, destination)` is the same independently
-usable Python verifier. Its `reference` comes from a successful publication
-receipt; the caller must also supply the independently trusted registry `spec`.
-Manifest origins, immutable revisions, member paths and declared budgets are
-checked before downloads; each returned object is hash/size checked before use.
-The existing Hub SDK downloader spools remote files before these checks, so this
-interface does **not** claim OS-level isolation or an adversarial network-transfer
-quota. Limits and exact object verification do not certify policy interpretation.
+`restore_packet_stage(hub, spec, reference, destination)` is the independently
+usable verifier. Supply both a successful publication reference and independently
+trusted registry specification. The existing SDK downloader spools remote files
+before caller-side size checks; this is not an OS sandbox or adversarial network
+transfer quota. Fixity does not certify clinical or legal policy interpretation.
 
-## Automation and evidence states
+## Per-packet execution and failure semantics
 
-The `Original source packet integrity and public staging` workflow always verifies
-registered packets in PR checks without secrets. Only trusted `main` push/manual
-runs may invoke publication. Missing `HF_TOKEN` produces the explicit terminal
-state `blocked_missing_hf_token`, no Hub calls, and a retained receipt. A green job
-with that state means the blocker was recorded, **not** that publication passed.
-Invalid data, authentication failures or failed remote fixity return nonzero with
-a sanitized failure receipt. Uploaded Actions artifacts contain receipts only;
-raw documents remain in their pre-existing Git source packet until independently
-verified public HF storage is available. This work does not delete those originals.
+Run receipts use schema version `1.1`; immutable package/reference schemas and
+identities are unchanged. Every selected packet remains in the progress denominator,
+including queued, failed and credential-blocked items. Checkpoints before and after
+phase transitions preserve earlier observations and verified publication references
+when a later packet fails. Snapshot data are detached from future mutations.
 
-Every package/reference carries `not_medallion_release: true` and
-`gate_b_passed: false`. Even a fully captured finite packet cannot grant itself
-production maturity. Software tests use synthetic fixtures and an injected Hub;
-only a real successful publication run establishes a live HF revision. The
-SourceRight/CiteWeft/Authentext native-qualification and final Bronze completion
-contracts remain separate requirements.
+- `verified`: the requested verify/stage/publish operation completed. Use the
+  publication fields to determine whether remote work was requested and verified.
+- `blocked_missing_hf_token`: offline integrity/staging completed but no Hub adapter
+  was invoked for publication. A green blocked job is not an upload.
+- `partial_failure` or `failed`: at least one selected packet failed; the command
+  exits nonzero. Independent packets still run, and successful references remain.
+- `executing`: the last persisted phase is not a completed run. Interruptions are
+  not swallowed or converted into a passing terminal result.
+
+`network_attempted` records entry into the publication boundary. If an exception or
+interruption prevents verified reconstruction, `remote_write_state` stays unknown;
+no zero-write assurance is inferred. `network_used` is null when only attempted,
+unverified remote work exists. `remote_bytes_verified` describes completed
+publication items only; `all_selected_packets_published` requires the full selection.
+A verified existing package is not evidence of a new write.
+
+A journal-write failure stops before further packet side effects and preserves the
+last durable observation. JSON and Markdown outputs are individually atomic, not a
+cross-file transaction. Host power loss or runner deletion can still remove local
+checkpoints before Actions uploads them; this is not a remote transaction log.
+Error messages, tokens, headers and arbitrary source text are never put into the
+fixed-label status summary. The per-packet barrier catches ordinary exceptions as
+failed results, not BaseException interruptions or checkpoint exceptions.
+
+## Automation and publication blocker
+
+PR verification is secret-free. Only trusted-main push/manual runs may publish.
+Main run `34401751088` at `192c7e652fc4ddbf76c6400a700754f509f9808d` returned
+`blocked_missing_hf_token`; its publication job had no available HF_TOKEN. Configure
+a scoped HF write credential using the repository's Actions secret mechanism, then
+run this workflow on main. Do not send the credential through chat, commits or PRs.
+This observation does not establish current permissions of another HF connection.
+
+Actions retains only receipts, not raw originals. Existing Git-held public originals
+are not deleted before verified HF storage exists. Every package/reference remains
+`not_medallion_release: true`, `gate_b_passed: false`. Native ecosystem audits,
+complete document acquisition and final Bronze release qualification remain separate.
