@@ -87,6 +87,7 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
     Raises:
         ValueError: If a row contains a missing key or value.
+
     """
     validated: list[dict[str, str]] = []
     with path.open(encoding="utf-8", newline="") as stream:
@@ -114,6 +115,7 @@ def require_text(value: object, field: str) -> str:
 
     Raises:
         ValueError: If the value is not a non-empty string.
+
     """
     if not isinstance(value, str) or not value.strip():
         message = f"Missing required source field: {field}"
@@ -133,6 +135,7 @@ def load_sources(path: Path) -> list[SourceRow]:
     Raises:
         TypeError: If the request or a source has the wrong JSON structure.
         ValueError: If a source field, URL, or identifier is invalid.
+
     """
     parsed = cast("object", json.loads(path.read_text(encoding="utf-8")))
     if not isinstance(parsed, dict):
@@ -182,6 +185,7 @@ def write_csv(path: Path, rows: list[dict[str, str]], fields: list[str]) -> None
         path: Output path.
         rows: Rows to write.
         fields: Ordered field names.
+
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as stream:
@@ -202,6 +206,7 @@ def sha256(path: Path) -> str:
 
     Returns:
         Lowercase hexadecimal SHA-256 digest.
+
     """
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -218,6 +223,7 @@ def scan_public_boundary(output: Path) -> None:
 
     Raises:
         ValueError: If a forbidden marker occurs in a generated file.
+
     """
     for path in output.rglob("*"):
         if not path.is_file():
@@ -237,6 +243,7 @@ def write_manifest(output: Path) -> None:
 
     Args:
         output: Built dataset directory.
+
     """
     lines = [
         f"{sha256(path)}  {path.relative_to(output).as_posix()}"
@@ -257,6 +264,7 @@ def build_dataset(output: Path) -> DatasetReceipt:
 
     Returns:
         Deterministic dataset receipt.
+
     """
     if output.exists():
         shutil.rmtree(output)
@@ -340,6 +348,7 @@ def parse_output(arguments: list[str]) -> Path:
 
     Raises:
         ValueError: If the arguments do not contain exactly ``--output PATH``.
+
     """
     if len(arguments) != EXPECTED_CLI_ARGUMENTS or arguments[0] != "--output":
         message = "Usage: build_credentialing_hf_dataset.py --output PATH"
@@ -352,6 +361,7 @@ def main() -> int:
 
     Returns:
         Zero when the build completes successfully.
+
     """
     receipt = build_dataset(parse_output(sys.argv[1:]))
     print(json.dumps(receipt, indent=2))
