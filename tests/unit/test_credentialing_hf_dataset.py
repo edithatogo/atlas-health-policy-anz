@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import csv
 import hashlib
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from scripts.build_credentialing_hf_dataset import build_dataset
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def _sha256(path: Path) -> str:
