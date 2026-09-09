@@ -36,14 +36,32 @@ of a trusted old run receipt: every source/stage and remote package is reverifie
 The status summary contains only fixed labels and numeric counts, not arbitrary
 source text, exception messages, paths, headers or credentials.
 
-## Acceptance and unchanged boundaries
+## Hosted implementation qualification
+
+All seven PR workflows passed at code head
+`edb77fce9a9509c90aa7bf7586b97878e2574fe8`, tested through GitHub merge revision
+`cc7d0fe2318523f9912eb648e1515a1ef8f140c5`. The full suite reports 457 unique
+passing tests: all 435 previous cases plus 22 new regression cases. Combined
+statement/branch coverage is 97.56%, above the unchanged 95% minimum. The new
+packet_progress module has 100% measured statement/branch coverage; this does not
+imply universal full coverage of the repository or script entry points.
+
+Ruff/format/basedpyright/ty, all seven Test-Goblin jobs, Context CI, Dependency
+review, routine Testing Frontier and secret-free committed-original verification
+passed. Security jobs actually ran full-history Gitleaks, actionlint, zizmor,
+CodeQL, the locked vulnerability audit and SBOM generation successfully.
+
+Evidence: `quality/packet-execution-hosted-20260910.json`. Its artifact digest is
+reported by GitHub, not locally re-hashed. The execution container is unavailable;
+no local test or artifact-verification claim is made. The evidence-only commit
+and actual main merge receive their own checks; PR #13 records those later
+observations rather than implying this receipt can self-qualify.
+
+## Unchanged boundaries
 
 Regression tests cover good/bad/good selections, unknown remote effects after a
 simulated committed upload, idempotent re-verification, corrupt stages, process
 interruptions, checkpoint write failures, output collisions and sanitized reports.
-Run normal hosted strict, test, security and original-packet workflows before
-claiming qualification. The local container is unavailable in this pass; no local
-runtime, artifact digest or local test result is claimed.
 
 Source originals, packet pins, AU/NZ collections, `pyproject.toml`, `uv.lock` and all
 95%/strict gates remain unchanged. Actual publication remains blocked until a
