@@ -1,0 +1,16 @@
+{
+  "source_commit": "f5e6761286d57e78715bbe9ba6e802982676deb9",
+  "verified_count": 10,
+  "records": [
+    {"id":"chhhs-strategic-plan-2023-2027","sha256":"7db9b75f854febc19ceaed3a5114dde155420cf0951aa02c9aee0662a7ab8b60","bytes":1153450,"remote_bytes_verified":true},
+    {"id":"qh-strategic-plan-2025-2029-june-2026","sha256":"8a5b7751aa52235bc6cb79538bd630aceca7bf2e08512618f546b739d8539bfc","bytes":1470438,"remote_bytes_verified":true},
+    {"id":"qh-climate-risk-strategy-2021-2026","sha256":"bd46a21f51997bcc6b711673567fb538c83c51d376b282ef096f777f5c91b547","bytes":1230700,"remote_bytes_verified":true},
+    {"id":"qh-climate-adaptation-guidelines-2019","sha256":"8dbbbcdb61f809fe5716ddd8724826f88bf29ac8390c68f0db8823d2d3b21898","bytes":2412266,"remote_bytes_verified":true},
+    {"id":"chhhs-clinical-services-plan-2022-2027","sha256":"e51caa9243196f991742f714e38b0bd780a92de718d9e80330e1f4e4dff08d29","bytes":5638110,"remote_bytes_verified":true},
+    {"id":"chhhs-research-clinical-trials-plan-2024-2029","sha256":"5bc3c252d61b2367dec81d2fb2fcb1a61a85d0b9ffa6c68a0f97f17854900e3c","bytes":573215,"remote_bytes_verified":true},
+    {"id":"queensland-energy-roadmap-2025","sha256":"4e2810955d0cd7320a0783a81555a0b81edae823bc8118497d18555bd86b47c3","bytes":3972506,"remote_bytes_verified":true},
+    {"id":"paf-cost-benefit-analysis-2024","sha256":"e52c70c0adcf27957346e629b6df7101cf27ee56e5b44c0a33e8026943fdbe21","bytes":939468,"remote_bytes_verified":true},
+    {"id":"qra-strategic-plan-2026-2030","sha256":"049a75ccce85c5b62e2c305918245a17e202dd64d9c223a77613e3b8c1a6ecd3","bytes":281861,"remote_bytes_verified":true},
+    {"id":"qsdr-summary-2022-2027","sha256":"7eba00663a54f30e19f461be13313f74bc6c0fac4c79ca8a3d7aef208bd2341c","bytes":646612,"remote_bytes_verified":true}
+  ]
+}
