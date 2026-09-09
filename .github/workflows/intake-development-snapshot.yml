@@ -1,0 +1,44 @@
+name: Temporary intake development snapshot
+on:
+  push:
+    branches: [feat/intake-packet-compatibility]
+    paths: [.github/workflows/intake-development-snapshot.yml]
+permissions:
+  contents: read
+concurrency:
+  group: intake-development-snapshot
+  cancel-in-progress: false
+jobs:
+  snapshot:
+    name: Export pinned public source and actual base interpreter, without secrets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out public source without persisted credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Install pinned runtime manager
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          version: "0.11.29"
+          enable-cache: false
+      - name: Archive source and base interpreter rather than virtualenv symlinks
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv python install 3.14.6
+          mkdir -p build/intake-dev
+          base=$(uv run --isolated --no-project --python 3.14.6 python -c 'import sys; print(sys.base_prefix)')
+          tar -czf build/intake-dev/python-base.tar.gz -C "$base" .
+          git archive --format=tar.gz HEAD > build/intake-dev/source.tar.gz
+          git rev-parse HEAD > build/intake-dev/commit.txt
+          sha256sum pyproject.toml uv.lock > build/intake-dev/contracts.sha256
+          (cd build/intake-dev && sha256sum python-base.tar.gz source.tar.gz commit.txt contracts.sha256 > SHA256SUMS)
+      - name: Retain temporary reproducibility snapshot
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: intake-development-snapshot
+          path: build/intake-dev/
+          retention-days: 1
+          if-no-files-found: error
