@@ -1,0 +1,163 @@
+name: One-shot Queensland public source originals
+on:
+  push:
+    branches: [source-documents/qld-energy-resilience-20260909]
+    paths:
+      - data/source-intake/qld-energy-resilience-20260909/request.json
+      - .github/workflows/qld-source-intake-once.yml
+permissions:
+  contents: read
+concurrency:
+  group: qld-source-intake-20260909
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          version: '0.11.29'
+          enable-cache: false
+      - name: Capture only the named public original PDFs
+        env:
+          PYTHONPATH: src
+        run: |
+          uv run --no-project --python 3.14.6 python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from datetime import UTC, datetime
+          from pathlib import Path
+          from urllib.parse import urlsplit
+          from australian_health_policy_atlas.capture import capture_url
+          from australian_health_policy_atlas.integrity import atomic_bytes, atomic_json
+
+          request_path = Path('data/source-intake/qld-energy-resilience-20260909/request.json')
+          request_bytes = request_path.read_bytes()
+          request = json.loads(request_bytes)
+          assert request['evaluation_material_allowed'] is False
+          assert request['medallion_promotion'] is False
+          assert len(request['sources']) <= 18
+          root = Path('data/source-documents/qld-energy-resilience-20260909')
+          root.mkdir(parents=True, exist_ok=True)
+          cas = Path(os.environ['RUNNER_TEMP']) / 'qld-original-cas'
+          records = []
+          total = 0
+          for source in request['sources']:
+              record = dict(source)
+              try:
+                  host = urlsplit(source['url']).hostname
+                  receipt = capture_url(source['url'], cas_root=cas,
+                      max_bytes=request['maximum_bytes_per_document'], retries=1,
+                      timeout_seconds=30, allowed_hosts=(host,))
+                  body = Path(receipt.stored_path).read_bytes()
+                  if receipt.http_status != 200 or not body.startswith(b'%PDF-'):
+                      raise ValueError('not a successful original PDF response')
+                  if b'%%EOF' not in body[-4096:]:
+                      raise ValueError('PDF end marker not found; incomplete or nonstandard file held')
+                  digest = hashlib.sha256(body).hexdigest()
+                  if digest != receipt.sha256:
+                      raise ValueError('native capture and independently computed hash disagree')
+                  if total + len(body) > request['maximum_total_bytes']:
+                      raise ValueError('finite total collection byte budget exceeded')
+                  relative = f"originals/{source['id']}--{digest[:16]}.pdf"
+                  target = root / relative
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  if target.exists() and target.read_bytes() != body:
+                      raise ValueError('immutable destination collision')
+                  atomic_bytes(target, body)
+                  total += len(body)
+                  observed = receipt.as_dict()
+                  observed['stored_path'] = target.as_posix()
+                  record.update(status='captured_original_pdf', receipt=observed,
+                      original_unmodified=True, semantic_qualification=False,
+                      remote_verification=False)
+              except Exception as exc:
+                  record.update(status='capture_failed', error_type=type(exc).__name__,
+                      error=str(exc)[:600], remote_verification=False)
+              records.append(record)
+          manifest = {'schema_version':1, 'collection_id':request['collection_id'],
+              'request_sha256':hashlib.sha256(request_bytes).hexdigest(),
+              'captured_at':datetime.now(UTC).isoformat(), 'code_revision':os.environ['GITHUB_SHA'],
+              'captured_count':sum(r['status']=='captured_original_pdf' for r in records),
+              'requested_count':len(records), 'bytes':total, 'evaluation_material':False,
+              'medallion_promotion':False, 'records':records}
+          atomic_json(root/'manifest.json', manifest)
+          lines = ['# Original public documents', '',
+              'Unaltered originals with bibliographic and capture provenance. No evaluation material. No Bronze release closure is claimed.', '',
+              '| Source | Disposition | Original |', '|---|---|---|']
+          for record in records:
+              path = record.get('receipt',{}).get('stored_path','')
+              link = '['+record['id']+']('+str(Path(path).relative_to(root))+')' if path else 'Not captured'
+              lines.append('| '+record['title']+' | '+record['status']+' | '+link+' |')
+          lines.extend(['', '## Rights', '',
+              'Original notices and credits are retained. Consult each manifest entry and original document for attribution and licence terms. Site defaults do not supersede document-specific exceptions. No endorsement is implied. No altered or extracted full-text version is distributed.'])
+          atomic_bytes(root/'README.md', ('\n'.join(lines)+'\n').encode())
+          if not manifest['captured_count']:
+              raise SystemExit('No original PDF captured; do not claim transfer success')
+          print(json.dumps({'captured':manifest['captured_count'],'requested':len(records),'bytes':total}))
+          PY
+      - name: Commit only the original-source collection
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add --force -- data/source-documents/qld-energy-resilience-20260909
+          git diff --cached --name-only | grep -v '^data/source-documents/qld-energy-resilience-20260909/' > /tmp/unexpected-paths || true
+          test ! -s /tmp/unexpected-paths
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: preserve bounded Queensland policy originals and capture receipts'
+            auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+            git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:refs/heads/source-documents/qld-energy-resilience-20260909
+          fi
+          echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Verify every stored PDF from its public immutable Git revision
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, time, urllib.request
+          from pathlib import Path
+          manifest = json.loads(Path('data/source-documents/qld-energy-resilience-20260909/manifest.json').read_text())
+          observations = []
+          for row in manifest['records']:
+              if row['status'] != 'captured_original_pdf':
+                  continue
+              receipt = row['receipt']
+              url = 'https://raw.githubusercontent.com/edithatogo/atlas-health-policy-anz/'+os.environ['SOURCE_COMMIT']+'/'+receipt['stored_path']
+              for attempt in range(3):
+                  try:
+                      with urllib.request.urlopen(url, timeout=45) as response:
+                          body = response.read(33554433)
+                      break
+                  except Exception:
+                      if attempt == 2:
+                          raise
+                      time.sleep(3)
+              if len(body) != receipt['size_bytes'] or hashlib.sha256(body).hexdigest() != receipt['sha256']:
+                  raise SystemExit('Remote original failed byte verification: '+row['id'])
+              observations.append({'id':row['id'],'sha256':receipt['sha256'],'bytes':len(body),'remote_bytes_verified':True})
+          Path('build/source-intake').mkdir(parents=True, exist_ok=True)
+          Path('build/source-intake/remote-verification.json').write_text(json.dumps({'source_commit':os.environ['SOURCE_COMMIT'],'verified_count':len(observations),'records':observations},indent=2)+'\n')
+          print('Verified', len(observations), 'original PDFs from public immutable Git revision', os.environ['SOURCE_COMMIT'])
+          PY
+      - name: Export pinned public Conductor dependency without local project data
+        run: |
+          git clone --bare https://github.com/edithatogo/conductor-next.git "$RUNNER_TEMP/conductor-public.git"
+          git -C "$RUNNER_TEMP/conductor-public.git" cat-file -e 137c1e41ff9c1dc75ff277b9582460a0bd8c4768^{commit}
+          git -C "$RUNNER_TEMP/conductor-public.git" branch intake-export-pin 137c1e41ff9c1dc75ff277b9582460a0bd8c4768
+          git -C "$RUNNER_TEMP/conductor-public.git" bundle create "$GITHUB_WORKSPACE/build/source-intake/conductor-pinned.bundle" refs/heads/intake-export-pin
+          sha256sum build/source-intake/conductor-pinned.bundle > build/source-intake/conductor-pinned.sha256
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: qld-source-intake-receipts-and-public-dependency
+          path: build/source-intake/
+          if-no-files-found: warn
+          retention-days: 7
