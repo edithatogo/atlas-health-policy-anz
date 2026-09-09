@@ -2,14 +2,9 @@ from __future__ import annotations
 
 import csv
 import hashlib
-import json
-import subprocess
-import sys
 from pathlib import Path
-from typing import cast
 
-ROOT = Path(__file__).parents[2]
-BUILDER = ROOT / "scripts" / "build_credentialing_hf_dataset.py"
+from scripts.build_credentialing_hf_dataset import build_dataset
 
 
 def _sha256(path: Path) -> str:
@@ -20,13 +15,7 @@ def _sha256(path: Path) -> str:
 
 def test_public_credentialing_dataset_builds_fail_closed(tmp_path: Path) -> None:
     output = tmp_path / "credentialing-policy-atlas"
-    completed = subprocess.run(
-        [sys.executable, str(BUILDER), "--output", str(output)],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    receipt = cast("dict[str, object]", json.loads(completed.stdout))
+    receipt = build_dataset(output)
 
     assert receipt["source_rows"] == 14
     assert receipt["model_scope_rows"] == 88
