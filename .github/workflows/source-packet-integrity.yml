@@ -2,15 +2,22 @@ name: Original source packet integrity and public staging
 
 on:
   pull_request:
+    paths:
+      - source-packets/**
+      - data/sources/source-packets-v1.json
+      - src/**
+      - scripts/source_packets.py
+      - .github/workflows/source-packet-integrity.yml
+      - uv.lock
   push:
     branches: [main]
     paths:
-      - 'source-packets/**'
-      - 'data/sources/source-packets-v1.json'
-      - 'src/australian_health_policy_atlas/**'
-      - 'scripts/source_packets.py'
-      - '.github/workflows/source-packet-integrity.yml'
-      - 'uv.lock'
+      - source-packets/**
+      - data/sources/source-packets-v1.json
+      - src/**
+      - scripts/source_packets.py
+      - .github/workflows/source-packet-integrity.yml
+      - uv.lock
   workflow_dispatch:
 
 permissions:
@@ -27,25 +34,25 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check out tracked source without credentials
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
       - name: Install pinned runtime manager
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
-          version: '0.11.29'
+          version: "0.11.29"
           enable-cache: false
       - name: Verify and reconstruct packets offline without optional dependencies
         env:
           PYTHONPATH: src
-          HF_HUB_OFFLINE: '1'
-          HF_HUB_DISABLE_TELEMETRY: '1'
+          HF_HUB_OFFLINE: "1"
+          HF_HUB_DISABLE_TELEMETRY: "1"
         run: |
           uv python install 3.14.6
-          uv run --isolated --no-project --python 3.14.6 python -S -m scripts.source_packets stage --workspace "$RUNNER_TEMP/atlas-packet-candidates" --receipt build/packet-integrity-receipt.json
+          uv run --isolated --no-project --python 3.14.6 python -S -m scripts.source_packets stage --workspace "$RUNNER_TEMP/atlas-packet-candidates" --receipt build/packet-integrity-receipt.json --summary "$GITHUB_STEP_SUMMARY"
       - name: Retain integrity receipts only, not raw documents
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: source-packet-integrity
           path: build/packet-integrity-receipt.json
@@ -60,13 +67,13 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out trusted main without GitHub write credentials
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
       - name: Install pinned runtime manager
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
-          version: '0.11.29'
+          version: "0.11.29"
           enable-cache: false
       - name: Install exact locked publication dependencies
         run: |
@@ -76,15 +83,12 @@ jobs:
         env:
           PYTHONPATH: src
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          HF_HUB_DISABLE_TELEMETRY: '1'
-          DO_NOT_TRACK: '1'
-        # Use the exact synchronized interpreter. This uploads a Hugging Face
-        # dataset through HfApi, not Python distributions through uv publish/PyPI.
-        run: |
-          .venv/bin/python -m scripts.source_packets publish --workspace "$RUNNER_TEMP/atlas-packet-publication" --receipt build/packet-publication-receipt.json
+          HF_HUB_DISABLE_TELEMETRY: "1"
+          DO_NOT_TRACK: "1"
+        run: .venv/bin/python -m scripts.source_packets publish --workspace "$RUNNER_TEMP/atlas-packet-publication" --receipt build/packet-publication-receipt.json --summary "$GITHUB_STEP_SUMMARY"
       - name: Retain publication outcome, never token or original bytes
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: source-packet-publication
           path: build/packet-publication-receipt.json

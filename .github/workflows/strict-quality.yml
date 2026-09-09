@@ -34,6 +34,12 @@ jobs:
         env:
           ATLAS_CHECKER: ${{ matrix.checker }}
         run: uv run --no-sync python scripts/strict_quality.py "$ATLAS_CHECKER"
+      - name: Show every lint location without changing source or acceptance
+        if: failure() && matrix.checker == 'ruff'
+        run: uv run --no-sync ruff check --output-format=concise src scripts tests
+      - name: Show the exact proposed formatting diff without applying it
+        if: failure() && matrix.checker == 'format'
+        run: uv run --no-sync ruff format --diff src scripts tests
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:

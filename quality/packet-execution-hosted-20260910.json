@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "observed-hosted-packet-execution-qualification",
+  "repository": "edithatogo/atlas-health-policy-anz",
+  "pull_request": 13,
+  "tracks": ["T02", "T07"],
+  "observed_on": "2026-09-10",
+  "timezone": "Australia/Brisbane",
+  "pr_head": "edb77fce9a9509c90aa7bf7586b97878e2574fe8",
+  "pr_base": "192c7e652fc4ddbf76c6400a700754f509f9808d",
+  "tested_pr_merge_revision": "cc7d0fe2318523f9912eb648e1515a1ef8f140c5",
+  "observation_method": "GitHub connector workflow, job and full coverage-log inspection",
+  "workflows": [
+    {"name": "Strict Python Quality", "run_id": 34404517277, "conclusion": "success"},
+    {"name": "Test-Goblin", "run_id": 34404517282, "conclusion": "success"},
+    {"name": "Context CI", "run_id": 34404517289, "conclusion": "success"},
+    {"name": "Dependency review", "run_id": 34404517416, "conclusion": "success"},
+    {"name": "Security and Context", "run_id": 34404517386, "conclusion": "success"},
+    {"name": "Testing Frontier", "run_id": 34404517297, "conclusion": "success"},
+    {"name": "Original source packet integrity and public staging", "run_id": 34404517268, "conclusion": "success", "scope": "secret-free original verification; PR publication disabled"}
+  ],
+  "tests": {"unique_passed": 457, "failures": 0, "errors": 0, "skips": 0, "previous_unique_tests_retained": 435, "added_regression_cases": 22, "parallel_repeat_is_not_additional_unique_tests": true},
+  "coverage": {"reported_combined_percent": 97.56, "required_combined_percent": 95, "statements": 3031, "missed_statements": 49, "branches": 744, "packet_progress_combined_percent": 100.0, "branch_only_percent_independently_read": false},
+  "runtime": {"python": "3.14.6", "pytest": "9.1.1", "uv": "0.11.29", "host_override": false},
+  "dependency_lock_sha256": "8d19325b11a134540c41566bd37a8b36dabba1b729d05e072f18ae3503219d60",
+  "pyproject_and_lock_unchanged": true,
+  "quality_artifact": {
+    "id": 10124788016,
+    "name": "atlas-quality-receipts",
+    "reported_bytes": 187696,
+    "reported_sha256": "19f611ff731773aa6a6085f8b25f3351d207ecf9dc653e99902067c1f85ec1fc",
+    "local_download_digest_verified": false,
+    "source": "GitHub Actions upload step; not an independently downloaded artifact"
+  },
+  "prior_trusted_main_publication": {
+    "commit": "192c7e652fc4ddbf76c6400a700754f509f9808d",
+    "run_id": 34401751088,
+    "publication_job_id": 102635115348,
+    "outcome": "blocked_missing_hf_token",
+    "scope": "HF_TOKEN unavailable to that job; not a claim about other HF connections"
+  },
+  "local_tests_executed": false,
+  "new_policy_captures": 0,
+  "live_hf_writes": 0,
+  "medallion_promotion": false,
+  "new_conductor_tracks": false,
+  "qualification_boundary": "Pins the named PR code and GitHub-generated test merge. A later evidence-only head and actual main merge must pass their own applicable checks. Integrity, tests and known publication blockers do not qualify policy semantics or Bronze maturity. Final merge observations belong to PR #13 to avoid self-referential receipt commits."
+}
