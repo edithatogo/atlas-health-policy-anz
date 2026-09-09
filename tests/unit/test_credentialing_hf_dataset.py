@@ -44,9 +44,13 @@ def test_public_credentialing_dataset_builds_fail_closed(tmp_path: Path) -> None
     assert not list(output.rglob("*.pdf"))
     assert not list(output.rglob("*.docx"))
 
-    manifest_lines = (output / "MANIFEST.sha256").read_text(
-        encoding="utf-8",
-    ).splitlines()
+    manifest_lines = (
+        (output / "MANIFEST.sha256")
+        .read_text(
+            encoding="utf-8",
+        )
+        .splitlines()
+    )
     assert manifest_lines
     for line in manifest_lines:
         expected, relative_path = line.split("  ", maxsplit=1)
