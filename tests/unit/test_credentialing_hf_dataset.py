@@ -28,7 +28,7 @@ def test_public_credentialing_dataset_builds_fail_closed(tmp_path: Path) -> None
     )
     receipt = cast("dict[str, object]", json.loads(completed.stdout))
 
-    assert receipt["source_rows"] == 8
+    assert receipt["source_rows"] == 14
     assert receipt["model_scope_rows"] == 88
     assert receipt["final_model_rows"] == 83
     assert receipt["under_review_rows"] == 5
