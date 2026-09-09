@@ -1,10 +1,7 @@
-name: One-off Queensland policy original-document packet
+name: Manual bounded Queensland policy original-document packet
+# Initial authorized capture is complete. No automatic or scheduled reruns.
 on:
-  push:
-    branches: ["source-packet/qld-energy-health-20260909"]
-    paths:
-      - "source-packets/queensland-energy-health-20260909/request.json"
-      - ".github/workflows/qld-source-packet-20260909.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
@@ -12,7 +9,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   capture:
-    if: github.repository == 'edithatogo/atlas-health-policy-anz'
+    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/source-packet/qld-energy-health-20260909'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
@@ -50,7 +47,7 @@ jobs:
           auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
           git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$SOURCE_BRANCH"
   dependency_handoff:
-    if: github.repository == 'edithatogo/atlas-health-policy-anz'
+    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/source-packet/qld-energy-health-20260909'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -61,7 +58,7 @@ jobs:
         run: |
           set -euo pipefail
           git clone --single-branch https://github.com/edithatogo/conductor-next.git "$RUNNER_TEMP/conductor"
-          git -C "$RUNNER_TEMP/conductor" cat-file -e 137c1e41ff9c1dc75ff277b9582460a0bd8c4768^{commit}
+          git -C "$RUNNER_TEMP/conductor" cat-file -e '137c1e41ff9c1dc75ff277b9582460a0bd8c4768^{commit}'
           git -C "$RUNNER_TEMP/conductor" branch local-handoff 137c1e41ff9c1dc75ff277b9582460a0bd8c4768
           git -C "$RUNNER_TEMP/conductor" bundle create "$RUNNER_TEMP/conductor-pinned.bundle" local-handoff
           sha256sum "$RUNNER_TEMP/conductor-pinned.bundle" > "$RUNNER_TEMP/conductor-pinned.bundle.sha256"
