@@ -18,6 +18,7 @@ from typing import Literal
 from urllib.parse import urlsplit
 
 from .hashing import sha256_bytes, sha256_file
+from .intake_adapter import project_intake
 from .integrity import IDENTIFIER, REVISION, SHA256, read_json, safe_path, sealed
 from .records import integer, records, string, strings
 
@@ -29,6 +30,7 @@ PDF_TAIL_BYTES = 65536
 ASCII_SPACE = 32
 SOURCE_FIELDS = ("source_id", "title", "url", "licence", "attribution", "rights_basis")
 Layout = Literal["original", "staged"]
+INTAKE_ROOT_DEPTH = 3
 
 
 def require_packet(condition: object, message: str) -> None:
@@ -53,6 +55,7 @@ class PacketSpec:
     capture_sha256: str
     allowed_hosts: tuple[str, ...]
     known_census_gaps: tuple[str, ...]
+    metadata_format: str = "source-packet-1.0"
 
     @classmethod
     def from_record(cls, value: dict[str, object]) -> PacketSpec:
@@ -70,15 +73,25 @@ class PacketSpec:
             capture_sha256=string(value["capture_sha256"]),
             allowed_hosts=tuple(strings(value["allowed_hosts"])),
             known_census_gaps=tuple(strings(value["known_census_gaps"])),
+            metadata_format=string(value.get("metadata_format", "source-packet-1.0")),
         )
         result.validate()
         return result
 
     def validate(self) -> None:
-        """Require canonical identities, a packet-only directory and unique hosts."""
+        """Require canonical identities, a format-defined directory and unique hosts."""
         require_packet(bool(IDENTIFIER.fullmatch(self.packet_id)), "invalid packet ID")
         require_packet(
-            self.directory == f"source-packets/{self.packet_id}",
+            self.metadata_format in {"source-packet-1.0", "finite-source-intake-1.0"},
+            "unsupported packet metadata format",
+        )
+        prefix = (
+            "source-packets"
+            if self.metadata_format == "source-packet-1.0"
+            else "data/source-documents"
+        )
+        require_packet(
+            self.directory == f"{prefix}/{self.packet_id}",
             "packet directory does not match identity",
         )
         require_packet(
@@ -119,6 +132,11 @@ class PacketSpec:
             "capture_sha256": self.capture_sha256,
             "allowed_hosts": list(self.allowed_hosts),
             "known_census_gaps": list(self.known_census_gaps),
+            **(
+                {"metadata_format": self.metadata_format}
+                if self.metadata_format != "source-packet-1.0"
+                else {}
+            ),
         }
 
 
@@ -154,9 +172,45 @@ def _bounded_bytes(path: Path, maximum: int) -> bytes:
     return data
 
 
-def _pinned_json(root: Path, name: str, digest: str) -> dict[str, object]:
-    data = _bounded_bytes(safe_path(root, name), MAX_METADATA_BYTES)
-    require_packet(sha256_bytes(data) == digest, "pinned metadata changed: " + name)
+def packet_metadata_paths(
+    root: Path, spec: PacketSpec, layout: Layout
+) -> tuple[Path, Path]:
+    """Locate only format-defined pinned metadata, never arbitrary adjacent inputs.
+
+    Returns:
+        Request and capture paths. Earlier intakes keep their original split
+        repository layout; staged evidence always uses the same portable names.
+
+    """
+    spec.validate()
+    require_packet(layout in {"original", "staged"}, "unsupported packet layout")
+    if layout == "staged":
+        return safe_path(root, "evidence/request.json"), safe_path(
+            root, "evidence/capture-manifest.json"
+        )
+    if spec.metadata_format == "source-packet-1.0":
+        return safe_path(root, "request.json"), safe_path(root, "capture-manifest.json")
+    absolute = root.absolute()
+    require_packet(
+        len(absolute.parents) >= INTAKE_ROOT_DEPTH,
+        "intake root does not match pinned layout",
+    )
+    repository = absolute.parents[2]
+    require_packet(
+        safe_path(repository, spec.directory) == absolute,
+        "intake root does not match pinned layout",
+    )
+    return (
+        safe_path(repository, f"data/source-intake/{spec.packet_id}/request.json"),
+        safe_path(root, "manifest.json"),
+    )
+
+
+def _pinned_json(path: Path, digest: str) -> dict[str, object]:
+    data = _bounded_bytes(path, MAX_METADATA_BYTES)
+    require_packet(
+        sha256_bytes(data) == digest, "pinned metadata changed: " + path.name
+    )
     return read_json(data)
 
 
@@ -191,9 +245,11 @@ def _metadata(
 ) -> tuple[
     dict[str, dict[str, object]], dict[str, dict[str, object]], dict[str, object]
 ]:
-    prefix = "evidence/" if layout == "staged" else ""
-    request = _pinned_json(root, prefix + "request.json", spec.request_sha256)
-    capture = _pinned_json(root, prefix + "capture-manifest.json", spec.capture_sha256)
+    request_path, capture_path = packet_metadata_paths(root, spec, layout)
+    request = _pinned_json(request_path, spec.request_sha256)
+    capture = _pinned_json(capture_path, spec.capture_sha256)
+    if spec.metadata_format == "finite-source-intake-1.0":
+        request, capture = project_intake(request, capture, spec)
     require_packet(
         request["packet_id"] == capture["packet_id"] == spec.packet_id,
         "metadata packet identity mismatch",

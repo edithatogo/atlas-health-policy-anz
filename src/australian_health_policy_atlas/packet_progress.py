@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Literal
 
 from .hashing import canonical_json_bytes, sha256_json
 from .integrity import read_json, sealed
+from .packet_holdings import summarize_holdings
 
 if TYPE_CHECKING:
     from .packet_ingestion import PacketSpec
@@ -132,6 +133,9 @@ class PacketRun:
                 item.observation for item in self.items if item.observation is not None
             ],
             "publication": publications,
+            "holdings": summarize_holdings([
+                item.observation for item in self.items if item.observation is not None
+            ]),
             "dataset_id": self.dataset_id,
             "execution": self.execution,
             "network_attempted": attempted,

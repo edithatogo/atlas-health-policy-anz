@@ -1,5 +1,11 @@
 name: Bounded public ANZ Bronze capture
 on:
+  pull_request:
+    paths:
+      - src/**
+      - data/sources/**
+      - .github/workflows/bronze-capture.yml
+      - uv.lock
   workflow_dispatch:
   schedule:
     - cron: "43 13 * * 2,5"
@@ -8,20 +14,43 @@ permissions:
 concurrency:
   group: bronze-capture-${{ github.ref }}
   cancel-in-progress: false
+env:
+  ATLAS_COLLECTION: anz-v1
+  ATLAS_REQUEST_BUDGET: "20"
 jobs:
   preflight:
-    name: Check publication prerequisites and ANZ source matrix
+    name: Validate offline acquisition plan before any credential or network work
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     outputs:
       ready: ${{ steps.preflight.outputs.ready }}
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Check out governed source without persisted credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+      - name: Install exact runtime manager
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: false
+      - name: Install declared Python before importing its syntax
+        run: uv python install 3.14.6
+      - id: matrix
+        name: Compile bounded identity-pinned plan without installed dependencies
+        env:
+          PYTHONPATH: src
+          HF_HUB_OFFLINE: "1"
+          HF_HUB_DISABLE_TELEMETRY: "1"
+        shell: bash
+        run: |
+          matrix=$(uv run --isolated --no-project --python 3.14.6 python -S -m australian_health_policy_atlas.capture_plan --collection "$ATLAS_COLLECTION" --request-budget "$ATLAS_REQUEST_BUDGET" --receipt build/capture-plan.json)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "Offline source-policy and frontier-budget plan validated. No capture or publication was performed by preflight; see the acquisition-plan artifact." >> "$GITHUB_STEP_SUMMARY"
       - id: preflight
-        name: Check lock and credential availability
+        name: Check publication prerequisites only on trusted main
+        if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         shell: bash
@@ -32,18 +61,18 @@ jobs:
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
-      - id: matrix
-        name: Build bounded ANZ source matrix
-        env:
-          PYTHONPATH: src
-        shell: bash
-        run: |
-          matrix=$(python -m australian_health_policy_atlas.operations --collection anz-v1 --matrix)
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+      - name: Retain the source identities and bounded execution plan
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: bronze-acquisition-plan
+          path: build/capture-plan.json
+          if-no-files-found: error
+          retention-days: 14
   capture:
     name: Capture and verify public source ${{ matrix.source_id }}
     needs: preflight
-    if: needs.preflight.outputs.ready == 'true'
+    if: needs.preflight.outputs.ready == 'true' && github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     strategy:
@@ -51,10 +80,12 @@ jobs:
       max-parallel: 3
       matrix: ${{ fromJSON(needs.preflight.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Check out the governed source revision
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      - name: Install exact runtime manager
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           version: "0.11.29"
           enable-cache: true
@@ -68,9 +99,10 @@ jobs:
         run: |
           mkdir -p build/receipts
           uv run --no-sync python -m australian_health_policy_atlas.operations \
-            --collection anz-v1 --source-id "$SOURCE_ID" --workspace "$RUNNER_TEMP/atlas-source" \
-            --request-budget 20 > "build/receipts/${SOURCE_ID}.json"
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+            --collection "$ATLAS_COLLECTION" --source-id "$SOURCE_ID" --workspace "$RUNNER_TEMP/atlas-source" \
+            --request-budget "$ATLAS_REQUEST_BUDGET" > "build/receipts/${SOURCE_ID}.json"
+      - name: Retain source disposition receipts
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
           name: source-receipt-${{ matrix.source_id }}

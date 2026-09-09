@@ -134,3 +134,38 @@ Actions retains only receipts, not raw originals. Existing Git-held public origi
 are not deleted before verified HF storage exists. Every package/reference remains
 `not_medallion_release: true`, `gate_b_passed: false`. Native ecosystem audits,
 complete document acquisition and final Bronze release qualification remain separate.
+
+## Earlier finite-intake compatibility and cross-packet holdings
+
+The registry also accepts `metadata_format: finite-source-intake-1.0` for the
+preserved `data/source-intake/<id>/request.json` and
+`data/source-documents/<id>/manifest.json` layout. All original PDFs remain in the
+latter directory's `originals/` folder. The adapter supplies a transient common
+validation view while staging the exact pinned original JSON bytes, not a newly
+invented capture receipt. It reuses the existing byte verifier and public
+reconstruction path. Unknown formats and format/directory mismatches fail.
+
+The older `source-packet-1.0` format remains the default and omits the optional
+format discriminator from serialization, preserving existing package identities.
+The first packet's eight original byte objects are unchanged. With both preserved
+histories selected, there are ten distinct PDF byte objects (18,318,626 bytes),
+18 successful capture occurrences and 15 failed capture records across 33 requested
+records. These are not 33 different documents or a national coverage denominator.
+
+Every progress receipt now contains a sealed `holdings` summary. It deduplicates
+original counts by exact SHA-256/size, rejects contradictory counts or object sizes,
+and retains failure histories. Only independently verified packet observations
+enter this summary; its self-hash does not authenticate an externally supplied
+claim. A failed packet is still represented in run progress, but its unverified
+contents are not added to the holdings count. Actions summaries display the same
+numeric distinction between distinct bytes and capture records.
+
+No historical failure is retrospectively marked successful, and the QRA summary
+is not relabelled as a full strategy. Rights prose and original successful-request
+timestamps remain unchanged. Failed intake records lack individual timestamps;
+the adapter explicitly labels their available batch completion timestamp.
+
+Both preserved source layouts now trigger PR integrity checks. Publication still
+runs only on trusted main with a usable scoped HF_TOKEN, and every package remains
+staging rather than a medallion release. See
+`conductor/intake-compatibility-20260910.md` for provenance and scope.

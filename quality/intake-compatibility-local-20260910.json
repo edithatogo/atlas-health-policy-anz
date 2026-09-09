@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "kind": "local-intake-compatibility-qualification",
+  "observed_date": "2026-09-10",
+  "source_baseline": "7a2f6fe39e628c6c77887fa53fdaa2970ad18648",
+  "main_baseline": "9e0d389c80556bb93c0aecaaf1df587ee9387be6",
+  "snapshot_tree": "3423afa370eacd31726a338df053019dd1611f1c",
+  "changes_excluding_this_receipt": [
+    {
+      "path": ".github/workflows/bronze-capture.yml",
+      "status": "modified_or_added",
+      "blob": "649e4a4f345c488edad09e43f4d369539c73b62a"
+    },
+    {
+      "path": ".github/workflows/intake-development-snapshot.yml",
+      "status": "deleted",
+      "blob": null
+    },
+    {
+      "path": ".github/workflows/source-packet-integrity.yml",
+      "status": "modified_or_added",
+      "blob": "8d89ec20fc0b52fb9ed4243060624a303b68b47c"
+    },
+    {
+      "path": "conductor/intake-compatibility-20260910.md",
+      "status": "modified_or_added",
+      "blob": "37bfc60750142b630026a9a366a10cf6fc949d51"
+    },
+    {
+      "path": "conductor/source-packet-integration-20260910.md",
+      "status": "modified_or_added",
+      "blob": "3da48a42f3c408909ac3e3494c280a839eec5c91"
+    },
+    {
+      "path": "conductor/tracks/T02-bronze-maturity/metadata.toml",
+      "status": "modified_or_added",
+      "blob": "7d1f555ee7f5ced821604e7a2907d5b4aa3b571d"
+    },
+    {
+      "path": "conductor/tracks/T02-bronze-maturity/plan.md",
+      "status": "modified_or_added",
+      "blob": "650e226b01bc5d29f595c6fc9f8f8c9e7b879ae2"
+    },
+    {
+      "path": "data/sources/source-packets-v1.json",
+      "status": "modified_or_added",
+      "blob": "bccfcbea921ed59f688d297d8a9324277f4263e6"
+    },
+    {
+      "path": "docs/CI_CD.md",
+      "status": "modified_or_added",
+      "blob": "b4709480c839bebe949c64e9e6e900f50819c159"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS.md",
+      "status": "modified_or_added",
+      "blob": "01c0dee7a108de7e10f3d6c4a2687095283f00d6"
+    },
+    {
+      "path": "docs/SOURCE_PACKET_STAGING.md",
+      "status": "modified_or_added",
+      "blob": "b435c324a0407c35d22135bc4c477cd15c4fddb4"
+    },
+    {
+      "path": "schemas/source-packet-registry-v1.json",
+      "status": "modified_or_added",
+      "blob": "8611615c283e3dd7f6c22ef5856b532b1df87c57"
+    },
+    {
+      "path": "schemas/source-packet-staging-v1.json",
+      "status": "modified_or_added",
+      "blob": "940712607b15d36ec78d7b33249931e91a90fdb7"
+    },
+    {
+      "path": "scripts/source_packets.py",
+      "status": "modified_or_added",
+      "blob": "1fe846e4f33fcb5a5ab7e71642fb8287c6eaa0e7"
+    },
+    {
+      "path": "src/australian_health_policy_atlas/capture_plan.py",
+      "status": "modified_or_added",
+      "blob": "3d12664c34062c3f9fd2273d45d9e39223d2b8e1"
+    },
+    {
+      "path": "src/australian_health_policy_atlas/intake_adapter.py",
+      "status": "modified_or_added",
+      "blob": "6e92670537cb637ed83eb876e02b078443ff6660"
+    },
+    {
+      "path": "src/australian_health_policy_atlas/operations.py",
+      "status": "modified_or_added",
+      "blob": "8e6e42b4ddd83aae276c956c879f7d750d7c1fb4"
+    },
+    {
+      "path": "src/australian_health_policy_atlas/packet_holdings.py",
+      "status": "modified_or_added",
+      "blob": "df97c567a068cb1fb4355e9ad237becbc73b31eb"
+    },
+    {
+      "path": "src/australian_health_policy_atlas/packet_ingestion.py",
+      "status": "modified_or_added",
+      "blob": "f538a32b9828097dc457e4616b31481d405708ec"
+    },
+    {
+      "path": "src/australian_health_policy_atlas/packet_progress.py",
+      "status": "modified_or_added",
+      "blob": "15372501834a8fc195e24c6f7a5a48a25dad4422"
+    },
+    {
+      "path": "src/australian_health_policy_atlas/packet_staging.py",
+      "status": "modified_or_added",
+      "blob": "5b5fb615bfb3779380013e2da2b899edf7e87eb4"
+    },
+    {
+      "path": "tests/intake_support.py",
+      "status": "modified_or_added",
+      "blob": "6dc1f9c34e5237e984ec64a0c3fecda93b4c5ba7"
+    },
+    {
+      "path": "tests/integration/test_intake_holdings.py",
+      "status": "modified_or_added",
+      "blob": "ad84ce919a00b354e959ae51633e4c2b5d5195d5"
+    },
+    {
+      "path": "tests/unit/test_capture_plan.py",
+      "status": "modified_or_added",
+      "blob": "5dfc07024761750fde9e5ad7125299f6e0e148cc"
+    },
+    {
+      "path": "tests/unit/test_intake_compatibility.py",
+      "status": "modified_or_added",
+      "blob": "065b1f1342e0f54091efbe7b165cd58b73f33331"
+    }
+  ],
+  "checks": {
+    "ruff": {
+      "status": "passed",
+      "receipt_sha256": "990928b35bbc56e71778ff731e7cb736cc61b8e61178bac7f9dc7af925dd07c3"
+    },
+    "format": {
+      "status": "passed",
+      "receipt_sha256": "0f2e95b48cb0f6005af0f86544766765d75988cb4b97c38000e7ace1f726c05b"
+    },
+    "basedpyright": {
+      "status": "passed",
+      "receipt_sha256": "7873896cc1c4112ab79c329b3b54c5e0006198fad758eadeee1afa4e983fd548"
+    },
+    "ty": {
+      "status": "passed",
+      "receipt_sha256": "74562b728ab546767924f13ec7a4e8150d40fe26ee948266ae45ca1c627f66c9"
+    },
+    "coverage": {
+      "status": "passed",
+      "receipt_sha256": "72de806af9da81cd76aa2326084b745db809c198982e8607f3d216a0381f5a5b"
+    },
+    "parallel": {
+      "status": "passed",
+      "receipt_sha256": "9fc43ee0266dd4ab2839dbfb1c854ff08261c27ec1994cd7b1881feb5c0490ae"
+    },
+    "benchmark": {
+      "status": "passed",
+      "receipt_sha256": "5e59bcd2a27b1fd370b7693ca19332b980fafab200bac3310922a5b10190e879"
+    }
+  },
+  "junit": {
+    "tests": 534,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "coverage": {
+    "covered_lines": 3127,
+    "num_statements": 3175,
+    "percent_covered": 97.69094138543517,
+    "percent_covered_display": "97.69",
+    "missing_lines": 48,
+    "excluded_lines": 106,
+    "percent_statements_covered": 98.48818897637796,
+    "percent_statements_covered_display": "98.49",
+    "num_branches": 766,
+    "num_partial_branches": 41,
+    "covered_branches": 723,
+    "missing_branches": 43,
+    "percent_branches_covered": 94.38642297650131,
+    "percent_branches_covered_display": "94.39"
+  },
+  "runtime": {
+    "python": "3.14.6",
+    "dependency_environment": "existing hosted artifact site-packages plus separately exported base interpreter; not a fresh local uv sync",
+    "compatibility_override": false
+  },
+  "environment_artifacts": [
+    {
+      "id": 10121246670,
+      "sha256": "5ea08084f6d12383c8765ba807d05fdd964bfbcd576ba0aa9f66e8272cd49a43",
+      "download_digest_verified": true
+    },
+    {
+      "id": 10125873395,
+      "sha256": "2e29dc5dee95f4c8f495dee0b1d5ae59b90588074ff343b102345d54070bd028",
+      "download_digest_verified": true,
+      "internal_member_digests_verified": true
+    }
+  ],
+  "contracts": {
+    "pyproject.toml": "69ca7eab1fdd3d3231758ff93d5e44409ba132401e4d89c3d7b67a9147393099",
+    "uv.lock": "8d19325b11a134540c41566bd37a8b36dabba1b729d05e072f18ae3503219d60"
+  },
+  "holdings": {
+    "captured_original_occurrences": 18,
+    "failed_capture_record_count": 15,
+    "gate_b_passed": false,
+    "historical_failures_resolved": false,
+    "kind": "verified-packet-byte-holdings",
+    "not_medallion_release": true,
+    "object_identities": [
+      {
+        "sha256": "049a75ccce85c5b62e2c305918245a17e202dd64d9c223a77613e3b8c1a6ecd3",
+        "size_bytes": 281861
+      },
+      {
+        "sha256": "4e2810955d0cd7320a0783a81555a0b81edae823bc8118497d18555bd86b47c3",
+        "size_bytes": 3972506
+      },
+      {
+        "sha256": "5bc3c252d61b2367dec81d2fb2fcb1a61a85d0b9ffa6c68a0f97f17854900e3c",
+        "size_bytes": 573215
+      },
+      {
+        "sha256": "7db9b75f854febc19ceaed3a5114dde155420cf0951aa02c9aee0662a7ab8b60",
+        "size_bytes": 1153450
+      },
+      {
+        "sha256": "7eba00663a54f30e19f461be13313f74bc6c0fac4c79ca8a3d7aef208bd2341c",
+        "size_bytes": 646612
+      },
+      {
+        "sha256": "8a5b7751aa52235bc6cb79538bd630aceca7bf2e08512618f546b739d8539bfc",
+        "size_bytes": 1470438
+      },
+      {
+        "sha256": "8dbbbcdb61f809fe5716ddd8724826f88bf29ac8390c68f0db8823d2d3b21898",
+        "size_bytes": 2412266
+      },
+      {
+        "sha256": "bd46a21f51997bcc6b711673567fb538c83c51d376b282ef096f777f5c91b547",
+        "size_bytes": 1230700
+      },
+      {
+        "sha256": "e51caa9243196f991742f714e38b0bd780a92de718d9e80330e1f4e4dff08d29",
+        "size_bytes": 5638110
+      },
+      {
+        "sha256": "e52c70c0adcf27957346e629b6df7101cf27ee56e5b44c0a33e8026943fdbe21",
+        "size_bytes": 939468
+      }
+    ],
+    "packet_ids": [
+      "qld-energy-resilience-20260909",
+      "queensland-energy-health-20260909"
+    ],
+    "policy_equivalence_inferred": false,
+    "repeated_original_occurrences": 8,
+    "requested_source_record_count": 33,
+    "schema_version": "1.0",
+    "scope": "successfully_verified_packet_observations_only",
+    "sha256": "d67b01fa991ed30f4a938c0cffa4e998348c2b2b7de8df77a0936ef570bbb357",
+    "unique_original_bytes": 18318626,
+    "unique_original_count": 10,
+    "verified_packet_count": 2
+  },
+  "offline_acquisition_plan": {
+    "sha256": "33345d7e2e1d932ffa4a2375b709842d1ce21d29f8b3d711aa526409e4fc6436",
+    "source_count": 220,
+    "maximum_frontier_attempts": 4400
+  },
+  "publication_outcome": "blocked_missing_hf_token",
+  "live_hf_writes": 0,
+  "new_original_captures": 0,
+  "medallion_promotion": false,
+  "qualification_boundary": "Local tests validate the listed changed blobs, not their eventual GitHub commit or live publication. Hosted checks and post-merge outcomes are recorded separately in the PR."
+}
