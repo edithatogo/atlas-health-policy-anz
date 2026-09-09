@@ -24,6 +24,8 @@ if TYPE_CHECKING:
     from australian_health_policy_atlas.hub_staging import HubStore
     from australian_health_policy_atlas.packet_ingestion import PacketSpec
 
+SYNTHETIC = "synthetic-offline-fixture"
+
 
 def packet_selection(tmp_path: Path) -> tuple[Path, list[PacketFixture]]:
     repository = tmp_path / "repository"
@@ -57,7 +59,9 @@ def arguments(tmp_path: Path, repository: Path, mode: str) -> source_packets.Arg
     return args
 
 
-def test_all_selected_packets_remain_after_middle_source_failure(tmp_path: Path) -> None:
+def test_all_selected_packets_remain_after_middle_source_failure(
+    tmp_path: Path,
+) -> None:
     repository, fixtures = packet_selection(tmp_path)
     (fixtures[1].root / "originals/alpha.pdf").write_bytes(b"corrupt")
     snapshots: list[dict[str, object]] = []
@@ -69,7 +73,9 @@ def test_all_selected_packets_remain_after_middle_source_failure(tmp_path: Path)
     assert result["failed_packet_count"] == 1
     assert len(records(result["observations"])) == 2
     assert [item["phase"] for item in records(result["packets"])] == [
-        "staged", "failed", "staged"
+        "staged",
+        "failed",
+        "staged",
     ]
     assert records(result["packets"])[1]["failure_phase"] == "verifying"
     assert result["network_used"] is False
@@ -99,7 +105,9 @@ def test_success_survives_later_unknown_remote_effect_and_rerun(
         store: HubStore, stage: Path, spec: PacketSpec
     ) -> dict[str, object]:
         progress = next(
-            i for i in records(snapshots[-1]["packets"]) if i["packet_id"] == spec.packet_id
+            i
+            for i in records(snapshots[-1]["packets"])
+            if i["packet_id"] == spec.packet_id
         )
         assert progress["phase"] == "publishing"
         assert progress["network_attempted"] is True
@@ -111,7 +119,7 @@ def test_success_survives_later_unknown_remote_effect_and_rerun(
         return result
 
     monkeypatch.setattr(source_packets, "publish_packet_stage", interrupted_publication)
-    result = source_packets.execute(args, token="synthetic", checkpoint=snapshots.append)
+    result = source_packets.execute(args, token=SYNTHETIC, checkpoint=snapshots.append)
     assert result["status"] == "partial_failure"
     assert result["published_packet_count"] == 2
     assert len(records(result["publication"])) == 2
@@ -123,12 +131,14 @@ def test_success_survives_later_unknown_remote_effect_and_rerun(
     assert records(result["packets"])[1]["failure_phase"] == "publishing"
     assert records(result["packets"])[1]["remote_write_state"] == "unknown"
     monkeypatch.setattr(source_packets, "publish_packet_stage", actual)
-    rerun = source_packets.execute(args, token="synthetic")
+    rerun = source_packets.execute(args, token=SYNTHETIC)
     assert rerun["status"] == "verified"
     assert rerun["published_packet_count"] == 3
     assert rerun["all_selected_packets_published"] is True
     assert rerun["remote_effect_unknown"] is False
-    assert all(i["reused_existing_package"] is True for i in records(rerun["publication"]))
+    assert all(
+        i["reused_existing_package"] is True for i in records(rerun["publication"])
+    )
 
 
 @pytest.mark.parametrize("exception", [RuntimeError, ImportError, LookupError])
@@ -143,7 +153,7 @@ def test_remote_failure_never_claims_zero_network_use(
         raise exception(message)
 
     monkeypatch.setattr(source_packets, "HfStore", ignoring_arguments(fail))
-    result = source_packets.execute(args, token="synthetic")
+    result = source_packets.execute(args, token=SYNTHETIC)
     assert result["status"] == "failed"
     assert result["network_attempted"] is True
     assert result["network_used"] is None
@@ -153,7 +163,9 @@ def test_remote_failure_never_claims_zero_network_use(
 
 
 @pytest.mark.parametrize("mode", ["stage", "publish"])
-def test_valid_existing_stage_is_reverified_not_overwritten(tmp_path: Path, mode: str) -> None:
+def test_valid_existing_stage_is_reverified_not_overwritten(
+    tmp_path: Path, mode: str
+) -> None:
     fixture = packet_fixture(tmp_path)
     args = arguments(tmp_path, fixture.registry(), mode)
     first = source_packets.execute(args)
@@ -183,11 +195,13 @@ def test_failed_checkpoint_stops_before_any_packet_action(
         calls.append("unexpected")
         return {}
 
-    monkeypatch.setattr(source_packets, "inspect_packet", ignoring_arguments(unexpected))
+    monkeypatch.setattr(
+        source_packets, "inspect_packet", ignoring_arguments(unexpected)
+    )
     with pytest.raises(OSError, match="disk failure"):
         source_packets.execute(
             arguments(tmp_path, fixture.registry(), "publish"),
-            token="synthetic",
+            token=SYNTHETIC,
             checkpoint=checkpoint,
         )
     assert not calls
@@ -215,7 +229,9 @@ def test_process_interrupt_preserves_last_complete_checkpoint(
     assert last["execution_complete"] is False
     assert last["status"] == "executing"
     assert [i["phase"] for i in records(last["packets"])] == [
-        "verified", "verifying", "queued"
+        "verified",
+        "verifying",
+        "queued",
     ]
     assert len(records(last["observations"])) == 1
 
@@ -233,7 +249,7 @@ def test_publication_interrupt_keeps_unknown_effect(
     with pytest.raises(KeyboardInterrupt):
         source_packets.execute(
             arguments(tmp_path, fixture.registry(), "publish"),
-            token="synthetic",
+            token=SYNTHETIC,
             checkpoint=snapshots.append,
         )
     assert snapshots[-1]["status"] == "executing"
@@ -262,7 +278,10 @@ def test_only_safe_summary_labels_and_counts_are_rendered() -> None:
     assert "private" not in summary
 
 
-@pytest.mark.parametrize("status", ["executing", "verified", "blocked_missing_hf_token", "partial_failure", "failed"])
+@pytest.mark.parametrize(
+    "status",
+    ["executing", "verified", "blocked_missing_hf_token", "partial_failure", "failed"],
+)
 def test_summary_handles_every_execution_status(status: str) -> None:
     result: dict[str, object] = {"status": status}
     assert "Unknown execution status" not in source_packets.render_summary(result)
@@ -270,7 +289,9 @@ def test_summary_handles_every_execution_status(status: str) -> None:
 
 
 @pytest.mark.parametrize("output", ["receipt", "summary", "workspace"])
-def test_output_must_not_overlap_preserved_originals(tmp_path: Path, output: str) -> None:
+def test_output_must_not_overlap_preserved_originals(
+    tmp_path: Path, output: str
+) -> None:
     fixture = packet_fixture(tmp_path)
     args = arguments(tmp_path, fixture.registry(), "verify")
     original = fixture.root / "originals/alpha.pdf"
@@ -300,8 +321,16 @@ def test_main_preserves_partial_result_and_returns_nonzero(
     receipt, summary = tmp_path / "receipt.json", tmp_path / "summary.md"
     monkeypatch.setattr(
         "sys.argv",
-        ["source_packets", "verify", "--repository", str(repository),
-         "--receipt", str(receipt), "--summary", str(summary)],
+        [
+            "source_packets",
+            "verify",
+            "--repository",
+            str(repository),
+            "--receipt",
+            str(receipt),
+            "--summary",
+            str(summary),
+        ],
     )
     assert source_packets.main() == 1
     result = read_json(receipt.read_bytes())
@@ -318,8 +347,14 @@ def test_main_journal_failure_propagates_without_overwriting_progress(
     receipt = tmp_path / "receipt.json"
     monkeypatch.setattr(
         "sys.argv",
-        ["source_packets", "verify", "--repository", str(fixture.registry()),
-         "--receipt", str(receipt)],
+        [
+            "source_packets",
+            "verify",
+            "--repository",
+            str(fixture.registry()),
+            "--receipt",
+            str(receipt),
+        ],
     )
     calls = 0
 

@@ -103,7 +103,7 @@ def _attempt(
 ) -> dict[str, object] | None:
     try:
         return action()
-    except Exception as error:  # noqa: BLE001 - Bounded per-packet fault barrier; interrupts and checkpoint writes remain outside it.
+    except Exception as error:  # ruff: ignore[blind-except] - Bounded per-packet fault barrier; interruptions and checkpoint writes remain outside it.
         item.failure_phase = item.phase
         item.error_type = type(error).__name__
         item.phase = "failed"
@@ -118,9 +118,7 @@ def _stage(args: Arguments, item: PacketProgress) -> dict[str, object]:
     return build_packet_stage(source, item.spec, destination)
 
 
-def _publish(
-    args: Arguments, item: PacketProgress, token: str
-) -> dict[str, object]:
+def _publish(args: Arguments, item: PacketProgress, token: str) -> dict[str, object]:
     return publish_packet_stage(
         HfStore(DATASET, token), args.workspace / item.spec.packet_id, item.spec
     )
