@@ -14,8 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
-      # Required only to commit allowlisted source originals and receipts to this branch.
-      contents: write
+      contents: write # Commit only allowlisted source originals and receipts to the exact source branch.
     steps:
       - name: Check out source-packet branch without persistent credentials
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
