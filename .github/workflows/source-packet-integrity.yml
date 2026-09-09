@@ -78,8 +78,10 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_HUB_DISABLE_TELEMETRY: '1'
           DO_NOT_TRACK: '1'
+        # Use the exact synchronized interpreter. This uploads a Hugging Face
+        # dataset through HfApi, not Python distributions through uv publish/PyPI.
         run: |
-          uv run --no-sync python -m scripts.source_packets publish --workspace "$RUNNER_TEMP/atlas-packet-publication" --receipt build/packet-publication-receipt.json
+          .venv/bin/python -m scripts.source_packets publish --workspace "$RUNNER_TEMP/atlas-packet-publication" --receipt build/packet-publication-receipt.json
       - name: Retain publication outcome, never token or original bytes
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
