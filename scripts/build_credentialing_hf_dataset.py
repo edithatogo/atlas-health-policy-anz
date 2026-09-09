@@ -12,7 +12,9 @@ from pathlib import Path
 from typing import TypedDict, cast
 
 ROOT = Path(__file__).resolve().parents[1]
-COLLECTION = ROOT / "data" / "source-intake" / "credentialing-socp-anz-20260910"
+COLLECTION = (
+    ROOT / "data" / "source-intake" / "credentialing-socp-anz-20260910"
+)
 CATALOGUES = (
     COLLECTION / "schn-medical-surgical-model-catalogue.csv",
     COLLECTION / "schn-paediatric-model-catalogue.csv",
@@ -24,6 +26,33 @@ FORBIDDEN_MARKERS = (
     "client_secret",
     "private key",
     "drive.google.com",
+)
+README_TEXT = "\n".join(
+    (
+        "---",
+        "pretty_name: Australian Credentialing and Scope of Clinical Practice Policy Atlas",
+        "language:",
+        "  - en",
+        "license: other",
+        "size_categories:",
+        "  - n<1K",
+        "---",
+        "",
+        "# Australian credentialing and scope-of-clinical-practice Policy Atlas",
+        "",
+        "This public metadata dataset catalogues selected Australian credentialing",
+        "authorities and the observed NSW State Scope of Clinical Practice Unit",
+        "model-scope library.",
+        "",
+        "It contains no patient, practitioner, credential, referee, committee-case,",
+        "tenant or production-system information. Source documents retain their",
+        "publisher terms and are not redistributed here.",
+        "",
+        "Catalogue metadata is not a controlled policy instrument. Verify the current",
+        "publisher source, authority, effective date, local service capability and",
+        "applicable governance before use.",
+        "",
+    )
 )
 
 
@@ -92,7 +121,10 @@ def load_sources(path: Path) -> list[SourceRow]:
         source: SourceRow = {
             "id": require_text(raw_source.get("id"), "id"),
             "title": require_text(raw_source.get("title"), "title"),
-            "publisher": require_text(raw_source.get("publisher"), "publisher"),
+            "publisher": require_text(
+                raw_source.get("publisher"),
+                "publisher",
+            ),
             "url": require_text(raw_source.get("url"), "url"),
             "authority_class": require_text(
                 raw_source.get("authority_class"),
@@ -115,7 +147,11 @@ def write_csv(path: Path, rows: list[dict[str, str]], fields: list[str]) -> None
     """Write deterministic UTF-8 CSV output."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
+        writer = csv.DictWriter(
+            stream,
+            fieldnames=fields,
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
 
@@ -137,7 +173,10 @@ def scan_public_boundary(output: Path) -> None:
         body = path.read_text(encoding="utf-8").lower()
         for marker in FORBIDDEN_MARKERS:
             if marker in body:
-                msg = f"Public dataset contains forbidden marker {marker!r}: {path}"
+                msg = (
+                    "Public dataset contains forbidden marker "
+                    f"{marker!r}: {path}"
+                )
                 raise ValueError(msg)
 
 
@@ -200,40 +239,23 @@ def build_dataset(output: Path) -> DatasetReceipt:
     )
 
     final_count = sum(model["status"] == "Final" for model in models)
-    under_review_count = len(models) - final_count
-    readme = """---
-pretty_name: Australian Credentialing and Scope of Clinical Practice Policy Atlas
-language:
-  - en
-license: other
-size_categories:
-  - n<1K
----
-
-# Australian credentialing and scope-of-clinical-practice Policy Atlas
-
-This public metadata dataset catalogues selected Australian credentialing authorities and the observed NSW State Scope of Clinical Practice Unit model-scope library.
-
-It contains no patient, practitioner, credential, referee, committee-case, tenant or production-system information. Source documents retain their publisher terms and are not redistributed here.
-
-Catalogue metadata is not a controlled policy instrument. Verify the current publisher source, legal or policy authority, effective date, local service capability and applicable governance before use.
-"""
-    (output / "README.md").write_text(readme, encoding="utf-8")
     receipt: DatasetReceipt = {
         "schema_version": 1,
         "release": "credentialing-socp-anz-20260910",
         "source_rows": len(sources),
         "model_scope_rows": len(models),
         "final_model_rows": final_count,
-        "under_review_rows": under_review_count,
+        "under_review_rows": len(models) - final_count,
         "contains_source_binaries": False,
         "contains_personal_or_operational_data": False,
         "publication_requires_explicit_gate": True,
         "evidence_ceiling": (
             "Public metadata only; not local adoption, source currency after the "
-            "observed date, service capability, an individual decision or "n            "operating-effectiveness evidence."
+            "observed date, service capability, an individual decision or "
+            "operating-effectiveness evidence."
         ),
     }
+    (output / "README.md").write_text(README_TEXT, encoding="utf-8")
     (output / "dataset-receipt.json").write_text(
         json.dumps(receipt, indent=2) + "\n",
         encoding="utf-8",
