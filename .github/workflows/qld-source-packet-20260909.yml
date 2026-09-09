@@ -1,5 +1,5 @@
 name: Manual bounded Queensland policy original-document packet
-# Initial authorized capture is complete. No automatic or scheduled reruns.
+# Initial capture and dependency-only handoff are complete. No automatic reruns.
 on:
   workflow_dispatch:
 permissions:
@@ -9,13 +9,16 @@ concurrency:
   cancel-in-progress: false
 jobs:
   capture:
+    name: Capture and verify the explicitly selected public policy packet
     if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/source-packet/qld-energy-health-20260909'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
+      # Required only to commit allowlisted source originals and receipts to this branch.
       contents: write
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: Check out source-packet branch without persistent credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
       - name: Offline transport negative controls
@@ -46,27 +49,3 @@ jobs:
           git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'data: capture original Queensland policy documents with fixity receipts'
           auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
           git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$SOURCE_BRANCH"
-  dependency_handoff:
-    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/source-packet/qld-energy-health-20260909'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    permissions:
-      contents: read
-    steps:
-      - name: Bundle the selected public Conductor revision without executing it
-        shell: bash
-        run: |
-          set -euo pipefail
-          git clone --single-branch https://github.com/edithatogo/conductor-next.git "$RUNNER_TEMP/conductor"
-          git -C "$RUNNER_TEMP/conductor" cat-file -e '137c1e41ff9c1dc75ff277b9582460a0bd8c4768^{commit}'
-          git -C "$RUNNER_TEMP/conductor" branch local-handoff 137c1e41ff9c1dc75ff277b9582460a0bd8c4768
-          git -C "$RUNNER_TEMP/conductor" bundle create "$RUNNER_TEMP/conductor-pinned.bundle" local-handoff
-          sha256sum "$RUNNER_TEMP/conductor-pinned.bundle" > "$RUNNER_TEMP/conductor-pinned.bundle.sha256"
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: conductor-pinned-dependency-only
-          path: |
-            ${{ runner.temp }}/conductor-pinned.bundle
-            ${{ runner.temp }}/conductor-pinned.bundle.sha256
-          retention-days: 30
-          if-no-files-found: error
