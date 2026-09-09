@@ -1,0 +1,21 @@
+model_id,category,specialty,status,authoritative_listing_url,document_url,verified
+SCHN-P-001,Paediatric,Clinical Genetics (including Paediatric Clinical Genetics),Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,https://www.schn.health.nsw.gov.au/sites/default/files/2023-10/Final%20Model%20SoCP%20for%20Clinical%20Genetics%201.1%20-%2026%20Sep%202023.pdf,2026-09-10
+SCHN-P-002,Paediatric,Community Child Health,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-003,Paediatric,General Paediatrics,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,https://www.schn.health.nsw.gov.au/sites/default/files/2023-10/Final%20Model%20SoCP%20for%20General%20Paediatrics%201.1%20-%2026%20Sep%202023.pdf,2026-09-10
+SCHN-P-004,Paediatric,Neonatal and Perinatal Medicine,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-005,Paediatric,Paediatric Cardiology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-006,Paediatric,Paediatric Emergency Medicine,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-007,Paediatric,Paediatric Endocrinology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-008,Paediatric,Paediatric Gastroenterology and Hepatology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-009,Paediatric,Paediatric Haematology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-010,Paediatric,Paediatric Immunology and Allergy,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-011,Paediatric,Paediatric Infectious Diseases,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-012,Paediatric,Paediatric Intensive Care Medicine,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-013,Paediatric,Paediatric Medical Oncology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-014,Paediatric,Paediatric Nephrology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-015,Paediatric,Paediatric Neurology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-016,Paediatric,Paediatric Palliative Medicine,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-017,Paediatric,Paediatric Rehabilitation Medicine,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-018,Paediatric,Paediatric Respiratory and Sleep Medicine,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-019,Paediatric,Paediatric Rheumatology,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
+SCHN-P-020,Paediatric,Paediatric Surgery,Final,https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric,,2026-09-10
