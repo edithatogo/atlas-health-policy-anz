@@ -231,10 +231,7 @@ def scan_public_boundary(output: Path) -> None:
         body = path.read_text(encoding="utf-8").lower()
         for marker in FORBIDDEN_MARKERS:
             if marker in body:
-                message = (
-                    "Public dataset contains forbidden marker "
-                    f"{marker!r}: {path}"
-                )
+                message = f"Public dataset contains forbidden marker {marker!r}: {path}"
                 raise ValueError(message)
 
 
