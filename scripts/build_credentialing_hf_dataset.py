@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Build the public credentialing Policy Atlas dataset package."""
 
 from __future__ import annotations
@@ -25,31 +24,31 @@ FORBIDDEN_MARKERS = (
     "private key",
     "drive.google.com",
 )
-README_TEXT = "\n".join((
-    "---",
-    "pretty_name: Australian Credentialing and Scope of Clinical Practice Policy Atlas",
-    "language:",
-    "  - en",
-    "license: other",
-    "size_categories:",
-    "  - n<1K",
-    "---",
-    "",
-    "# Australian credentialing and scope-of-clinical-practice Policy Atlas",
-    "",
-    "This public metadata dataset catalogues selected Australian credentialing",
-    "authorities and the observed NSW State Scope of Clinical Practice Unit",
-    "model-scope library.",
-    "",
-    "It contains no patient, practitioner, credential, referee, committee-case,",
-    "tenant or production-system information. Source documents retain their",
-    "publisher terms and are not redistributed here.",
-    "",
-    "Catalogue metadata is not a controlled policy instrument. Verify the current",
-    "publisher source, authority, effective date, local service capability and",
-    "applicable governance before use.",
-    "",
-))
+EXPECTED_CLI_ARGUMENTS = 2
+READ_BLOCK_SIZE = 1024 * 1024
+README_TEXT = """---
+pretty_name: Australian Credentialing and Scope of Clinical Practice Policy Atlas
+language:
+  - en
+license: other
+size_categories:
+  - n<1K
+---
+
+# Australian credentialing and scope-of-clinical-practice Policy Atlas
+
+This public metadata dataset catalogues selected Australian credentialing
+authorities and the observed NSW State Scope of Clinical Practice Unit
+model-scope library.
+
+It contains no patient, practitioner, credential, referee, committee-case,
+tenant or production-system information. Source documents retain their
+publisher terms and are not redistributed here.
+
+Catalogue metadata is not a controlled policy instrument. Verify the current
+publisher source, authority, effective date, local service capability and
+applicable governance before use.
+"""
 
 
 class SourceRow(TypedDict):
@@ -78,7 +77,17 @@ class DatasetReceipt(TypedDict):
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
-    """Read one catalogue and reject incomplete CSV cells."""
+    """Read one catalogue and reject incomplete CSV cells.
+
+    Args:
+        path: Catalogue path.
+
+    Returns:
+        Validated rows containing string keys and values.
+
+    Raises:
+        ValueError: If a row contains a missing key or value.
+    """
     validated: list[dict[str, str]] = []
     with path.open(encoding="utf-8", newline="") as stream:
         reader = csv.DictReader(stream)
@@ -94,7 +103,18 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
 
 def require_text(value: object, field: str) -> str:
-    """Return a required non-empty string."""
+    """Return a required non-empty string.
+
+    Args:
+        value: Candidate value.
+        field: Field name used in an error message.
+
+    Returns:
+        The validated string.
+
+    Raises:
+        ValueError: If the value is not a non-empty string.
+    """
     if not isinstance(value, str) or not value.strip():
         message = f"Missing required source field: {field}"
         raise ValueError(message)
@@ -102,22 +122,33 @@ def require_text(value: object, field: str) -> str:
 
 
 def load_sources(path: Path) -> list[SourceRow]:
-    """Load and validate the public source metadata boundary."""
+    """Load and validate the public source metadata boundary.
+
+    Args:
+        path: Collection request path.
+
+    Returns:
+        Validated public source rows.
+
+    Raises:
+        TypeError: If the request or a source has the wrong JSON structure.
+        ValueError: If a source field, URL, or identifier is invalid.
+    """
     parsed = cast("object", json.loads(path.read_text(encoding="utf-8")))
     if not isinstance(parsed, dict):
-        msg = "Collection request must be a JSON object"
-        raise TypeError(msg)
+        message = "Collection request must be a JSON object"
+        raise TypeError(message)
     parsed_mapping = cast("dict[str, object]", parsed)
     raw_sources = parsed_mapping.get("sources")
     if not isinstance(raw_sources, list):
-        msg = "Collection request must contain a sources array"
-        raise TypeError(msg)
+        message = "Collection request must contain a sources array"
+        raise TypeError(message)
 
     sources: list[SourceRow] = []
     for raw_source in cast("list[object]", raw_sources):
         if not isinstance(raw_source, dict):
-            msg = "Each source must be a JSON object"
-            raise TypeError(msg)
+            message = "Each source must be a JSON object"
+            raise TypeError(message)
         source_mapping = cast("dict[str, object]", raw_source)
         source: SourceRow = {
             "id": require_text(source_mapping.get("id"), "id"),
@@ -133,19 +164,25 @@ def load_sources(path: Path) -> list[SourceRow]:
             ),
         }
         if not source["url"].startswith("https://"):
-            msg = f"Public source URL must use HTTPS: {source['id']}"
-            raise ValueError(msg)
+            message = f"Public source URL must use HTTPS: {source['id']}"
+            raise ValueError(message)
         sources.append(source)
 
     identifiers = [source["id"] for source in sources]
     if len(identifiers) != len(set(identifiers)):
-        msg = "Public source identifiers must be unique"
-        raise ValueError(msg)
+        message = "Public source identifiers must be unique"
+        raise ValueError(message)
     return sources
 
 
 def write_csv(path: Path, rows: list[dict[str, str]], fields: list[str]) -> None:
-    """Write deterministic UTF-8 CSV output."""
+    """Write deterministic UTF-8 CSV output.
+
+    Args:
+        path: Output path.
+        rows: Rows to write.
+        fields: Ordered field names.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(
@@ -158,28 +195,49 @@ def write_csv(path: Path, rows: list[dict[str, str]], fields: list[str]) -> None
 
 
 def sha256(path: Path) -> str:
-    """Return the SHA-256 digest for one file."""
+    """Return the SHA-256 digest for one file.
+
+    Args:
+        path: File to hash.
+
+    Returns:
+        Lowercase hexadecimal SHA-256 digest.
+    """
     digest = hashlib.sha256()
     with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
+        for block in iter(lambda: stream.read(READ_BLOCK_SIZE), b""):
             digest.update(block)
     return digest.hexdigest()
 
 
 def scan_public_boundary(output: Path) -> None:
-    """Fail closed on selected sensitive or internal-publication markers."""
+    """Fail closed on selected sensitive or internal-publication markers.
+
+    Args:
+        output: Built dataset directory.
+
+    Raises:
+        ValueError: If a forbidden marker occurs in a generated file.
+    """
     for path in output.rglob("*"):
         if not path.is_file():
             continue
         body = path.read_text(encoding="utf-8").lower()
         for marker in FORBIDDEN_MARKERS:
             if marker in body:
-                msg = f"Public dataset contains forbidden marker {marker!r}: {path}"
-                raise ValueError(msg)
+                message = (
+                    "Public dataset contains forbidden marker "
+                    f"{marker!r}: {path}"
+                )
+                raise ValueError(message)
 
 
 def write_manifest(output: Path) -> None:
-    """Write deterministic fixity records for every generated file."""
+    """Write deterministic fixity records for every generated file.
+
+    Args:
+        output: Built dataset directory.
+    """
     lines = [
         f"{sha256(path)}  {path.relative_to(output).as_posix()}"
         for path in sorted(output.rglob("*"))
@@ -192,7 +250,14 @@ def write_manifest(output: Path) -> None:
 
 
 def build_dataset(output: Path) -> DatasetReceipt:
-    """Build a public metadata-only Hugging Face dataset package."""
+    """Build a public metadata-only Hugging Face dataset package.
+
+    Args:
+        output: Destination directory. An existing directory is replaced.
+
+    Returns:
+        Deterministic dataset receipt.
+    """
     if output.exists():
         shutil.rmtree(output)
     output.mkdir(parents=True)
@@ -265,15 +330,29 @@ def build_dataset(output: Path) -> DatasetReceipt:
 
 
 def parse_output(arguments: list[str]) -> Path:
-    """Parse the deliberately small fail-closed command line."""
-    if len(arguments) != 2 or arguments[0] != "--output":
-        msg = "Usage: build_credentialing_hf_dataset.py --output PATH"
-        raise ValueError(msg)
+    """Parse the deliberately small fail-closed command line.
+
+    Args:
+        arguments: Command-line arguments excluding the executable name.
+
+    Returns:
+        Requested output path.
+
+    Raises:
+        ValueError: If the arguments do not contain exactly ``--output PATH``.
+    """
+    if len(arguments) != EXPECTED_CLI_ARGUMENTS or arguments[0] != "--output":
+        message = "Usage: build_credentialing_hf_dataset.py --output PATH"
+        raise ValueError(message)
     return Path(arguments[1])
 
 
 def main() -> int:
-    """Build the package and print its receipt."""
+    """Build the package and print its receipt.
+
+    Returns:
+        Zero when the build completes successfully.
+    """
     receipt = build_dataset(parse_output(sys.argv[1:]))
     print(json.dumps(receipt, indent=2))
     return 0
