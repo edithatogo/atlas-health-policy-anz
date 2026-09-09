@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "collection_id": "credentialing-socp-anz-20260910",
+  "kind": "bounded-public-source-metadata-intake",
+  "scope": "Public Australian credentialing and scope-of-clinical-practice authorities, implementation guidance and model-SoCP catalogue metadata",
+  "authorization": "Repository owner expressly requested public credentialing and model-SoCP sources be catalogued in the Policy Atlas.",
+  "evaluation_material_allowed": false,
+  "medallion_promotion": false,
+  "publication_class": "public-source-metadata-only",
+  "python_target": "3.14",
+  "rights_rule": "Store publisher metadata, public URLs, derived identifiers and bounded summaries. Do not relicense or redistribute source binaries unless document-specific rights and publication approval are recorded.",
+  "sources": [
+    {
+      "id": "acsqhc-credentialing-guidance-2026",
+      "title": "Credentialing and defining scope of clinical practice: guidance for health services and clinicians",
+      "publisher": "Australian Commission on Safety and Quality in Health Care",
+      "url": "https://www.safetyandquality.gov.au/publications-and-resources/resource-library/credentialing-and-defining-scope-clinical-practice-guidance-health-services-and-clinicians",
+      "authority_class": "national-guidance"
+    },
+    {
+      "id": "qld-health-hsd-034",
+      "title": "Credentialing and defining the scope of clinical practice",
+      "publisher": "Queensland Health",
+      "url": "https://www.health.qld.gov.au/system-governance/policies-standards/health-service-directives/credentialing-and-defining-the-scope-of-clinical-practice",
+      "authority_class": "health-service-directive"
+    },
+    {
+      "id": "schn-model-socp-guidelines",
+      "title": "NSW model scopes of clinical practice guidelines",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit",
+      "authority_class": "state-model-guidance"
+    },
+    {
+      "id": "schn-model-scopes-medical-surgical",
+      "title": "Model scopes: surgical and medical",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-surgical-and-medical",
+      "authority_class": "state-model-catalogue"
+    },
+    {
+      "id": "schn-model-scopes-paediatric",
+      "title": "Model scopes: paediatric",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric",
+      "authority_class": "state-model-catalogue"
+    },
+    {
+      "id": "schn-model-scopes-dental",
+      "title": "Model scopes: dental",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-dental",
+      "authority_class": "state-model-catalogue"
+    },
+    {
+      "id": "schn-ecredential",
+      "title": "eCredential",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/ecredential",
+      "authority_class": "implementation-guidance"
+    },
+    {
+      "id": "amc-rural-generalist-recognition",
+      "title": "Rural Generalist Medicine specialty recognition",
+      "publisher": "Australian Medical Council",
+      "url": "https://www.amc.org.au/accredited-organisations/assessment-and-accreditation-of-specialist-medical-programs-and-professional-development-programs/rural-generalist-medicine/",
+      "authority_class": "specialty-recognition"
+    }
+  ],
+  "expected_inventory": {
+    "catalogue_entries": 88,
+    "final_models": 83,
+    "under_review_after_consultation": 5,
+    "categories": {
+      "Medical and surgical": 56,
+      "Paediatric": 20,
+      "Dental": 12
+    },
+    "under_review_titles": [
+      "General Practice",
+      "Neurology",
+      "Neurosurgery",
+      "Orthopaedic Surgery",
+      "Urology"
+    ]
+  },
+  "evidence_ceiling": "This intake records public source metadata and expected catalogue structure. It does not establish local adoption, source currency beyond the observation date, controlled-document status, service capability, individual competence or an individual scope-of-practice decision."
+}
