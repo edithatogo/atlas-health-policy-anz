@@ -1,0 +1,75 @@
+name: One-off Queensland policy original-document packet
+on:
+  push:
+    branches: ["source-packet/qld-energy-health-20260909"]
+    paths:
+      - "source-packets/queensland-energy-health-20260909/request.json"
+      - ".github/workflows/qld-source-packet-20260909.yml"
+permissions:
+  contents: read
+concurrency:
+  group: qld-source-packet-20260909
+  cancel-in-progress: false
+jobs:
+  capture:
+    if: github.repository == 'edithatogo/atlas-health-policy-anz'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Offline transport negative controls
+        run: python -m unittest discover -s source-packets/queensland-energy-health-20260909 -p 'test_capture.py' -v
+      - name: Capture allowlisted original documents
+        run: python source-packets/queensland-energy-health-20260909/capture.py
+      - name: Retain packet and failure receipts
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: qld-original-policy-packet-20260909
+          path: source-packets/queensland-energy-health-20260909/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit only originals and capture receipts to the source branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_BRANCH: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SOURCE_BRANCH" = "source-packet/qld-energy-health-20260909"
+          git add -- source-packets/queensland-energy-health-20260909/originals source-packets/queensland-energy-health-20260909/capture-manifest.json source-packets/queensland-energy-health-20260909/capture-manifest.sha256
+          if git diff --cached --quiet; then exit 0; fi
+          git diff --cached --name-only | while IFS= read -r path; do
+            case "$path" in source-packets/queensland-energy-health-20260909/*) ;; *) exit 1 ;; esac
+          done
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'data: capture original Queensland policy documents with fixity receipts'
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$SOURCE_BRANCH"
+  dependency_handoff:
+    if: github.repository == 'edithatogo/atlas-health-policy-anz'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Bundle the selected public Conductor revision without executing it
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --single-branch https://github.com/edithatogo/conductor-next.git "$RUNNER_TEMP/conductor"
+          git -C "$RUNNER_TEMP/conductor" cat-file -e 137c1e41ff9c1dc75ff277b9582460a0bd8c4768^{commit}
+          git -C "$RUNNER_TEMP/conductor" branch local-handoff 137c1e41ff9c1dc75ff277b9582460a0bd8c4768
+          git -C "$RUNNER_TEMP/conductor" bundle create "$RUNNER_TEMP/conductor-pinned.bundle" local-handoff
+          sha256sum "$RUNNER_TEMP/conductor-pinned.bundle" > "$RUNNER_TEMP/conductor-pinned.bundle.sha256"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: conductor-pinned-dependency-only
+          path: |
+            ${{ runner.temp }}/conductor-pinned.bundle
+            ${{ runner.temp }}/conductor-pinned.bundle.sha256
+          retention-days: 30
+          if-no-files-found: error
