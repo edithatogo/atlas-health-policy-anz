@@ -76,6 +76,12 @@ def test_credentialing_collection_is_metadata_only_and_fail_closed() -> None:
     assert "schn-model-scopes-dental" in source_ids
     assert "qld-health-hsd-034" in source_ids
     assert "acsqhc-credentialing-guidance-2026" in source_ids
+    assert "medical-board-rural-generalist-recognition-2025" in source_ids
+    assert "medical-board-specialty-recognition-faq" in source_ids
+    assert "acrrm-rural-generalist-registration-2026" in source_ids
+    assert "acrrm-rural-generalist-program-accreditation-2026" in source_ids
+    assert "racgp-additional-rural-skills-2026" in source_ids
+    assert "ahpra-specialist-registration" in source_ids
 
 
 def test_under_review_models_are_explicit() -> None:
