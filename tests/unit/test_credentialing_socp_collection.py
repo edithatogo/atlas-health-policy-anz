@@ -47,11 +47,15 @@ def test_credentialing_collection_has_expected_inventory() -> None:
         == inventory["under_review_after_consultation"]
         == 5
     )
-    assert categories == expected_categories == {
-        "Dental": 12,
-        "Medical and surgical": 56,
-        "Paediatric": 20,
-    }
+    assert (
+        categories
+        == expected_categories
+        == {
+            "Dental": 12,
+            "Medical and surgical": 56,
+            "Paediatric": 20,
+        }
+    )
     model_ids = [model["model_id"] for model in models]
     assert len(model_ids) == len(set(model_ids))
 
@@ -84,13 +88,17 @@ def test_under_review_models_are_explicit() -> None:
         if model["status"] == "Under review after consultation"
     ]
 
-    assert observed == expected == [
-        "General Practice",
-        "Neurology",
-        "Neurosurgery",
-        "Orthopaedic Surgery",
-        "Urology",
-    ]
+    assert (
+        observed
+        == expected
+        == [
+            "General Practice",
+            "Neurology",
+            "Neurosurgery",
+            "Orthopaedic Surgery",
+            "Urology",
+        ]
+    )
 
 
 def test_model_rows_preserve_source_and_evidence_ceiling() -> None:
