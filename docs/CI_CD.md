@@ -30,7 +30,7 @@ Runs on PR/main plus weekly schedule. Produces persistent receipts for leaks, SB
 Model calls are not required for routine code CI. CI uses deterministic fixtures and recorded responses for contracts. Live local/open-model benchmarks run on explicit benchmark workflows or free/available compute and publish a model/prompt manifest plus metrics rather than changing production routing directly.
 
 ## Free-resource strategy
-Because the intended GitHub repository is public, standard GitHub-hosted runners are the default high-volume compute substrate. Large data are not uploaded as Actions artifacts; they live in versioned Hugging Face datasets/Xet. Actions artifacts retain only small receipts, reports and attestations with short retention.
+Because the intended GitHub repository is public, standard GitHub-hosted runners are the default high-volume compute substrate. Large data are not uploaded as Actions artifacts; they live in versioned Hugging Face datasets/Xet. Actions artifacts normally retain only small receipts, reports and attestations with short retention. The bounded diagnostic-only exception below is not canonical data storage.
 
 ## Release publication
 GitHub Actions builds release manifests and publication candidates; Hugging Face remains the data plane. Publication is followed by remote revision/hash/schema/viewer verification. A GitHub release receipt records the corresponding HF immutable revision.
@@ -59,4 +59,14 @@ runtime or coverage. See `conductor/intake-compatibility-20260910.md`.
 Use GitHub Artifact Attestations for release packages and SBOMs once there are release artefacts. GitHub Agentic Workflows may later augment issue/CI/docs maintenance, but they must not replace deterministic evidence qualification or medallion gates. GitHub Models is not part of the design; the service was retired in 2026, so model experimentation should use local/Hugging Face/provider-specific routes instead.
 
 ## Free-resource boundaries
-Standard GitHub-hosted runners are the preferred free compute substrate while the repository is public. Store only compact receipts/reports in Actions artifacts; durable datasets belong on Hugging Face. Hugging Face Dataset Viewer/Parquet/Croissant and Xet are useful public-data services. ZeroGPU can support bounded demos/spot evaluation within its quota. Hugging Face Jobs are pay-as-you-go and therefore are not assumed to be a free production dependency. Agentic Workflows similarly depend on a configured AI engine and are optional maintenance automation, not free deterministic compute.
+Standard GitHub-hosted runners are the preferred free compute substrate while the repository is public. Store compact receipts/reports in Actions artifacts by default; durable datasets belong on Hugging Face. The small seed-probe exception below has explicit size and expiry limits. Hugging Face Dataset Viewer/Parquet/Croissant and Xet are useful public-data services. ZeroGPU can support bounded demos/spot evaluation within its quota. Hugging Face Jobs are pay-as-you-go and therefore are not assumed to be a free production dependency. Agentic Workflows similarly depend on a configured AI engine and are optional maintenance automation, not free deterministic compute.
+
+
+## Bounded seed-access diagnostic exception
+
+The trusted-main `seed-probe.yml` diagnostic may retain at most nine 2 MiB source-
+stage bundles for seven days, with compact references, a pinned plan and access
+dispositions. This permits access testing and independent replay without HF
+credentials. It is not canonical corpus storage or a medallion release, and adds no
+recurring schedule. PRs compile the offline plan only. Existing original-packet
+and full-corpus workflows remain receipt-only. See `docs/CAPTURE_BUNDLES.md`.

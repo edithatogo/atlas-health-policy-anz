@@ -1,0 +1,89 @@
+name: Bounded AU NZ source-access probe
+
+on:
+  pull_request:
+    paths:
+      - src/**
+      - tests/**
+      - data/sources/**
+      - .github/workflows/seed-probe.yml
+  push:
+    branches: [main]
+    paths:
+      - src/australian_health_policy_atlas/capture_bundle.py
+      - src/australian_health_policy_atlas/seed_probe.py
+      - .github/workflows/seed-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: atlas-seed-probe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: Compile the exact nine-source diagnostic plan offline
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out governed code without persisted credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Install pinned runtime manager
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: false
+      - name: Compile source/configuration pins without site packages
+        env:
+          PYTHONPATH: src
+          HF_HUB_OFFLINE: "1"
+          HF_HUB_DISABLE_TELEMETRY: "1"
+        run: |
+          uv python install 3.14.6
+          uv run --isolated --no-project --python 3.14.6 python -S -m australian_health_policy_atlas.seed_probe plan --output "$RUNNER_TEMP/atlas-probe-plan"
+          echo "Plan only: nine seed entries, one frontier attempt and 1 MiB captured-body limit per entry. No capture or HF publication in this job." >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain the compact deterministic diagnostic plan
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: seed-probe-plan
+          path: ${{ runner.temp }}/atlas-probe-plan/plan.json
+          if-no-files-found: error
+          retention-days: 14
+
+  probe:
+    name: Capture nine bounded public seeds and replay their original bytes
+    needs: plan
+    if: github.repository == 'edithatogo/atlas-health-policy-anz' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out the trusted source revision without write credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Install pinned runtime manager
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          enable-cache: false
+      - name: Capture and independently replay the fixed public diagnostic
+        env:
+          PYTHONPATH: src
+          HF_HUB_OFFLINE: "1"
+          HF_HUB_DISABLE_TELEMETRY: "1"
+        run: |
+          uv python install 3.14.6
+          uv run --isolated --no-project --python 3.14.6 python -S -m australian_health_policy_atlas.seed_probe run --output "$RUNNER_TEMP/atlas-seed-probe"
+          echo "Diagnostic execution completed. Read run.json for captured and failed access outcomes: completion is not corpus completeness, policy absence, HF publication or Bronze qualification." >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain bounded diagnostic bundles temporarily, never as canonical data
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: seed-probe-captures
+          path: ${{ runner.temp }}/atlas-seed-probe/
+          if-no-files-found: error
+          retention-days: 7

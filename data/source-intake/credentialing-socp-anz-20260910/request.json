@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "collection_id": "credentialing-socp-anz-20260910",
+  "kind": "bounded-public-source-metadata-intake",
+  "scope": "Public Australian credentialing and scope-of-clinical-practice authorities, implementation guidance, Rural Generalist Medicine sources and model-SoCP catalogue metadata",
+  "authorization": "Repository owner expressly requested public credentialing and model-SoCP sources be catalogued in the Policy Atlas.",
+  "evaluation_material_allowed": false,
+  "medallion_promotion": false,
+  "publication_class": "public-source-metadata-only",
+  "python_target": "3.14",
+  "rights_rule": "Store publisher metadata, public URLs, derived identifiers and bounded summaries. Do not relicense or redistribute source binaries unless document-specific rights and publication approval are recorded.",
+  "sources": [
+    {
+      "id": "acsqhc-credentialing-guidance-2026",
+      "title": "Credentialing and defining scope of clinical practice: guidance for health services and clinicians",
+      "publisher": "Australian Commission on Safety and Quality in Health Care",
+      "url": "https://www.safetyandquality.gov.au/publications-and-resources/resource-library/credentialing-and-defining-scope-clinical-practice-guidance-health-services-and-clinicians",
+      "authority_class": "national-guidance"
+    },
+    {
+      "id": "qld-health-hsd-034",
+      "title": "Credentialing and defining the scope of clinical practice",
+      "publisher": "Queensland Health",
+      "url": "https://www.health.qld.gov.au/system-governance/policies-standards/health-service-directives/credentialing-and-defining-the-scope-of-clinical-practice",
+      "authority_class": "health-service-directive"
+    },
+    {
+      "id": "schn-model-socp-guidelines",
+      "title": "NSW model scopes of clinical practice guidelines",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit",
+      "authority_class": "state-model-guidance"
+    },
+    {
+      "id": "schn-model-scopes-medical-surgical",
+      "title": "Model scopes: surgical and medical",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-surgical-and-medical",
+      "authority_class": "state-model-catalogue"
+    },
+    {
+      "id": "schn-model-scopes-paediatric",
+      "title": "Model scopes: paediatric",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-paediatric",
+      "authority_class": "state-model-catalogue"
+    },
+    {
+      "id": "schn-model-scopes-dental",
+      "title": "Model scopes: dental",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-dental",
+      "authority_class": "state-model-catalogue"
+    },
+    {
+      "id": "schn-ecredential",
+      "title": "eCredential",
+      "publisher": "NSW State Scope of Clinical Practice Unit",
+      "url": "https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/ecredential",
+      "authority_class": "implementation-guidance"
+    },
+    {
+      "id": "amc-rural-generalist-recognition",
+      "title": "Rural Generalist Medicine specialty recognition",
+      "publisher": "Australian Medical Council",
+      "url": "https://www.amc.org.au/accredited-organisations/assessment-and-accreditation-of-specialist-medical-programs-and-professional-development-programs/rural-generalist-medicine/",
+      "authority_class": "specialty-recognition"
+    },
+    {
+      "id": "medical-board-rural-generalist-recognition-2025",
+      "title": "Rural generalist medicine approved as a new field of specialty practice",
+      "publisher": "Medical Board of Australia",
+      "url": "https://www.medicalboard.gov.au/News/2025-09-22-Rural-generalist-medicine-approved-as-a-new-field-of-specialty-practice",
+      "authority_class": "regulator-recognition-notice"
+    },
+    {
+      "id": "medical-board-specialty-recognition-faq",
+      "title": "FAQ: recognition of medical specialties",
+      "publisher": "Medical Board of Australia",
+      "url": "https://www.medicalboard.gov.au/Codes-Guidelines-Policies/FAQ/FAQ-recognition-of-medical-specialties.aspx",
+      "authority_class": "regulator-guidance"
+    },
+    {
+      "id": "acrrm-rural-generalist-registration-2026",
+      "title": "Rural Generalist Registration",
+      "publisher": "Australian College of Rural and Remote Medicine",
+      "url": "https://acrrm.org.au/about-us/about-the-college/rural-generalist-medicine/rural-generalist-registration",
+      "authority_class": "college-registration-guidance"
+    },
+    {
+      "id": "acrrm-rural-generalist-program-accreditation-2026",
+      "title": "ACRRM Rural Generalist training program accredited for specialist registration",
+      "publisher": "Australian College of Rural and Remote Medicine",
+      "url": "https://www.acrrm.org.au/about-us/news-events/media-releases/article/2026/08/10/acrrm-rural-generalist-training-program-accredited-for-specialist-registration",
+      "authority_class": "college-accreditation-notice"
+    },
+    {
+      "id": "racgp-additional-rural-skills-2026",
+      "title": "Additional Rural Skills Training requirements",
+      "publisher": "Royal Australian College of General Practitioners",
+      "url": "https://www.racgp.org.au/education/gp-training/rural-generalist/arst-information-from-2022",
+      "authority_class": "college-training-guidance"
+    },
+    {
+      "id": "ahpra-specialist-registration",
+      "title": "Specialist registration",
+      "publisher": "Australian Health Practitioner Regulation Agency",
+      "url": "https://www.ahpra.gov.au/Registration/Applying-for-registration/Specialist-Registration",
+      "authority_class": "registration-guidance"
+    }
+  ],
+  "expected_inventory": {
+    "catalogue_entries": 88,
+    "final_models": 83,
+    "under_review_after_consultation": 5,
+    "categories": {
+      "Medical and surgical": 56,
+      "Paediatric": 20,
+      "Dental": 12
+    },
+    "under_review_titles": [
+      "General Practice",
+      "Neurology",
+      "Neurosurgery",
+      "Orthopaedic Surgery",
+      "Urology"
+    ]
+  },
+  "evidence_ceiling": "This intake records public source metadata and expected catalogue structure. It does not establish local adoption, source currency beyond the observation date, controlled-document status, service capability, individual competence or an individual scope-of-practice decision. Rural Generalist registration, qualification and protected-title rules must be checked against current regulator and Ahpra sources before operational use."
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "kind": "local-bounded-capture-bundle-qualification",
+  "repository": "edithatogo/atlas-health-policy-anz",
+  "tracks": ["T02", "T07"],
+  "observed_on": "2026-09-10",
+  "source_baseline": "30ebb9bc0add05042839eb8ef214d1492d208368",
+  "source_snapshot": "c20358e8b0e3462c41adc2130ad137a06793fe3e",
+  "concurrent_main_preserved_for_hosted_combined_validation": "c7fd8b8835034280badde76cfd8765b018c9abd5",
+  "python": "3.14.6",
+  "checks": {
+    "format-receipt.json": "passed",
+    "basedpyright-receipt.json": "passed",
+    "coverage-receipt.json": "passed",
+    "ty-receipt.json": "passed",
+    "parallel-receipt.json": "passed",
+    "ruff-receipt.json": "passed",
+    "benchmark-receipt.json": "passed"
+  },
+  "tests": {"passed": 575, "failed": 0, "errors": 0, "skips": 0, "previous_tests_retained": 534, "additional_regressions": 41},
+  "coverage_totals": {
+    "covered_lines": 3305,
+    "num_statements": 3354,
+    "percent_covered": 97.79874213836477,
+    "percent_covered_display": "97.80",
+    "missing_lines": 49,
+    "excluded_lines": 110,
+    "percent_statements_covered": 98.53905784138342,
+    "percent_statements_covered_display": "98.54",
+    "num_branches": 780,
+    "num_partial_branches": 40,
+    "covered_branches": 738,
+    "missing_branches": 42,
+    "percent_branches_covered": 94.61538461538461,
+    "percent_branches_covered_display": "94.62"
+  },
+  "coverage_minimum_percent": 95,
+  "source_files_sha256": {
+    "src/australian_health_policy_atlas/capture_bundle.py": "205033f0efe4adf9e2430a1ab735b21c46198aede412d22f9fb392529f5a371b",
+    "src/australian_health_policy_atlas/seed_probe.py": "2e6ea5335f7d023027ea025b1c9d08bb191e689b263eee517fd892dc52bc646a",
+    "tests/unit/test_capture_bundle.py": "f0703d67098cb48cf3a6c7b659fe41e4f031647a16e87c31834c633e7af67842",
+    "tests/unit/test_seed_probe.py": "0698e12367ddc9cc3c2d24aa19f0ab8cbbd14ec85509a088df3810fefd8e9a93",
+    ".github/workflows/seed-probe.yml": "e773c54192384937dbf87a5e7752309c37531f2f5a9bf20ab8fea8ee3c32ba26"
+  },
+  "contracts_sha256": {
+    "pyproject.toml": "69ca7eab1fdd3d3231758ff93d5e44409ba132401e4d89c3d7b67a9147393099",
+    "uv.lock": "8d19325b11a134540c41566bd37a8b36dabba1b729d05e072f18ae3503219d60"
+  },
+  "artifacts_independently_downloaded_and_digest_verified": {
+    "10133710372": "898233bff900e2cbffbc3cc460d9db133838672faf769c50815b4fa47512f7c9",
+    "10125873395": "2e29dc5dee95f4c8f495dee0b1d5ae59b90588074ff343b102345d54070bd028",
+    "10133967124": "81cd3a42b206b6529b5e0436cf0d8b8dff1f06c355e99f8665cfbdc04b0abd23"
+  },
+  "live_probe_executed_by_local_tests": false,
+  "hf_writes": 0,
+  "new_tracks": false,
+  "medallion_promotion": false,
+  "qualification_boundary": "Local synthetic baseline only, not a remote tested commit or combined-main qualification. The concurrent credentialing collection is preserved unchanged for separate hosted PR checks. Actual probe, final PR and main results must be read from those runs."
+}
