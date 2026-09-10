@@ -1,0 +1,21 @@
+geography,geography_type,year,period,value,unit,source_id
+Northern Queensland,PHN,2016,2016-03/2016-12,127,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2017,2017-01/2017-12,52,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2018,2018-01/2018-12,41,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2019,2019-01/2019-12,35,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2020,2020-01/2020-12,29,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2021,2021-01/2021-12,25,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2022,2022-01/2022-12,22,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2023,2023-01/2023-12,21,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2024,2024-01/2024-12,19,rounded monthly average people receiving treatment,S02
+Northern Queensland,PHN,2025,2025-01/2025-05,12,rounded monthly average people receiving treatment,S02
+Australia,country,2016,2016-03/2016-12,3241,rounded monthly average people receiving treatment,S02
+Australia,country,2017,2017-01/2017-12,1771,rounded monthly average people receiving treatment,S02
+Australia,country,2018,2018-01/2018-12,1281,rounded monthly average people receiving treatment,S02
+Australia,country,2019,2019-01/2019-12,954,rounded monthly average people receiving treatment,S02
+Australia,country,2020,2020-01/2020-12,688,rounded monthly average people receiving treatment,S02
+Australia,country,2021,2021-01/2021-12,548,rounded monthly average people receiving treatment,S02
+Australia,country,2022,2022-01/2022-12,432,rounded monthly average people receiving treatment,S02
+Australia,country,2023,2023-01/2023-12,455,rounded monthly average people receiving treatment,S02
+Australia,country,2024,2024-01/2024-12,436,rounded monthly average people receiving treatment,S02
+Australia,country,2025,2025-01/2025-05,335,rounded monthly average people receiving treatment,S02

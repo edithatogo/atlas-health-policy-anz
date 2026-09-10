@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "review_date": "2026-09-10",
+  "representation": "Semantic JSON reconstructed from displayed web-tool API responses; not original HTTP response bytes.",
+  "responses": [
+    {
+      "source_id": "S10",
+      "endpoint": "https://myhospitalsapi.aihw.gov.au/api/v1/measure-categories",
+      "response": {
+        "result": [
+          {
+            "measure_category_code": "MYH-ADM",
+            "measure_category_name": "MyHospitals Admissions"
+          },
+          {
+            "measure_category_code": "MYH-CANCER",
+            "measure_category_name": "MyHospitals Cancer"
+          },
+          {
+            "measure_category_code": "MYH-CWS",
+            "measure_category_name": "MyHospitals Financial performance"
+          },
+          {
+            "measure_category_code": "MYH-ED",
+            "measure_category_name": "MyHospitals ED Presentations"
+          },
+          {
+            "measure_category_code": "MYH-ED-TIME",
+            "measure_category_name": "MyHospitals Time in ED"
+          },
+          {
+            "measure_category_code": "MYH-ED-WAITS",
+            "measure_category_name": "MyHospitals ED Waiting Times"
+          },
+          {
+            "measure_category_code": "MYH-ES",
+            "measure_category_name": "MyHospitals Elective surgery"
+          },
+          {
+            "measure_category_code": "MYH-HH",
+            "measure_category_name": "MyHospitals Hand hygiene"
+          },
+          {
+            "measure_category_code": "MYH-LOS",
+            "measure_category_name": "MyHospitals Length of stay"
+          },
+          {
+            "measure_category_code": "MYH-RSI",
+            "measure_category_name": "MyHospitals Relative stay index"
+          },
+          {
+            "measure_category_code": "MYH-SAB",
+            "measure_category_name": "MyHospitals SAB"
+          },
+          {
+            "measure_category_code": "MYH-SSI",
+            "measure_category_name": "MyHospitals Specialised services"
+          }
+        ],
+        "version_information": {
+          "api_version": "1.6.4.0",
+          "data_version": 2026052802,
+          "date_uploaded": "2026-05-28T00:00:00",
+          "requested_time_stamp": "2026-09-10T17:33:27.5322366+10:00"
+        }
+      }
+    },
+    {
+      "source_id": "S11",
+      "endpoint": "https://myhospitalsapi.aihw.gov.au/api/v1/reporting-unit-types",
+      "response": {
+        "result": [
+          {
+            "reporting_unit_type_code": "H",
+            "reporting_unit_type_name": "Hospital"
+          },
+          {
+            "reporting_unit_type_code": "PG",
+            "reporting_unit_type_name": "Peer Group"
+          },
+          {
+            "reporting_unit_type_code": "LHN",
+            "reporting_unit_type_name": "Local Hospital Network"
+          },
+          {
+            "reporting_unit_type_code": "NAT",
+            "reporting_unit_type_name": "National"
+          },
+          {
+            "reporting_unit_type_code": "S",
+            "reporting_unit_type_name": "State"
+          },
+          {
+            "reporting_unit_type_code": "PHN",
+            "reporting_unit_type_name": "Primary Health Network"
+          }
+        ],
+        "version_information": {
+          "api_version": "1.6.4.0",
+          "data_version": 2026052802,
+          "date_uploaded": "2026-05-28T00:00:00",
+          "requested_time_stamp": "2026-09-09T11:50:31.3688881+10:00"
+        }
+      }
+    }
+  ],
+  "interpretation": "Metadata proves accessible MyHospitals categories and geography types, not a hepatitis prevalence or care-cascade API. The second response is cached from 9 September.",
+  "not_captured": [
+    "AIHW original cancer workbooks",
+    "ABS population observation response",
+    "Queensland or NNDSS notification API observations"
+  ]
+}
