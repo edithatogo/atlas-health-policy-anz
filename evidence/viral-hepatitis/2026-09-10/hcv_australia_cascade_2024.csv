@@ -1,0 +1,13 @@
+measure,value,unit,denominator_definition,denominator_value,geography,period,evidence_type,source_id
+chronic_hcv_end_year,62880,people,modelled end-2024 chronic HCV population,,Australia,2024,modelled,S03
+diagnosed_chronic_hcv_end_year,55610,people,end-2024 chronic HCV population,62880,Australia,2024,modelled,S03
+diagnosed_percent,88,percent,end-2024 chronic HCV population,62880,Australia,2024,modelled,S03
+rna_confirmed_end_year,41710,people,people diagnosed with chronic HCV at end-2024,55610,Australia,2024,modelled,S03
+rna_confirmed_percent_of_diagnosed,75,percent,people diagnosed with chronic HCV at end-2024,55610,Australia,2024,modelled,S03
+chronic_hcv_start_year,67970,people,end-2023 chronic HCV population,,Australia,2024,modelled,S03
+initial_daa_treatment_during_year,5240,people,start-2024 chronic HCV population,67970,Australia,2024,modelled,S03
+initial_daa_treatment_percent,8,percent,start-2024 chronic HCV population,67970,Australia,2024,modelled,S03
+initial_treatment_cures_during_year,4920,people,people initially treated during 2024,5240,Australia,2024,modelled,S03
+initial_treatment_cure_percent,94,percent,people initially treated during 2024,5240,Australia,2024,modelled,S03
+treatment_following_reinfection,1860,people,separate retreatment measure,,Australia,2024,modelled,S03
+cures_following_reinfection,1750,people,treated following reinfection,1860,Australia,2024,modelled,S03
