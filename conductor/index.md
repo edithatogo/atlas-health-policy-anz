@@ -51,3 +51,12 @@ inputs to independent packet verification, deterministic staging and pinned publ
 replay. See `docs/SOURCE_PACKET_STAGING.md`. The existing T02/T07 track states and
 all production medallion gates remain unchanged. Publication status comes from
 actual run receipts, not the presence of upload code or a green blocked job.
+
+
+## Current bounded source-access diagnostic
+
+Read [capture-bundle execution](capture-bundles-20260910.md) for the current T02/T07
+increment. It adds independent source-stage transport/replay and a nine-source
+access probe without changing the governed collections or claiming corpus
+completeness. The temporary diagnostic-artifact exception is explicit; durable
+public data publication still belongs to HF and remains independently gated.
