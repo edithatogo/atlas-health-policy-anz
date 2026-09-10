@@ -18,20 +18,18 @@ jobs:
         with:
           version: '0.11.29'
           enable-cache: false
-      - name: Build exact read-only development snapshot without credentials
+      - name: Export only locked native checker binaries
         run: |
           uv python install 3.14.6
           uv sync --python 3.14.6 --group dev --group publication --extra nlp --locked
           mkdir -p "$RUNNER_TEMP/export"
-          git archive HEAD | gzip -n > "$RUNNER_TEMP/export/source.tar.gz"
-          tar -czf "$RUNNER_TEMP/export/site-packages.tar.gz" -C .venv/lib/python3.14 site-packages
-          git rev-parse HEAD > "$RUNNER_TEMP/export/commit.txt"
+          tar -czf "$RUNNER_TEMP/export/checkers.tar.gz" -C .venv/bin ruff ty
           sha256sum pyproject.toml uv.lock > "$RUNNER_TEMP/export/contracts.sha256"
           cd "$RUNNER_TEMP/export"
-          sha256sum source.tar.gz site-packages.tar.gz commit.txt contracts.sha256 > SHA256SUMS
+          sha256sum checkers.tar.gz contracts.sha256 > SHA256SUMS
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: bundle-development-snapshot
+          name: bundle-native-checkers
           path: ${{ runner.temp }}/export/
           if-no-files-found: error
           retention-days: 1
