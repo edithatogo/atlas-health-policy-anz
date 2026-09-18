@@ -1,0 +1,50 @@
+bundle,filename,bytes,pages,sha256,pdf_title
+memo,memo-cred-mo-socp-lower-gi.pdf,469864,4,ec5616a64cf876cacc8883a04f6ebe15a9f38da34d461c0491d9e187f48847aa,MEMORANDUM - Credentialed Medical Officers with SoCP in Lower GI Endoscopy at Metro North Health.
+memo,memo-medical-stars-02112022.pdf,119851,5,f52f15de0444e3ab8194b1e71a9268e4a1e49fb5e0807df2a46dc82173ee9c61,"Credentialing of Medical Officers within STARS, Metro North Hospital and Health Service"
+memo,memo-medical-stars-08022021.pdf,133433,4,a5baf439134e86ddffd02e32b66dfea1cdaf75f07c5813fad01572450b2d3daf,Memorandum: Credentialing of Medical Officers within STARS - 8 February 2021 | Metro North Hospital and Health Service
+memo,memo-medical-stars-11032022.pdf,170999,5,1fab118df678b566d56bd02b9641460f96faffdbba5327dc1aa604a6453d4654,Credentialing of Medical Officers within STARS
+memo,memo-medical-stars-12082024.pdf,171560,3,3f78d87fe2f02cac6b9caf8e0dc38fa0ee426280945fea08b7d80201fa1c8e40,MEMO: Credentialing of Medical Officers within STARS | Metro North Health
+memo,memo-medical-stars-20022023.pdf,235276,5,cf240f27ebc6ad7c2cee819544adde80b09a4fc36f035ec14c7fe59c5a8f9e7b,MEMO: Credentialing of Medical Officers within STARS | Metro North Health
+memo,memo-medical-stars-26102021.pdf,214909,8,378539857f866115c981b04d7d2613f50492a96c6cbb79c350ffdc990b724648,Memorandum: Credentialing of Medical Officers within STARS - 26 August 2021 | Metro North Hospital and Health Service
+memo,memo-medical-stars-27012021.pdf,106517,2,36d71333a1d5c4ef38f7455b2a39242f709a4b707e4917dff840c8950589dea7,Memorandum: Credentialing of Medical Officers within STARS - 27 January 2021 | Metro North Hospital and Health Service
+memo,memo-medical-stars-27042021.pdf,175357,6,20fa2c7d0d680cc889f7fea9e4bbcaa7a7d4fb08431431dd08209785ebf17981,Memorandum: Credentialing of Medical Officers within STARS - 27 April 2021 | Metro North Hospital and Health Service
+memo,memo-medical-stars-27062024.pdf,164701,3,68f19a6aebaa607ee033e7c978a5f6f0b92f71c185e8988927dac2516254abd4,MEMO: Credentialing of Medical Officers within STARS | Metro North Health
+memo,memo-medical-stars-30112021.pdf,285908,10,d045404a63cc0df269b666ed2a5ca192216e7387320e99274d308bceaf5926ea,Memorandum: Credentialing of Medical Officers within STARS - 26 August 2021 | Metro North Hospital and Health Service
+socp,20171221-Scope-of-Clinical-Practice-List-Project-Interim-Principles-and-Definitions.pdf,257126,7,3706c7fc22ce5a2aaeceefd20bf301a9d4ec06ae20855b817598160ca2041dc5,Scope of Clinical Practice List Project - Interim Principles and Definitions
+socp,socp-addiction-medicine.pdf,190737,3,08f10070fee46e45e3654a4d8f4d6aa4b72ee971d6391e577e96df6dd1e7966d,"Credentialing and Scope of Clinical Practice Module - Addiction Medicine, Metro North Hospital and Health Service"
+socp,socp-anaesthetics.pdf,229912,5,694417a1d88abd95260ac7508b1e89b33b30948324b647dfb2e61e424f6e0b6c,"Credentialing and Scope of Clinical Practice Module - Anaesthetics, Metro North Hospital and Health Service"
+socp,socp-cardiothoracic-surgery.pdf,116801,7,a671232e03ecb9bd28f35bb0f990b1250fc14132b59b32cab8ef8a5ab794449c,Credentialing and Scope of Clinical Practice Module - Cardiothoracic Surgery | Metro North Hospital and Health Service
+socp,socp-clin-immunology.pdf,61004,2,cb54d65887188db8b5a93847f30b1e28a30ecec92e8e047fc843a32ca1a3c392,"Credentialing and Scope of Clinical Practice Module - Clinical Immunology and Allergy, Metro North Hospital and Health Service"
+socp,socp-clin-pharm.pdf,64023,3,5c1f0d54e181371898895d667f3d16f3885581e26c6e6bff83350b5178a45605,"Credentialing and Scope of Clinical Practice Module - Clinical Pharmacology, Metro North Hospital and Health Service"
+socp,socp-clinical-genetics.pdf,202211,3,149f27d6612998b4ae70993cca4b2da7ca7b641f363bb468dd5f72cb1755ba46,"Credentialing and Scope of Clinical Practice Module - Clinical Genetics, Metro North Hospital and Health Service"
+socp,socp-cori-surgical.pdf,182102,4,176379ed8ac7b3802cab20948a696d6038d2d2b2a6edfcaf609bd38f5e8b92cc,Specialised Scope of Clinical Practice – CORI Surgical System – Knee arthroplasty | Metro North Health
+socp,socp-dentistry.pdf,387019,19,5ad221648fb84ec5962f7c1081fca729b8f13e31b1f0b4deb05eefd49bbd1921,"Credentialing and Scope of Clinical Practice Module - Dentistry, Metro North Hospital and Health Service"
+socp,socp-diving-hyperbaric-medicine.pdf,182112,5,4f6792cc78603db5e0a40b35bf5f1478600eac570ee76110c5b74a5a3e8f68d0,"Credentialing and Scope of Clinical Practice Module - Diving & Hyperbaric medicine, Metro North Hospital and Health Service"
+socp,socp-emergency-med.pdf,69472,4,e312ebb915f37b47007dc8bde4c4beffbef239815639bb20eed80f62bb24555b,
+socp,socp-gastroenterology-end.pdf,188927,5,c6e9fd9057b6c2f20a7b6194a5814b7b406eb4fe5b124c4ff4afdbcaa5a8ac53,Scope of Clinical Practice – Gastrointestinal Endoscopy for General Surgeons | Metro North Health
+socp,socp-gastroenterology-hep.pdf,618341,7,6c55d0712b529a4ef51f5c3d73d4d50f7133653f19e4c5520c0fa9b0471bf4a1,Scope of Clinical Practice – Gastroenterology and Hepatology
+socp,socp-gen-med.pdf,209481,4,6660a8165cd0d0ce385f7cf8cfb66a5f15445bc64ad5d1c47cb82c8a8930e357,"Credentialing and Scope of Clinical Practice Module - General Medicine, Metro North Hospital and Health Service"
+socp,socp-general-practice.pdf,368638,12,d9eb4fdfa1e599a4816a496e5f6b4dd519965246e8c8d58e92f4ba77aa33f1ea,"SoCP Module - General Practice and Breast Medicine, Metro North Hospital and Health Service"
+socp,socp-geriatric-med.pdf,235062,7,8b53bf83646d28393dc085cddcf18c30bb193fc125cc5733a22b170ac91cbe67,"Credentialing and Scope of Clinical Practice Module - Geriatric Medicine, Metro North Hospital and Health Service"
+socp,socp-infectious-diseases.pdf,75384,5,936028fb5d70e70e208408209b1ce45ec29913571e86169456f5e4748a799d20,"SoCP Module - Infectious Diseases, Metro North Hospital and Health Service"
+socp,socp-intracranial-eeg-neurology.pdf,179921,4,ce7b5fea4f30f09a19a55d381b24834c857051fc11577b09e0e61bcc1ccaf755,SoCP module Intracranial Electroencephalography
+socp,socp-neonatal-med.pdf,63079,3,634e1b7a79a05d7c74a81f08b53b006482b8e80029524dd6417e3314d1b28f24,"Credentialing and Scope of Clinical Practice Module - Neonatal and Perinatal Medicine, Metro North Hospital and Health Service"
+socp,socp-neurosurgery.pdf,94767,4,e4458056e7dba99052e098fe63b56c36b2b94666b2e1b6c2f9a416f65cf10d98,"Credentialing and Scope of Clinical Practice Module - Neurosurgery, Metro North Hospital and Health Service"
+socp,socp-obstetric-med.pdf,57643,3,ac2ae117af769bf86ecde0f63c6ea1e6ddd5c3e2f11ccbd4572eccd3d07f5ed6,SoCP Module - Obstetric Medicine
+socp,socp-obstetrics-and-gynae.pdf,279802,30,94ddaa8a80e1ab1a622f5bee81079e0194a2ecdb75dc35c9fd2352c669e65503,Scope of Clinical Practice – Obstetrics and Gynaecology v1.3 | Metro North HHS
+socp,socp-oms.pdf,70422,4,b6d8f20052043aa808d8f8e59639ee0f370200931ee311abb2c2accbe13d0b50,"SoCP Module - Oral and Maxillofacial Surgery, Metro North Hospital and Health Service"
+socp,socp-ophthalmology.pdf,68930,4,0b6c48618f02b700e431af6462e24d39c9303053b07ef291f04cd78dc438ed3d,"SoCP  Module - Ophthalmology, Metro North Hospital and Health Service"
+socp,socp-orthopaedic.pdf,98855,4,4e02fd5b12bea4be3e4761cbc8d9e43cbac0e5758c188e77080b458f003a1f05,Orthopaedic Surgery including Complex Hand Surgery / Upper Limb Surgery
+socp,socp-orthopaedics-neurourgery.pdf,286177,4,7af1895edd506882b3b73e901f2f844e1081b654d19ca994335e276cd848ca43,Orthopaedics and Neurosurgery – Robotic Surgery: Spine | Metro North Health
+socp,socp-otolaryngology.pdf,255169,12,e047c3b2da2ee2e5f43f4c82019fdc2b392b48f64f4c9ddbfe7554d4c4f69afe,"Credentialing and Scope of Clinical Practice Module - Otolaryngology, Metro North Hospital and Health Service"
+socp,socp-pain-med.pdf,64153,3,1fa6a861820c75a45850ac7a160b4e465d0743628ec9d2a935d240fa2fd4e0d9,"Credentialing and Scope of Clinical Practice Module - Pain Medicine, Metro North Hospital and Health Service"
+socp,socp-plastic.pdf,102276,4,8c5320cc436a50f4ef1f7b94f42685351e13c00eac7ff843e6d096614d7587d2,Plastic and Reconstructive Surgery: Complex Hand Surgery
+socp,socp-psychiatry.pdf,295833,6,ca7cb9fe72f7fce96f1c4e2dbc4ae4035024e3166634317200d1314d4cbd7e0d,"Credentialing and Scope of Clinical Practice Module - Psychiatry, Metro North Hospital and Health Service"
+socp,socp-public-health.pdf,149605,2,329f4f0078ea7d94cdcf9b8988a03eb988f8b1cd1fc76d28fb3054097e4c1fa5,"Credentialing and Scope of Clinical Practice Module - Public Health, Metro North Hospital and Health Service"
+socp,socp-rehab-med.pdf,215228,5,ceee021db8e6daff6c92b7607fb13c6fc6a779c56ce0b7b47f0f50a8ed66c9a3,"Credentialing and Scope of Clinical Practice Module - Rehabilitation Medicine, Metro North Hospital and Health Service"
+socp,socp-respiratory-sleep-medicine.pdf,647599,14,bf70a0a994635f1dd18927ee53e2a7ee6ef563a7faa1dda74ada93926b62ffa2,SoCP Module Respiratory and Sleep Medicine
+socp,socp-rheumatology.pdf,191505,5,30986efb0b50c52e0473d18213b6bbb9f852def8f35f44bcf7647161457bd149,"Credentialing and Scope of Clinical Practice Module - Rheumatology, Metro North Hospital and Health Service"
+socp,socp-robotic-hpb-surgery.pdf,374481,7,afab96f6a048c452409c1fb774bce6af7596560eba4a209282dc2ca126f1f0c2,"Credentialing and Scope of Clinical Practice Module - Robotic HPB Surgery, Metro North Hospital and Health Service"
+socp,socp-sexual-health.pdf,58277,3,4d8df20844d02ba7334e4f6cd9a0071b6dc865d0740b578abc74d9deb4927c15,"SoCP Module - Sexual Health Medicine, Metro North Hospital and Health Service"
+socp,socp-urology.pdf,412701,11,69417f66320c475e4aa49a02373f498e4f2707284421cd46376c8cf5d8c79f5b,SoCP Module - Urology | Metro North Health
+socp,socp-vascular-surgery.pdf,176981,5,0a2246e9504bffe29358cd56c19aea4f59025e37c024f4cf9c8541a061490170,"Credentialing and Scope of Clinical Practice Module - Vascular Surgery, Metro North Hospital and Health Service"
