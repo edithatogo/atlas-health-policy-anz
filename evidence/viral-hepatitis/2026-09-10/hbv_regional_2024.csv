@@ -1,0 +1,16 @@
+geography_type,geography,population,modelled_chronic_hbv,prevalence_percent,care_uptake_percent,treatment_uptake_percent,care_and_treatment_status,year,source_id
+PHN,Northern Queensland,747284,4977,0.67,28.2,6.6,reported,2024,S01
+SA3,Bowen Basin - North,38486,226,0.59,18.8,4.9,reported,2024,S01
+SA3,Cairns - North,63036,357,0.57,19.5,5.4,reported,2024,S01
+SA3,Cairns - South,112394,1024,0.91,30.5,8.9,reported,2024,S01
+SA3,Charters Towers - Ayr - Ingham,42909,254,0.59,,,suppressed,2024,S01
+SA3,Far North,33914,434,1.28,64.5,10.4,reported,2024,S01
+SA3,Innisfail - Cassowary Coast,37044,359,0.97,28.7,6.7,reported,2024,S01
+SA3,Mackay,129164,515,0.4,23.1,6.5,reported,2024,S01
+SA3,Port Douglas - Daintree,13055,71,0.54,,,suppressed,2024,S01
+SA3,Tablelands (East) - Kuranda,45555,341,0.75,,,suppressed,2024,S01
+SA3,Townsville,205872,1286,0.62,20.3,4.1,reported,2024,S01
+SA3,Whitsunday,25855,110,0.43,,,suppressed,2024,S01
+PHN,Western Queensland,49029,374,0.76,,,suppressed,2024,S01
+SA3,Outback - North,31290,272,0.87,,,suppressed,2024,S01
+SA3,Outback - South,17739,101,0.57,,,suppressed,2024,S01

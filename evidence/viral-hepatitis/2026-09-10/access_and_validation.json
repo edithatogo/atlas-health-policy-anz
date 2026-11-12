@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "review_date": "2026-09-10",
+  "artifact_scope": "public curated aggregate research staging",
+  "publisher_original_bytes_captured": false,
+  "qualified_medallion_release": false,
+  "native_ecosystem_quality_tools_run": false,
+  "full_repository_ci_run_locally": false,
+  "local_validation": [
+    {
+      "check": "csv_shape_and_source_references",
+      "file": "hcv_treatment_monthly_average.csv",
+      "passed": true,
+      "rows": 20
+    },
+    {
+      "check": "csv_shape_and_source_references",
+      "file": "hbv_regional_2024.csv",
+      "passed": true,
+      "rows": 15
+    },
+    {
+      "check": "csv_shape_and_source_references",
+      "file": "national_programmes.csv",
+      "passed": true,
+      "rows": 8
+    },
+    {
+      "check": "csv_shape_and_source_references",
+      "file": "aihw_liver_cancer_indicators.csv",
+      "passed": true,
+      "rows": 10
+    },
+    {
+      "check": "csv_shape_and_source_references",
+      "file": "hcv_australia_cascade_2024.csv",
+      "passed": true,
+      "rows": 12
+    },
+    {
+      "check": "csv_shape_and_source_references",
+      "file": "aihw_prison_indicators.csv",
+      "passed": true,
+      "rows": 9
+    },
+    {
+      "check": "csv_shape_and_source_references",
+      "file": "sources.csv",
+      "passed": true,
+      "rows": 25
+    },
+    {
+      "check": "suppression_preserved",
+      "passed": true
+    },
+    {
+      "check": "cancer_2025_projection_flags",
+      "passed": true
+    },
+    {
+      "check": "api_observed_metadata_counts",
+      "passed": true
+    }
+  ],
+  "access_limitations": [
+    {
+      "surface": "working container HTTP and git clone",
+      "result": "DNS resolution failure"
+    },
+    {
+      "surface": "Queensland Q2 2026 BBV/STI URL",
+      "result": "web DisabledError; earlier extraction not revalidated"
+    },
+    {
+      "surface": "ABS Data API candidate population dataflow",
+      "result": "web safety/open error; no response acquired; candidate identifier not qualified"
+    },
+    {
+      "surface": "MyHospitals MYH-CANCER measures follow-up",
+      "result": "web safety/open error; no diagnosis-specific indicator verified"
+    },
+    {
+      "surface": "Queensland/data.gov.au catalogue queries",
+      "result": "web retrieval errors; no empty-dataset inference"
+    }
+  ]
+}

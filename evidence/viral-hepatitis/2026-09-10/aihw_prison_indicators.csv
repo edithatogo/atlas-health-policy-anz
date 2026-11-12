@@ -1,0 +1,10 @@
+collection,period,geography_scope,population,measure,percent,ci95_lower,ci95_upper,method,sample_n,source_id
+AusHep,2022-2023,participating public prisons excluding Victoria and ACT,all,hcv_antibody_positive,31.7,28.8,34.8,laboratory prevalence,1599,S04
+AusHep,2022-2023,participating public prisons excluding Victoria and ACT,all,hcv_rna_positive,8.0,6.4,9.9,laboratory prevalence,1599,S04
+AusHep,2022-2023,participating public prisons excluding Victoria and ACT,all,hbv_surface_antigen_positive,0.5,0.3,1.1,laboratory prevalence,1599,S04
+AusHep,2022-2023,participating public prisons excluding Victoria and ACT,First Nations,hcv_rna_positive,11.2,8.6,14.3,laboratory prevalence,,S04
+AusHep,2022-2023,participating public prisons excluding Victoria and ACT,non-Indigenous,hcv_rna_positive,6.6,4.7,9.1,laboratory prevalence,,S04
+NPHDC,2025,participating jurisdictions excluding Queensland for this item,all dischargees,reported_hcv_test_in_prison,67,,,self report; rounded,,S04
+NPHDC,2025,participating jurisdictions excluding Queensland for this item,tested dischargees,reported_positive_test_result,10.91,,,self report; test type unspecified,348,S04
+NPHDC,2025,participating jurisdictions excluding Queensland for this item,tested dischargees,did_not_know_test_result,16.66,,,self report,348,S04
+NPHDC,2025,participating jurisdictions excluding Queensland for this item,tested First Nations dischargees,did_not_know_test_result,25,,,self report,160,S04
