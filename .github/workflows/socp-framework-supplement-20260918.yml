@@ -1,0 +1,69 @@
+name: SoCP framework source supplement
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/socp-framework-supplement-20260918.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.14'
+      - name: Download public references only
+        run: |
+          python - <<'PY'
+          import hashlib,json,re,urllib.request,urllib.parse
+          from pathlib import Path
+          from html.parser import HTMLParser
+          from datetime import datetime,timezone
+          root=Path('/tmp/socp-supplement');root.mkdir()
+          records=[]
+          class Links(HTMLParser):
+              def __init__(self): super().__init__();self.links=[]
+              def handle_starttag(self,tag,attrs):
+                  if tag=='a' and dict(attrs).get('href'): self.links.append(dict(attrs)['href'])
+          urls={
+            'schn-working-groups':'https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/specialty-working-groups',
+            'schn-latest-updates':'https://www.schn.health.nsw.gov.au/nsw-state-scope-clinical-practice-unit/model-scopes-latest-updates',
+            'national-factsheet':'https://www.safetyandquality.gov.au/resources/credentialing-and-defining-scope-practice-factsheet'
+          }
+          allowed={'www.schn.health.nsw.gov.au','www.safetyandquality.gov.au'}
+          def get(url,path):
+              rec={'url':url,'path':path.name,'observed_at':datetime.now(timezone.utc).isoformat()}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'PolicyAtlas-SourceReview/1.0'})
+                  with urllib.request.urlopen(req,timeout=30) as res: data=res.read(10000001)
+                  if len(data)>10000000: raise ValueError('size limit')
+                  path.write_bytes(data);rec.update(status='preserved',sha256=hashlib.sha256(data).hexdigest(),bytes=len(data));records.append(rec);return data
+              except Exception as e: rec.update(status='failed',error=str(e)[:200]);records.append(rec);return None
+          candidates=set()
+          for name,url in urls.items():
+              data=get(url,root/(name+'.html'))
+              if data:
+                  parser=Links();parser.feed(data.decode('utf-8',errors='replace'))
+                  for href in parser.links:
+                      target=urllib.parse.urljoin(url,href);p=urllib.parse.urlsplit(target)
+                      if p.hostname in allowed and p.path.lower().endswith(('.pdf','.docx')) and any(w in urllib.parse.unquote(target).lower() for w in ('socp','scope','credential','tor','terms','working','factsheet')): candidates.add(target)
+          for url in sorted(candidates)[:25]:
+              name=re.sub(r'[^A-Za-z0-9._-]+','-',urllib.parse.unquote(urllib.parse.urlsplit(url).path.rsplit('/',1)[-1]))
+              get(url,root/(hashlib.sha256(url.encode()).hexdigest()[:12]+'-'+name))
+          binary='https://github.com/edithatogo/sourceright/releases/download/v0.1.20/sourceright-linux-x86_64'
+          data=get(binary,root/'sourceright-linux-x86_64');checksum=get(binary+'.sha256',root/'sourceright-linux-x86_64.sha256')
+          if data and checksum:
+              expected=checksum.decode().split()[0]
+              assert hashlib.sha256(data).hexdigest()==expected,'SourceRight checksum mismatch'
+          (root/'acquisition.json').write_text(json.dumps(records,indent=2))
+          print(json.dumps({'preserved':sum(r['status']=='preserved' for r in records),'failed':sum(r['status']=='failed' for r in records)},indent=2))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: socp-source-supplement-20260918
+          path: /tmp/socp-supplement/
+          retention-days: 7
+          if-no-files-found: error
