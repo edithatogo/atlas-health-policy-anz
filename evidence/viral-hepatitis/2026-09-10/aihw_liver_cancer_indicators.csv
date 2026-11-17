@@ -1,0 +1,11 @@
+population,sex,period,measure,value,unit,estimate_type,limitations,source_id
+First Nations,all,2025,incidence_asr,14,per 100000,projection,ACD2021; observed input excludes SA and Tasmania; Indigenous status imputed when unknown,S05
+non-Indigenous,all,2025,incidence_asr,4.6,per 100000,projection,Same comparison framework as First Nations estimate,S05
+First Nations,all,2025,mortality_asr,9,per 100000,projection,ACD2021; observed input excludes SA and Tasmania; Indigenous status imputed when unknown,S05
+non-Indigenous,all,2025,mortality_asr,2.8,per 100000,projection,Same comparison framework as First Nations estimate,S05
+First Nations,all,2017-2021,five_year_relative_survival,14,percent,survival estimate,Developmental life tables by Indigenous status; not a grant-period outcome,S05
+non-Indigenous,all,2017-2021,five_year_relative_survival,29,percent,age-adjusted survival estimate,Age-adjusted to First Nations age composition,S05
+Australia-born,male,2006-2020,incidence_asr,7.3,per 100000,observed period rate,WHO World Standard Population; people resident in Australia,S06
+Mainland South-East Asia-born,male,2006-2020,incidence_asr,30.2,per 100000,observed period rate,WHO World Standard Population; people resident in Australia,S06
+Australia-born,all,2016-2020,incidence_asr,5.7,per 100000,observed period rate,WHO World Standard Population; people resident in Australia,S06
+Overseas-born,all,2016-2020,incidence_asr,6.4,per 100000,observed period rate,WHO World Standard Population; people resident in Australia,S06
