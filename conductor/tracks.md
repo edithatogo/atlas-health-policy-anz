@@ -1,5 +1,7 @@
 # Tracks
 
+Policy-specific model assurance for existing T06/T07/T12: [Local-model comparison work package, 8 November 2026](local-model-assurance-20261108.md). This is a **planned extension of those tracks**, not an independent model registry or clinical/legal certification.
+
 | Track | Name | Status | Primary dependency |
 |---|---|---|---|
 | T00 | Foundation and context management | active | — |
