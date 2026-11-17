@@ -1,0 +1,42 @@
+name: NSW model-SoCP catalogue source health
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 2 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: schn-model-catalogue-health
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Read-only public source check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out without persistent credentials
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+      - name: Set up Python 3.14
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.14'
+      - name: Check listing pages against the reviewed catalogue
+        run: >-
+          python scripts/check_schn_model_catalogue.py
+          --output /tmp/schn-model-catalogue-health.json
+          --timeout-seconds 45
+          --strict
+      - name: Retain the source-health receipt
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: schn-model-catalogue-source-health
+          path: /tmp/schn-model-catalogue-health.json
+          retention-days: 30
+          if-no-files-found: warn
